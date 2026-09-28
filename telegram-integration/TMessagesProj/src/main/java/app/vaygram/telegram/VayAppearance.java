@@ -4,6 +4,7 @@ import app.vaygram.core.settings.VayDefaults;
 
 public final class VayAppearance {
     private static volatile boolean amoledSurfacesEnabled;
+    private static volatile boolean compactModeEnabled;
 
     private VayAppearance() {}
 
@@ -11,20 +12,31 @@ public final class VayAppearance {
         amoledSurfacesEnabled = enabled;
     }
 
+    static void setCompactModeEnabled(boolean enabled) {
+        compactModeEnabled = enabled;
+    }
+
+    public static boolean isCompactModeEnabled() {
+        return compactModeEnabled;
+    }
+
     public static float chatBubbleRadiusDp() {
         return VayTelegram.settings().get(VayDefaults.CHAT_BUBBLE_RADIUS);
     }
 
     public static float chatMessageSpacingDp() {
-        return VayTelegram.settings().get(VayDefaults.CHAT_MESSAGE_SPACING);
+        float value = VayTelegram.settings().get(VayDefaults.CHAT_MESSAGE_SPACING);
+        return compactModeEnabled ? 0f : value;
     }
 
     public static int dialogRowHeightDp() {
-        return VayTelegram.settings().get(VayDefaults.DIALOG_ROW_HEIGHT);
+        int value = VayTelegram.settings().get(VayDefaults.DIALOG_ROW_HEIGHT);
+        return compactModeEnabled ? Math.min(value, 60) : value;
     }
 
     public static float avatarSizeDp() {
-        return VayTelegram.settings().get(VayDefaults.AVATAR_SIZE);
+        float value = VayTelegram.settings().get(VayDefaults.AVATAR_SIZE);
+        return compactModeEnabled ? Math.min(value, 46f) : value;
     }
 
     public static float avatarRoundnessPercent() {
@@ -47,7 +59,13 @@ public final class VayAppearance {
     }
 
     public static int bottomNavigationHeightDp() {
-        return VayTelegram.settings().get(VayDefaults.NAV_HEIGHT);
+        return effectiveBottomNavigationHeightDp(
+                VayTelegram.settings().get(VayDefaults.NAV_HEIGHT)
+        );
+    }
+
+    static int effectiveBottomNavigationHeightDp(int configuredHeightDp) {
+        return compactModeEnabled ? Math.min(configuredHeightDp, 52) : configuredHeightDp;
     }
 
     public static int bottomNavigationHeightWithMarginsDp() {
@@ -59,7 +77,8 @@ public final class VayAppearance {
     }
 
     public static boolean showBottomNavigationLabels() {
-        return VayTelegram.settings().get(VayDefaults.NAV_SHOW_LABELS);
+        return !compactModeEnabled
+                && VayTelegram.settings().get(VayDefaults.NAV_SHOW_LABELS);
     }
 
     public static float animationScale() {

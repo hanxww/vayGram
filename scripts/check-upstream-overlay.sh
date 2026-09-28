@@ -76,6 +76,12 @@ must_grep 'key_chat_messagePanelBackground' \
 must_grep 'Theme\.refreshThemeColors\(\)' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/telegram/VayTelegram.java" \
   "live AMOLED theme refresh"
+must_grep 'setCompactModeEnabled' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/telegram/VayAppearance.java" \
+  "compact mode derived metrics"
+must_grep 'VayDefaults\.COMPACT_MODE' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/telegram/VayTelegram.java" \
+  "compact mode Telegram bridge"
 
 must_grep '^APP_PACKAGE=app\.vaygram\.messenger$' \
   "$TMP/telegram/gradle.properties" \

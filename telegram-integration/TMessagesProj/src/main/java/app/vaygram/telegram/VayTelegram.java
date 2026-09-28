@@ -44,7 +44,10 @@ public final class VayTelegram {
         );
 
         syncBubbleRadius(engine.get(VayDefaults.CHAT_BUBBLE_RADIUS));
-        syncMainTabsHeight(engine.get(VayDefaults.NAV_HEIGHT));
+        VayAppearance.setCompactModeEnabled(engine.get(VayDefaults.COMPACT_MODE));
+        syncMainTabsHeight(VayAppearance.effectiveBottomNavigationHeightDp(
+                engine.get(VayDefaults.NAV_HEIGHT)
+        ));
         VayAppearance.setAmoledSurfacesEnabled(engine.get(VayDefaults.THEME_AMOLED));
 
         engine.addListener(change -> {
@@ -63,9 +66,21 @@ public final class VayTelegram {
             if (VayDefaults.NAV_HEIGHT.getId().equals(settingId)) {
                 Object value = change.getNewValue();
                 if (value instanceof Number) {
-                    syncMainTabsHeight(((Number) value).intValue());
+                    syncMainTabsHeight(VayAppearance.effectiveBottomNavigationHeightDp(
+                            ((Number) value).intValue()
+                    ));
                 }
                 notifyMainTabsAppearanceChanged();
+            } else if (VayDefaults.COMPACT_MODE.getId().equals(settingId)) {
+                VayAppearance.setCompactModeEnabled(Boolean.TRUE.equals(change.getNewValue()));
+                syncMainTabsHeight(VayAppearance.effectiveBottomNavigationHeightDp(
+                        engine.get(VayDefaults.NAV_HEIGHT)
+                ));
+                notifyMainTabsAppearanceChanged();
+                NotificationCenter.getGlobalInstance().postNotificationName(
+                        NotificationCenter.dialogsNeedReload,
+                        true
+                );
             } else if (VayDefaults.NAV_SHOW_LABELS.getId().equals(settingId)
                     || VayDefaults.MOTION_SCALE.getId().equals(settingId)) {
                 notifyMainTabsAppearanceChanged();
