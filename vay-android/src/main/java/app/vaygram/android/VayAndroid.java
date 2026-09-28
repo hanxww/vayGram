@@ -8,6 +8,8 @@ import app.vaygram.android.settings.VayPresetRepository;
 import app.vaygram.core.settings.VayDefaults;
 import app.vaygram.core.settings.VaySettingsEngine;
 import app.vaygram.core.settings.VaySettingsRegistry;
+import app.vaygram.core.theme.VayThemeTokenRegistry;
+import app.vaygram.core.theme.VayThemeTokens;
 
 public final class VayAndroid {
     private static final String PREFS_NAME = "vaygram_settings_v1";
@@ -16,6 +18,7 @@ public final class VayAndroid {
     private static volatile VaySettingsRegistry registry;
     private static volatile VaySettingsEngine settings;
     private static volatile VayPresetRepository presets;
+    private static volatile VayThemeTokenRegistry themeTokens;
 
     private VayAndroid() {}
 
@@ -33,6 +36,7 @@ public final class VayAndroid {
                     Context.MODE_PRIVATE
             );
             registry = VayDefaults.createRegistry();
+            themeTokens = VayThemeTokens.createRegistry();
             settings = new VaySettingsEngine(
                     registry,
                     new SharedPreferencesVaySettingsStore(preferences)
@@ -62,6 +66,14 @@ public final class VayAndroid {
 
     public static VayPresetRepository presets() {
         VayPresetRepository result = presets;
+        if (result == null) {
+            throw new IllegalStateException("VayAndroid.initialize(context) must be called first");
+        }
+        return result;
+    }
+
+    public static VayThemeTokenRegistry themeTokens() {
+        VayThemeTokenRegistry result = themeTokens;
         if (result == null) {
             throw new IllegalStateException("VayAndroid.initialize(context) must be called first");
         }
