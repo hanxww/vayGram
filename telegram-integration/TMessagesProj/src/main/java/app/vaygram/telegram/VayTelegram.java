@@ -2,6 +2,7 @@ package app.vaygram.telegram;
 
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
 
 import app.vaygram.android.VayAndroid;
@@ -42,12 +43,25 @@ public final class VayTelegram {
         syncBubbleRadius(engine.get(VayDefaults.CHAT_BUBBLE_RADIUS));
 
         engine.addListener(change -> {
-            if (VayDefaults.CHAT_BUBBLE_RADIUS.getId().equals(change.getSettingId())
-                    && VayScopeKey.GLOBAL.equals(change.getScope())) {
+            if (!VayScopeKey.GLOBAL.equals(change.getScope())) {
+                return;
+            }
+
+            String settingId = change.getSettingId();
+            if (VayDefaults.CHAT_BUBBLE_RADIUS.getId().equals(settingId)) {
                 Object value = change.getNewValue();
                 if (value instanceof Number) {
                     syncBubbleRadius(((Number) value).floatValue());
                 }
+            }
+
+            if (VayDefaults.DIALOG_ROW_HEIGHT.getId().equals(settingId)
+                    || VayDefaults.AVATAR_SIZE.getId().equals(settingId)
+                    || VayDefaults.AVATAR_RADIUS.getId().equals(settingId)) {
+                NotificationCenter.getGlobalInstance().postNotificationName(
+                        NotificationCenter.dialogsNeedReload,
+                        true
+                );
             }
         });
     }
