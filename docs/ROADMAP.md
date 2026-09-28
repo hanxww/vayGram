@@ -34,8 +34,8 @@
 - [x] chat list row height
 - [x] avatar size
 - [x] avatar roundness
-- [ ] bottom bar height / labels
-- [ ] animation scale
+- [x] bottom bar height / labels
+- [x] animation scale — wired to vayGram-controlled main navigation motion
 - [ ] AMOLED surface mode
 - [ ] compact mode
 
