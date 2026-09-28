@@ -46,18 +46,27 @@ public final class VayTelegram {
 
         syncBubbleRadius(engine.get(VayDefaults.CHAT_BUBBLE_RADIUS));
         VayAppearance.setCompactModeEnabled(engine.get(VayDefaults.COMPACT_MODE));
+
+        VayScopeKey selectedAccountScope = accountScope(UserConfig.selectedAccount);
+        int selectedNavigationHeight = engine.getResolved(
+                VayDefaults.NAV_HEIGHT,
+                selectedAccountScope,
+                VayScopeKey.GLOBAL
+        );
         syncMainTabsHeight(VayAppearance.effectiveBottomNavigationHeightDp(
-                engine.get(VayDefaults.NAV_HEIGHT)
+                selectedNavigationHeight
         ));
-        VayAppearance.setAmoledSurfacesEnabled(engine.get(VayDefaults.THEME_AMOLED));
+
+        VayAppearance.setAmoledSurfacesEnabled(engine.getResolved(
+                VayDefaults.THEME_AMOLED,
+                selectedAccountScope,
+                VayScopeKey.GLOBAL
+        ));
 
         engine.addListener(change -> {
-            if (!VayScopeKey.GLOBAL.equals(change.getScope())) {
-                return;
-            }
-
             String settingId = change.getSettingId();
-            if (VayDefaults.CHAT_BUBBLE_RADIUS.getId().equals(settingId)) {
+            if (VayDefaults.CHAT_BUBBLE_RADIUS.getId().equals(settingId)
+                    && VayScopeKey.GLOBAL.equals(change.getScope())) {
                 Object value = change.getNewValue();
                 if (value instanceof Number) {
                     syncBubbleRadius(((Number) value).floatValue());
@@ -65,17 +74,16 @@ public final class VayTelegram {
             }
 
             if (VayDefaults.NAV_HEIGHT.getId().equals(settingId)) {
-                Object value = change.getNewValue();
-                if (value instanceof Number) {
-                    syncMainTabsHeight(VayAppearance.effectiveBottomNavigationHeightDp(
-                            ((Number) value).intValue()
-                    ));
-                }
                 notifyMainTabsAppearanceChanged();
             } else if (VayDefaults.COMPACT_MODE.getId().equals(settingId)) {
                 VayAppearance.setCompactModeEnabled(Boolean.TRUE.equals(change.getNewValue()));
+                VayScopeKey currentAccountScope = accountScope(UserConfig.selectedAccount);
                 syncMainTabsHeight(VayAppearance.effectiveBottomNavigationHeightDp(
-                        engine.get(VayDefaults.NAV_HEIGHT)
+                        engine.getResolved(
+                                VayDefaults.NAV_HEIGHT,
+                                currentAccountScope,
+                                VayScopeKey.GLOBAL
+                        )
                 ));
                 notifyMainTabsAppearanceChanged();
                 NotificationCenter.getGlobalInstance().postNotificationName(
@@ -86,8 +94,15 @@ public final class VayTelegram {
                     || VayDefaults.MOTION_SCALE.getId().equals(settingId)) {
                 notifyMainTabsAppearanceChanged();
             } else if (VayDefaults.THEME_AMOLED.getId().equals(settingId)) {
-                VayAppearance.setAmoledSurfacesEnabled(Boolean.TRUE.equals(change.getNewValue()));
+                VayScopeKey currentAccountScope = accountScope(UserConfig.selectedAccount);
+                VayAppearance.setAmoledSurfacesEnabled(engine.getResolved(
+                        VayDefaults.THEME_AMOLED,
+                        currentAccountScope,
+                        VayScopeKey.GLOBAL
+                ));
                 Theme.refreshThemeColors();
+            } else if (VayDefaults.CHAT_MESSAGE_SPACING.getId().equals(settingId)) {
+                notifyMainTabsAppearanceChanged();
             }
 
             if (VayDefaults.DIALOG_ROW_HEIGHT.getId().equals(settingId)
@@ -125,6 +140,21 @@ public final class VayTelegram {
                 .edit()
                 .putInt("bubbleRadius", radius)
                 .apply();
+    }
+
+    public static VayScopeKey accountScope(int account) {
+        long userId = UserConfig.getInstance(account).getClientUserId();
+        String subjectId = userId != 0
+                ? "tg:" + userId
+                : "slot:" + account;
+        return new VayScopeKey(app.vaygram.core.settings.VaySettingScope.ACCOUNT, subjectId);
+    }
+
+    public static VayScopeKey chatScope(int account, long dialogId) {
+        return new VayScopeKey(
+                app.vaygram.core.settings.VaySettingScope.CHAT,
+                accountScope(account).getSubjectId() + ":dialog:" + dialogId
+        );
     }
 
     public static VaySettingsEngine settings() {
