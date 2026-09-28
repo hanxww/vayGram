@@ -25,6 +25,10 @@ public final class VayAppearance {
         return VayTelegram.settings().get(VayDefaults.AVATAR_RADIUS);
     }
 
+    public static float dialogAvatarRadiusDp(float avatarSizeDp) {
+        return avatarSizeDp * avatarRoundnessPercent() / 100f;
+    }
+
     public static int bottomNavigationHeightDp() {
         return VayTelegram.settings().get(VayDefaults.NAV_HEIGHT);
     }
