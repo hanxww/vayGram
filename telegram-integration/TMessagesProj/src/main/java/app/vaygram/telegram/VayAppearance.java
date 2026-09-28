@@ -44,6 +44,14 @@ public final class VayAppearance {
         return VayTelegram.settings().get(VayDefaults.NAV_HEIGHT);
     }
 
+    public static int bottomNavigationHeightWithMarginsDp() {
+        return bottomNavigationHeightDp() + 16;
+    }
+
+    public static int bottomNavigationFloatingOffsetDp() {
+        return bottomNavigationHeightDp() + 8;
+    }
+
     public static boolean showBottomNavigationLabels() {
         return VayTelegram.settings().get(VayDefaults.NAV_SHOW_LABELS);
     }
