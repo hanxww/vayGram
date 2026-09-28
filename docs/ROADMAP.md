@@ -25,13 +25,14 @@
 - [x] reset all customized values
 - [x] Undo / Redo controls
 - [x] scope-aware settings screen foundation
-- [ ] embedded live preview host
+- [x] live numeric preview with cancel/apply
+- [ ] embedded visual preview host
 
 ## M2 — First visible mods
 - [x] chat bubble radius — bidirectional sync with Telegram renderer
 - [ ] chat message spacing
 - [x] chat list row height
-- [ ] avatar size
+- [x] avatar size
 - [x] avatar roundness
 - [ ] bottom bar height / labels
 - [ ] animation scale
