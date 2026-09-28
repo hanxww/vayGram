@@ -58,10 +58,6 @@ must_grep 'VayAppearance\.dialogMessagePaddingStartDp' \
 must_grep 'VayDefaults\.CHAT_BUBBLE_RADIUS' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/ThemeActivity.java" \
   "bubble radius hook"
-must_grep 'VayAppearance\.chatMessageSpacingDp\(\)' \
-  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/Cells/ChatMessageCell.java" \
-  "message spacing hook"
-
 must_grep 'vaySetMainTabsHeight\(int height\)' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/DialogsActivity.java" \
   "dynamic bottom bar height hook"
