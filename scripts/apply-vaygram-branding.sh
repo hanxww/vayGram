@@ -82,5 +82,32 @@ for path, mapping in replacements.items():
         text = text.replace(old, new)
     path.write_text(text, encoding="utf-8")
 
+contacts_controller = root / "TMessagesProj" / "src" / "main" / "java" / "org" / "telegram" / "messenger" / "ContactsController.java"
+text = contacts_controller.read_text(encoding="utf-8")
+text = text.replace(
+    'new Account("" + getUserConfig().getClientUserId(), "org.telegram.messenger")',
+    f'new Account("" + getUserConfig().getClientUserId(), "{package_id}")',
+)
+text = text.replace(
+    'am.getAccountsByType("org.telegram.messenger")',
+    f'am.getAccountsByType("{package_id}")',
+)
+text = text.replace(
+    '"vnd.android.cursor.item/vnd.org.telegram.messenger.android.profile"',
+    '"vnd.android.cursor.item/vnd.app.vaygram.messenger.android.profile"',
+)
+text = text.replace(
+    '"vnd.android.cursor.item/vnd.org.telegram.messenger.android.call.video"',
+    '"vnd.android.cursor.item/vnd.app.vaygram.messenger.android.call.video"',
+)
+text = text.replace(
+    '"vnd.android.cursor.item/vnd.org.telegram.messenger.android.call"',
+    '"vnd.android.cursor.item/vnd.app.vaygram.messenger.android.call"',
+)
+text = text.replace('"Telegram Profile"', '"vayGram Profile"')
+text = text.replace('"Telegram Voice Call"', '"vayGram Voice Call"')
+text = text.replace('"Telegram Video Call"', '"vayGram Video Call"')
+contacts_controller.write_text(text, encoding="utf-8")
+
 print(f"[vayGram] branded checkout as {app_name} ({package_id}, {version_name})")
 PY
