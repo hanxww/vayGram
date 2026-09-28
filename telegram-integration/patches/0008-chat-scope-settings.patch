@@ -1,0 +1,54 @@
+diff --git a/TMessagesProj/src/main/java/org/telegram/ui/ChatActivity.java b/TMessagesProj/src/main/java/org/telegram/ui/ChatActivity.java
+--- a/TMessagesProj/src/main/java/org/telegram/ui/ChatActivity.java
++++ b/TMessagesProj/src/main/java/org/telegram/ui/ChatActivity.java
+@@ -1684,11 +1684,12 @@
+     private final static int open_direct = 70;
+     private final static int remove_fee = 71;
+     private final static int charge_fee = 72;
+ 
+-    private final static int chat_menu_topic_create = 73;
+-
+-    private final static int id_chat_compose_panel = 1000;
++    private final static int chat_menu_topic_create = 73;
++    private final static int vay_chat_settings = 75;
++
++    private final static int id_chat_compose_panel = 1000;
+ 
+     RecyclerListView.OnItemLongClickListenerExtended onItemLongClickListener = new RecyclerListView.OnItemLongClickListenerExtended() {
+         @Override
+         public boolean onItemClick(View view, int position, float x, float y) {
+@@ -3715,10 +3716,12 @@
+                     } else {
+                         getMessagesController().getTopicsController().toggleViewForumAsMessages(-dialog_id, false);
+                         TopicsFragment.prepareToSwitchAnimation(ChatActivity.this);
+                     }
+-                } else if (id == copy) {
+-                    SpannableStringBuilder str = new SpannableStringBuilder();
++                } else if (id == vay_chat_settings) {
++                    presentFragment(app.vaygram.ui.VaySettingsActivity.forChat(currentAccount, dialog_id));
++                } else if (id == copy) {
++                    SpannableStringBuilder str = new SpannableStringBuilder();
+                     long previousUid = 0;
+                     for (int a = 1; a >= 0; a--) {
+                         ArrayList<Integer> ids = new ArrayList<>();
+                         for (int b = 0; b < selectedMessagesCanCopyIds[a].size(); b++) {
+@@ -4465,11 +4468,16 @@
+                         updateBotButtons();
+                     } else {
+                         headerItem.lazilyAddSubItem(delete_chat, R.drawable.msg_delete, LocaleController.getString(R.string.DeleteChatUser));
+                     }
+-                }
+-            }
+-            if (ChatObject.isMonoForum(currentChat) && ChatObject.canManageMonoForum(currentAccount, currentChat)) {
++                }
++            }
++            headerItem.lazilyAddSubItem(
++                    vay_chat_settings,
++                    R.drawable.msg_settings_old,
++                    "vayGram Chat Settings"
++            );
++            if (ChatObject.isMonoForum(currentChat) && ChatObject.canManageMonoForum(currentAccount, currentChat)) {
+                 headerItem.lazilyAddSubItem(remove_fee, R.drawable.menu_paid_off, getString(R.string.DirectRemoveFee));
+                 headerItem.lazilyAddSubItem(charge_fee, R.drawable.menu_feature_paid, getString(R.string.DirectChargeFee));
+                 headerItem.setSubItemShown(remove_fee, false);
+                 headerItem.setSubItemShown(charge_fee, false);
