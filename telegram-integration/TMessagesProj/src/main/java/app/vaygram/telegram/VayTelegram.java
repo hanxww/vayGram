@@ -9,6 +9,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.DialogsActivity;
 
 import app.vaygram.android.VayAndroid;
+import app.vaygram.android.settings.VayPresetRepository;
 import app.vaygram.core.settings.VayDefaults;
 import app.vaygram.core.settings.VayScopeKey;
 import app.vaygram.core.settings.VaySettingsEngine;
@@ -134,5 +135,10 @@ public final class VayTelegram {
     public static VaySettingsRegistry registry() {
         ensureInitialized();
         return VayAndroid.registry();
+    }
+
+    public static VayPresetRepository presets() {
+        ensureInitialized();
+        return VayAndroid.presets();
     }
 }
