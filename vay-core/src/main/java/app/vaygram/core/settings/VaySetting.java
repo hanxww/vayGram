@@ -19,6 +19,9 @@ public final class VaySetting<T> {
     private final Set<VaySettingScope> scopes;
     private final List<String> tags;
     private final VayValueValidator<T> validator;
+    private final Double minValue;
+    private final Double maxValue;
+    private final Double stepValue;
 
     private VaySetting(Builder<T> builder) {
         this.id = requireText(builder.id, "id");
@@ -31,6 +34,9 @@ public final class VaySetting<T> {
         this.scopes = Collections.unmodifiableSet(EnumSet.copyOf(builder.scopes));
         this.tags = Collections.unmodifiableList(new ArrayList<>(builder.tags));
         this.validator = builder.validator;
+        this.minValue = builder.minValue;
+        this.maxValue = builder.maxValue;
+        this.stepValue = builder.stepValue;
     }
 
     private static String requireText(String value, String field) {
@@ -64,6 +70,10 @@ public final class VaySetting<T> {
         return false;
     }
 
+    public boolean hasNumericRange() {
+        return minValue != null && maxValue != null && stepValue != null;
+    }
+
     public String getId() { return id; }
     public String getTitle() { return title; }
     public String getDescription() { return description; }
@@ -73,6 +83,9 @@ public final class VaySetting<T> {
     public VayVisibilityLevel getVisibilityLevel() { return visibilityLevel; }
     public Set<VaySettingScope> getScopes() { return scopes; }
     public List<String> getTags() { return tags; }
+    public Double getMinValue() { return minValue; }
+    public Double getMaxValue() { return maxValue; }
+    public Double getStepValue() { return stepValue; }
 
     public static final class Builder<T> {
         private final String id;
@@ -85,6 +98,9 @@ public final class VaySetting<T> {
         private Set<VaySettingScope> scopes = EnumSet.of(VaySettingScope.GLOBAL);
         private final List<String> tags = new ArrayList<>();
         private VayValueValidator<T> validator;
+        private Double minValue;
+        private Double maxValue;
+        private Double stepValue;
 
         private Builder(String id, VaySettingType type, T defaultValue) {
             this.id = id;
@@ -111,6 +127,20 @@ public final class VaySetting<T> {
 
         public Builder<T> validator(VayValueValidator<T> validator) {
             this.validator = validator;
+            return this;
+        }
+
+        public Builder<T> range(double min, double max, double step) {
+            if (type != VaySettingType.INTEGER && type != VaySettingType.FLOAT) {
+                throw new IllegalStateException("range() is only valid for INTEGER/FLOAT settings");
+            }
+            if (Double.isNaN(min) || Double.isNaN(max) || Double.isNaN(step)
+                    || min >= max || step <= 0d) {
+                throw new IllegalArgumentException("Invalid numeric range");
+            }
+            this.minValue = min;
+            this.maxValue = max;
+            this.stepValue = step;
             return this;
         }
 
