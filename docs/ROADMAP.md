@@ -37,7 +37,7 @@
 - [x] bottom bar height / labels
 - [x] animation scale — wired to vayGram-controlled main navigation motion
 - [x] AMOLED surface mode — pure-black supported surfaces in dark themes
-- [ ] compact mode
+- [x] compact mode — non-destructive density overlay
 
 ## M3 — Presets
 - [ ] settings profiles
