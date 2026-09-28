@@ -172,6 +172,22 @@ public final class VaySettingsEngine {
                 setting.getId(), scope, current, original, System.currentTimeMillis()));
     }
 
+    public synchronized <T> void clearStoredValue(VaySetting<T> setting, VayScopeKey scope) {
+        assertScopeAllowed(setting, scope);
+        if (!hasStoredValue(setting, scope)) {
+            return;
+        }
+        T oldValue = get(setting, scope);
+        store.remove(storageKey(setting, scope));
+        notifyListeners(new VaySettingChange(
+                setting.getId(),
+                scope,
+                oldValue,
+                setting.getDefaultValue(),
+                System.currentTimeMillis()
+        ));
+    }
+
     public synchronized <T> void reset(VaySetting<T> setting) {
         reset(setting, VayScopeKey.GLOBAL);
     }
