@@ -42,6 +42,12 @@ must_grep 'presentSettingFragment\(new app\.vaygram\.ui\.VaySettingsActivity\(\)
 must_grep 'ACTION_SAVE_PROFILE' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
   "save profile settings action"
+must_grep 'TYPE_PREVIEW' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
+  "embedded visual preview row"
+must_grep 'VaySettingsListener previewListener' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
+  "live preview listener"
 must_grep 'VayTelegram\.presets\(\)\.save' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
   "persistent profile save UI"
