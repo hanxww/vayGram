@@ -1,0 +1,26 @@
+diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Cells/ChatMessageCell.java b/TMessagesProj/src/main/java/org/telegram/ui/Cells/ChatMessageCell.java
+--- a/TMessagesProj/src/main/java/org/telegram/ui/Cells/ChatMessageCell.java
++++ b/TMessagesProj/src/main/java/org/telegram/ui/Cells/ChatMessageCell.java
+@@ -13690,12 +13690,16 @@
+             resultHeight = botDraftHeightController.getOverrideMeasureHeight(currentMessageObject, normHeight);
+         }
+ 
+-        additionalPaddingHeight = Math.max(0, resultHeight - normHeight);
+-
+-        setMeasuredDimension(
+-            isWidthAdaptive() ? getBoundsRight() - getBoundsLeft() : MeasureSpec.getSize(widthMeasureSpec),
+-            resultHeight
+-        );
++        additionalPaddingHeight = Math.max(0, resultHeight - normHeight);
++
++        final int vayMessageSpacing = currentMessageObject == null
++                ? 0
++                : AndroidUtilities.dp(app.vaygram.telegram.VayAppearance.chatMessageSpacingDp());
++
++        setMeasuredDimension(
++            isWidthAdaptive() ? getBoundsRight() - getBoundsLeft() : MeasureSpec.getSize(widthMeasureSpec),
++            resultHeight + vayMessageSpacing
++        );
+     }
+ 
+     private int additionalPaddingHeight;
