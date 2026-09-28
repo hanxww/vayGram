@@ -44,12 +44,27 @@ public final class VayAppearance {
         return VayTelegram.settings().get(VayDefaults.NAV_HEIGHT);
     }
 
+    public static int bottomNavigationHeightWithMarginsDp() {
+        return bottomNavigationHeightDp() + 16;
+    }
+
+    public static int bottomNavigationFloatingOffsetDp() {
+        return bottomNavigationHeightDp() + 8;
+    }
+
     public static boolean showBottomNavigationLabels() {
         return VayTelegram.settings().get(VayDefaults.NAV_SHOW_LABELS);
     }
 
     public static float animationScale() {
         return VayTelegram.settings().get(VayDefaults.MOTION_SCALE);
+    }
+
+    public static long animationDurationMs(long baseDurationMs) {
+        if (baseDurationMs <= 0) {
+            return 1L;
+        }
+        return Math.max(1L, Math.round(baseDurationMs * animationScale()));
     }
 
     public static boolean useAmoledSurfaces() {

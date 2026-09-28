@@ -1,0 +1,292 @@
+diff --git a/TMessagesProj/src/main/java/org/telegram/ui/DialogsActivity.java b/TMessagesProj/src/main/java/org/telegram/ui/DialogsActivity.java
+--- a/TMessagesProj/src/main/java/org/telegram/ui/DialogsActivity.java
++++ b/TMessagesProj/src/main/java/org/telegram/ui/DialogsActivity.java
+@@ -287,10 +287,16 @@
+ 
+     private static final boolean TMP_DISABLE_TOPICS_TWO_COLUMNS = false;
+ 
+-    public static final int MAIN_TABS_HEIGHT = 56;
+-    public static final int MAIN_TABS_MARGIN = 8;
+-    public static final int MAIN_TABS_HEIGHT_WITH_MARGINS = MAIN_TABS_HEIGHT + MAIN_TABS_MARGIN * 2;
+-    public static final int FILTER_TABS_HEIGHT = 36;
++    public static int MAIN_TABS_HEIGHT = 56;
++    public static final int MAIN_TABS_MARGIN = 8;
++    public static int MAIN_TABS_HEIGHT_WITH_MARGINS = MAIN_TABS_HEIGHT + MAIN_TABS_MARGIN * 2;
++
++    public static void vaySetMainTabsHeight(int height) {
++        MAIN_TABS_HEIGHT = Math.max(48, Math.min(88, height));
++        MAIN_TABS_HEIGHT_WITH_MARGINS = MAIN_TABS_HEIGHT + MAIN_TABS_MARGIN * 2;
++    }
++
++    public static final int FILTER_TABS_HEIGHT = 36;
+     public static final int SEARCH_TABS_HEIGHT = 36 + 7 + 7;
+     public static final int SEARCH_FIELD_HEIGHT = 48;
+ 
+diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Components/glass/GlassTabView.java b/TMessagesProj/src/main/java/org/telegram/ui/Components/glass/GlassTabView.java
+--- a/TMessagesProj/src/main/java/org/telegram/ui/Components/glass/GlassTabView.java
++++ b/TMessagesProj/src/main/java/org/telegram/ui/Components/glass/GlassTabView.java
+@@ -75,9 +75,12 @@
+     private TabAnimation tabAnimation;
+     private TLRPC.TL_attachMenuBot tabAnimationBot;
+ 
+-    private final TextPaint defaultTextPaint;
+-
+-    public GlassTabView(@NonNull Context context) {
++    private final TextPaint defaultTextPaint;
++
++    private boolean vayMainTab;
++    private boolean vayLabelVisible = true;
++
++    public GlassTabView(@NonNull Context context) {
+         super(context);
+         imageView = new RLottieImageView(context);
+         addView(imageView, LayoutHelper.createFrame(44, 44, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, -6, 0, 0));
+@@ -115,12 +118,68 @@
+     }
+ 
+     @Override
+-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+-        super.onSizeChanged(w, h, oldw, oldh);
+-        checkVisualWidth();
+-    }
+-
+-    private void checkVisualWidth() {
++    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
++        super.onSizeChanged(w, h, oldw, oldh);
++        checkVisualWidth();
++        updateVayMainTabLayout();
++    }
++
++    public void setVayMainTabLabelVisible(boolean visible) {
++        if (!vayMainTab) {
++            return;
++        }
++        if (vayLabelVisible != visible) {
++            vayLabelVisible = visible;
++            textView.setVisibility(visible ? VISIBLE : GONE);
++            updateVayMainTabLayout();
++            requestLayout();
++        }
++    }
++
++    public void setVayMainTabMotionScale(float scale) {
++        if (!vayMainTab) {
++            return;
++        }
++        final float clamped = Math.max(0f, Math.min(2f, scale));
++        isSelectedAnimator.setDuration(Math.max(1L, Math.round(320f * clamped)));
++        isHasCounterAnimator.setDuration(Math.max(1L, Math.round(380f * clamped)));
++        isHasCounterErrorAnimator.setDuration(Math.max(1L, Math.round(380f * clamped)));
++    }
++
++    private void updateVayMainTabLayout() {
++        if (!vayMainTab || getHeight() <= 0) {
++            return;
++        }
++
++        final int height = getHeight();
++        final int delta = (height - dp(48)) / 2;
++
++        FrameLayout.LayoutParams imageParams = (FrameLayout.LayoutParams) imageView.getLayoutParams();
++        if (imageParams != null) {
++            imageParams.topMargin = vayLabelVisible
++                    ? dp(4) + delta
++                    : Math.max(0, (height - imageParams.height) / 2);
++            imageView.setLayoutParams(imageParams);
++        }
++
++        if (backupImageView != null) {
++            FrameLayout.LayoutParams avatarParams = (FrameLayout.LayoutParams) backupImageView.getLayoutParams();
++            if (avatarParams != null) {
++                avatarParams.topMargin = vayLabelVisible
++                        ? dp(5) + delta
++                        : Math.max(0, (height - avatarParams.height) / 2);
++                backupImageView.setLayoutParams(avatarParams);
++            }
++        }
++
++        FrameLayout.LayoutParams textParams = (FrameLayout.LayoutParams) textView.getLayoutParams();
++        if (textParams != null && vayLabelVisible) {
++            textParams.topMargin = dp(28.33f) + delta;
++            textView.setLayoutParams(textParams);
++        }
++    }
++
++    private void checkVisualWidth() {
+         if (hasVisualWidth) {
+             final float offset = (visualWidth - getMeasuredWidth()) / 2f;
+             imageView.setTranslationX(offset);
+@@ -400,9 +459,10 @@
+     public static GlassTabView createMainTab(Context context, Theme.ResourcesProvider resourcesProvider, TabAnimation tabAnimation, @StringRes int stringRes) {
+         GlassTabView tab = new GlassTabView(context);
+         tab.resourcesProvider = resourcesProvider;
+-        tab.tabAnimation = tabAnimation;
+-        tab.textView.setText(LocaleController.getString(stringRes));
+-        tab.checkPlayAnimation(false);
++        tab.tabAnimation = tabAnimation;
++        tab.vayMainTab = true;
++        tab.textView.setText(LocaleController.getString(stringRes));
++        tab.checkPlayAnimation(false);
+         tab.imageView.setLayoutParams(LayoutHelper.createFrame(24, 24, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 4, 0, 0));
+         tab.colorDefault = Theme.getColor(Theme.key_glass_tabUnselected, resourcesProvider);
+         tab.colorSelected = Theme.getColor(Theme.key_glass_tabSelected, resourcesProvider);
+@@ -412,9 +472,10 @@
+     }
+ 
+     public static GlassTabView createAvatar(Context context, Theme.ResourcesProvider resourcesProvider, int currentAccount, @StringRes int stringRes) {
+-        GlassTabView tab = new GlassTabView(context);
+-        tab.textView.setText(LocaleController.getString(stringRes));
+-        tab.imageView.setVisibility(GONE);
++        GlassTabView tab = new GlassTabView(context);
++        tab.vayMainTab = true;
++        tab.textView.setText(LocaleController.getString(stringRes));
++        tab.imageView.setVisibility(GONE);
+ 
+         TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(UserConfig.getInstance(currentAccount).getClientUserId());
+         AvatarDrawable avatarDrawable = new AvatarDrawable(user);
+@@ -512,21 +573,27 @@
+         }
+     }
+ 
+-    @Override
+-    public float measureTextWidth() {
+-        return defaultTextPaint.measureText(textView.getText().toString());
+-    }
+-
+-    private TextPaint scaledTextPaint;
+-
+-    @Override
+-    public float measureTextWidth(float textSizeDp) {
+-        if (scaledTextPaint == null) {
+-            scaledTextPaint = new TextPaint(defaultTextPaint);
+-        }
+-        scaledTextPaint.setTextSize(dp(textSizeDp));
+-        return scaledTextPaint.measureText(textView.getText().toString());
+-    }
++    @Override
++    public float measureTextWidth() {
++        if (vayMainTab && !vayLabelVisible) {
++            return dp(24);
++        }
++        return defaultTextPaint.measureText(textView.getText().toString());
++    }
++
++    private TextPaint scaledTextPaint;
++
++    @Override
++    public float measureTextWidth(float textSizeDp) {
++        if (vayMainTab && !vayLabelVisible) {
++            return dp(24);
++        }
++        if (scaledTextPaint == null) {
++            scaledTextPaint = new TextPaint(defaultTextPaint);
++        }
++        scaledTextPaint.setTextSize(dp(textSizeDp));
++        return scaledTextPaint.measureText(textView.getText().toString());
++    }
+ 
+     @Override
+     public void setTextSizeDp(float textSizeDp) {
+diff --git a/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java b/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java
+--- a/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java
++++ b/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java
+@@ -84,8 +84,11 @@
+ import java.util.ArrayList;
+ import java.util.Collections;
+ 
+-import me.vkryl.android.animator.BoolAnimator;
+-import me.vkryl.android.animator.FactorAnimator;
++import app.vaygram.telegram.VayAppearance;
++import app.vaygram.telegram.VayTelegram;
++
++import me.vkryl.android.animator.BoolAnimator;
++import me.vkryl.android.animator.FactorAnimator;
+ 
+ public class MainTabsActivity extends ViewPagerActivity implements NotificationCenter.NotificationCenterDelegate, FactorAnimator.Target {
+ 
+@@ -301,9 +304,10 @@
+     }
+ 
+     @Override
+-    public View createView(Context context) {
+-        super.createView(context);
+-        tabletLayout = false;
++    public View createView(Context context) {
++        super.createView(context);
++        VayTelegram.ensureInitialized();
++        tabletLayout = false;
+ 
+         tabsView = new MainTabsLayout(context, resourceProvider);
+         tabsView.setClipChildren(false);
+@@ -391,12 +395,49 @@
+             updateLayout.updateAppUpdateViews(currentAccount, false);
+         }
+ 
+-        updateLayout();
+-        checkUnreadCount(false);
+-        return contentView;
+-    }
+-
+-    private void checkUnreadCount(boolean animated) {
++        applyVayNavigationAppearance();
++        updateLayout();
++        checkUnreadCount(false);
++        return contentView;
++    }
++
++    private void applyVayNavigationAppearance() {
++        final boolean labelsVisible = VayAppearance.showBottomNavigationLabels();
++        final float motionScale = VayAppearance.animationScale();
++        animatorTabsVisible.setDuration(VayAppearance.animationDurationMs(380));
++
++        if (tabs != null) {
++            for (GlassTabView tab : tabs) {
++                if (tab != null) {
++                    tab.setVayMainTabLabelVisible(labelsVisible);
++                    tab.setVayMainTabMotionScale(motionScale);
++                }
++            }
++        }
++
++        if (tabsView != null) {
++            final ViewGroup.LayoutParams params = tabsView.getLayoutParams();
++            final int height = dp(DialogsActivity.MAIN_TABS_HEIGHT_WITH_MARGINS);
++            if (params != null && params.height != height) {
++                params.height = height;
++                tabsView.setLayoutParams(params);
++            }
++            tabsView.requestLayout();
++        }
++
++        if (tabsViewBackground != null) {
++            tabsViewBackground.setRadius(dp(DialogsActivity.MAIN_TABS_HEIGHT / 2f));
++        }
++
++        if (tabsViewWrapper != null) {
++            tabsViewWrapper.requestLayout();
++        }
++        if (contentView != null) {
++            contentView.requestLayout();
++        }
++    }
++
++    private void checkUnreadCount(boolean animated) {
+         if (tabsView == null) {
+             return;
+         }
+@@ -957,9 +998,12 @@
+ 
+     @Override
+     public void didReceivedNotification(int id, int account, Object... args) {
+-        if (id == NotificationCenter.notificationsCountUpdated || id == NotificationCenter.updateInterfaces) {
+-            checkUnreadCount(fragmentView != null && fragmentView.isAttachedToWindow());
+-        } else if (id == NotificationCenter.appUpdateLoading) {
++        if (id == NotificationCenter.notificationsCountUpdated || id == NotificationCenter.updateInterfaces) {
++            checkUnreadCount(fragmentView != null && fragmentView.isAttachedToWindow());
++            if (id == NotificationCenter.updateInterfaces) {
++                applyVayNavigationAppearance();
++            }
++        } else if (id == NotificationCenter.appUpdateLoading) {
+             if (updateLayout != null) {
+                 updateLayout.updateFileProgress(null);
+                 updateLayout.updateAppUpdateViews(currentAccount, true);

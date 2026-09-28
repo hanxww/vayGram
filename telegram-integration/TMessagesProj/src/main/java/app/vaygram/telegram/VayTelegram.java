@@ -4,6 +4,8 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.UserConfig;
+import org.telegram.ui.DialogsActivity;
 
 import app.vaygram.android.VayAndroid;
 import app.vaygram.core.settings.VayDefaults;
@@ -41,6 +43,7 @@ public final class VayTelegram {
         );
 
         syncBubbleRadius(engine.get(VayDefaults.CHAT_BUBBLE_RADIUS));
+        syncMainTabsHeight(engine.get(VayDefaults.NAV_HEIGHT));
 
         engine.addListener(change -> {
             if (!VayScopeKey.GLOBAL.equals(change.getScope())) {
@@ -55,6 +58,17 @@ public final class VayTelegram {
                 }
             }
 
+            if (VayDefaults.NAV_HEIGHT.getId().equals(settingId)) {
+                Object value = change.getNewValue();
+                if (value instanceof Number) {
+                    syncMainTabsHeight(((Number) value).intValue());
+                }
+                notifyMainTabsAppearanceChanged();
+            } else if (VayDefaults.NAV_SHOW_LABELS.getId().equals(settingId)
+                    || VayDefaults.MOTION_SCALE.getId().equals(settingId)) {
+                notifyMainTabsAppearanceChanged();
+            }
+
             if (VayDefaults.DIALOG_ROW_HEIGHT.getId().equals(settingId)
                     || VayDefaults.AVATAR_SIZE.getId().equals(settingId)
                     || VayDefaults.AVATAR_RADIUS.getId().equals(settingId)) {
@@ -64,6 +78,19 @@ public final class VayTelegram {
                 );
             }
         });
+    }
+
+    private static void syncMainTabsHeight(int value) {
+        DialogsActivity.vaySetMainTabsHeight(Math.max(48, Math.min(88, value)));
+    }
+
+    private static void notifyMainTabsAppearanceChanged() {
+        for (int account = 0; account < UserConfig.MAX_ACCOUNT_COUNT; account++) {
+            NotificationCenter.getInstance(account).postNotificationName(
+                    NotificationCenter.updateInterfaces,
+                    0
+            );
+        }
     }
 
     private static void syncBubbleRadius(float value) {

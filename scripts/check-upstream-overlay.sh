@@ -54,6 +54,19 @@ must_grep 'VayAppearance\.chatMessageSpacingDp\(\)' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/Cells/ChatMessageCell.java" \
   "message spacing hook"
 
+must_grep 'vaySetMainTabsHeight\(int height\)' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/DialogsActivity.java" \
+  "dynamic bottom bar height hook"
+must_grep 'setVayMainTabLabelVisible' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/Components/glass/GlassTabView.java" \
+  "bottom bar label visibility hook"
+must_grep 'setVayMainTabMotionScale' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/Components/glass/GlassTabView.java" \
+  "bottom bar motion scale hook"
+must_grep 'applyVayNavigationAppearance\(\)' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java" \
+  "live bottom navigation refresh"
+
 must_grep '^APP_PACKAGE=app\.vaygram\.messenger$' \
   "$TMP/telegram/gradle.properties" \
   "vayGram application id"

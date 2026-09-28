@@ -23,6 +23,9 @@ public final class Demo {
         engine.addListener(change -> System.out.println("changed: " + change));
         System.out.println("vayGram settings registered: " + registry.size());
         System.out.println("default bubble radius: " + engine.get(VayDefaults.CHAT_BUBBLE_RADIUS));
+        if (engine.get(VayDefaults.NAV_HEIGHT) != 56) {
+            throw new IllegalStateException("Bottom navigation default must match Telegram's 56dp baseline");
+        }
 
         engine.set(VayDefaults.CHAT_BUBBLE_RADIUS, 12f);
         System.out.println("new bubble radius: " + engine.get(VayDefaults.CHAT_BUBBLE_RADIUS));
