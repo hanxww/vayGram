@@ -1081,7 +1081,7 @@ public final class VaySettingsActivity extends BaseFragment {
             );
             canvas.drawRoundRect(rect, bubbleRadiusPx, bubbleRadiusPx, paint);
 
-            paint.setColor(Theme.getColor(Theme.key_chat_inMessageText));
+            paint.setColor(Theme.getColor(Theme.key_chat_messageTextIn));
             rect.set(
                     left + AndroidUtilities.dp(30),
                     incomingTop + AndroidUtilities.dp(15),
@@ -1101,7 +1101,7 @@ public final class VaySettingsActivity extends BaseFragment {
             );
             canvas.drawRoundRect(rect, bubbleRadiusPx, bubbleRadiusPx, paint);
 
-            paint.setColor(Theme.getColor(Theme.key_chat_outMessageText));
+            paint.setColor(Theme.getColor(Theme.key_chat_messageTextOut));
             rect.set(
                     right - AndroidUtilities.dp(148),
                     outgoingTop + AndroidUtilities.dp(15),
