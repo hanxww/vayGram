@@ -34,6 +34,8 @@ must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsA
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/core/settings/VaySettingsEngine.java" "VayCore settings engine"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/VayAndroid.java" "Android settings bridge"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/settings/VayPresetRepository.java" "persistent preset repository"
+must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/theme/VayThemeBridge.java" "Telegram theme token bridge"
+must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/core/theme/VayThemeTokenRegistry.java" "semantic theme token registry"
 
 must_grep 'presentSettingFragment\(new app\.vaygram\.ui\.VaySettingsActivity\(\)\)' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/SettingsActivity.java" \
@@ -48,6 +50,12 @@ must_grep 'TYPE_PREVIEW' \
 must_grep 'VaySettingsListener previewListener' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
   "live preview listener"
+must_grep 'VayThemeBridge\.color' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
+  "semantic token preview consumer"
+must_grep 'VayThemeTokens\.CHAT_BUBBLE_OUT' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/theme/VayThemeBridge.java" \
+  "chat token Telegram mapping"
 must_grep 'VayTelegram\.presets\(\)\.save' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
   "persistent profile save UI"
