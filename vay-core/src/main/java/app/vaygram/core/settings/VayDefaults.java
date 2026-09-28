@@ -11,6 +11,7 @@ public final class VayDefaults {
             .visibility(VayVisibilityLevel.BASIC)
             .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT, VaySettingScope.CHAT)
             .tags("bubble", "radius", "chat", "скругление", "сообщения")
+            .range(0, 40, 1)
             .validator(v -> clamp(v, 0f, 40f))
             .build();
 
@@ -22,6 +23,7 @@ public final class VayDefaults {
             .visibility(VayVisibilityLevel.ADVANCED)
             .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT, VaySettingScope.CHAT)
             .tags("spacing", "density", "чат", "отступ")
+            .range(0, 24, 1)
             .validator(v -> clamp(v, 0f, 24f))
             .build();
 
@@ -33,6 +35,7 @@ public final class VayDefaults {
             .visibility(VayVisibilityLevel.ADVANCED)
             .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
             .tags("chat list", "compact", "density", "список чатов")
+            .range(48, 112, 1)
             .validator(v -> clamp(v, 48, 112))
             .build();
 
@@ -44,6 +47,7 @@ public final class VayDefaults {
             .visibility(VayVisibilityLevel.BASIC)
             .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT, VaySettingScope.CHAT)
             .tags("avatar", "аватар", "size", "размер")
+            .range(28, 96, 1)
             .validator(v -> clamp(v, 28f, 96f))
             .build();
 
@@ -55,6 +59,7 @@ public final class VayDefaults {
             .visibility(VayVisibilityLevel.ADVANCED)
             .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT, VaySettingScope.CHAT)
             .tags("avatar", "shape", "round", "аватар", "форма")
+            .range(0, 50, 1)
             .validator(v -> clamp(v, 0f, 50f))
             .build();
 
@@ -76,6 +81,7 @@ public final class VayDefaults {
             .visibility(VayVisibilityLevel.ADVANCED)
             .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
             .tags("bottom bar", "height", "navigation", "панель")
+            .range(48, 96, 1)
             .validator(v -> clamp(v, 48, 96))
             .build();
 
@@ -87,6 +93,7 @@ public final class VayDefaults {
             .visibility(VayVisibilityLevel.BASIC)
             .scopes(VaySettingScope.GLOBAL)
             .tags("animation", "speed", "motion", "анимация")
+            .range(0, 2, 0.05)
             .validator(v -> clamp(v, 0f, 2f))
             .build();
 
@@ -118,6 +125,7 @@ public final class VayDefaults {
             .visibility(VayVisibilityLevel.INSANE)
             .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
             .tags("glass", "blur", "radius", "блюр")
+            .range(0, 64, 1)
             .validator(v -> clamp(v, 0, 64))
             .build();
 

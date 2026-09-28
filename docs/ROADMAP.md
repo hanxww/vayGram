@@ -8,12 +8,16 @@
 - [x] Global / Account / Chat scopes
 - [x] history + undo/redo
 - [x] listeners for live preview
-- [ ] Android persistence adapter
+- [x] Android persistence adapter
+- [x] numeric range metadata for generated controls
 
 ## M1 — First UI
 - [ ] Vay Settings entry in Telegram settings
-- [ ] categories
-- [ ] search
+- [x] generated categories
+- [x] search
+- [x] Basic / Advanced / Insane switcher
+- [x] boolean controls
+- [x] generated numeric controls
 - [ ] recently changed
 - [ ] reset controls
 - [ ] live preview host
