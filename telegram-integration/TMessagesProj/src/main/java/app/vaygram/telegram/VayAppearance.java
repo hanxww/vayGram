@@ -160,10 +160,16 @@ public final class VayAppearance {
     }
 
     private static <T> T resolvedForChat(VaySetting<T> setting, int account, long dialogId) {
-        return VayTelegram.settings().getResolved(
-                setting,
-                VayTelegram.chatScope(account, dialogId),
-                VayTelegram.accountScope(account)
-        );
+        if (setting.getScopes().contains(app.vaygram.core.settings.VaySettingScope.CHAT)) {
+            return VayTelegram.settings().getResolved(
+                    setting,
+                    VayTelegram.chatScope(account, dialogId),
+                    VayTelegram.accountScope(account)
+            );
+        }
+        if (setting.getScopes().contains(app.vaygram.core.settings.VaySettingScope.ACCOUNT)) {
+            return resolvedForAccount(setting, account);
+        }
+        return VayTelegram.settings().get(setting);
     }
 }
