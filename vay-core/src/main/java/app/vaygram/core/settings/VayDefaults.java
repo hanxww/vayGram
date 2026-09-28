@@ -85,6 +85,16 @@ public final class VayDefaults {
             .validator(v -> clamp(v, 48, 88))
             .build();
 
+    public static final VaySetting<Boolean> COMPACT_MODE = VaySetting
+            .builder("layout.compact", VaySettingType.BOOLEAN, false)
+            .title("Compact mode")
+            .description("Temporarily tighten supported layouts without overwriting your custom values")
+            .category("Appearance / Layout")
+            .visibility(VayVisibilityLevel.BASIC)
+            .scopes(VaySettingScope.GLOBAL)
+            .tags("compact", "density", "small", "layout", "компакт", "плотность")
+            .build();
+
     public static final VaySetting<Float> MOTION_SCALE = VaySetting
             .builder("motion.scale", VaySettingType.FLOAT, 1f)
             .title("Animation scale")
@@ -148,6 +158,7 @@ public final class VayDefaults {
         registry.register(AVATAR_RADIUS);
         registry.register(NAV_SHOW_LABELS);
         registry.register(NAV_HEIGHT);
+        registry.register(COMPACT_MODE);
         registry.register(MOTION_SCALE);
         registry.register(THEME_AMOLED);
         registry.register(GLASS_BLUR);
