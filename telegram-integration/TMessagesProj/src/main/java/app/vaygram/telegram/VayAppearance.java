@@ -25,8 +25,18 @@ public final class VayAppearance {
         return VayTelegram.settings().get(VayDefaults.AVATAR_RADIUS);
     }
 
-    public static float dialogAvatarRadiusDp(float avatarSizeDp) {
-        return avatarSizeDp * avatarRoundnessPercent() / 100f;
+    public static float dialogAvatarSizeDp() {
+        float requested = avatarSizeDp();
+        float maxForRow = Math.max(28f, dialogRowHeightDp() - 12f);
+        return Math.max(28f, Math.min(requested, maxForRow));
+    }
+
+    public static int dialogMessagePaddingStartDp(int avatarStartDp) {
+        return Math.max(52, Math.round(avatarStartDp + dialogAvatarSizeDp() + 9f));
+    }
+
+    public static float dialogAvatarRadiusDp() {
+        return dialogAvatarSizeDp() * avatarRoundnessPercent() / 100f;
     }
 
     public static int bottomNavigationHeightDp() {
