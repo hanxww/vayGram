@@ -9,11 +9,19 @@ import app.vaygram.core.settings.VaySettingsEngine;
 import app.vaygram.core.settings.VaySettingsPreset;
 import app.vaygram.core.settings.VaySettingsRegistry;
 import app.vaygram.core.settings.VayVisibilityLevel;
+import app.vaygram.core.theme.VayThemeTokenRegistry;
+import app.vaygram.core.theme.VayThemeTokens;
 
 public final class Demo {
     public static void main(String[] args) {
         VaySettingsRegistry registry = VayDefaults.createRegistry();
         VaySettingsEngine engine = new VaySettingsEngine(registry, new InMemoryVaySettingsStore());
+        VayThemeTokenRegistry themeTokens = VayThemeTokens.createRegistry();
+        if (themeTokens.size() < 10
+                || themeTokens.find("chat.bubble.out") != VayThemeTokens.CHAT_BUBBLE_OUT
+                || themeTokens.search("navigation").size() < 3) {
+            throw new IllegalStateException("Theme token registry smoke test failed");
+        }
 
         engine.seedIfAbsent(VayDefaults.CHAT_BUBBLE_RADIUS, VayScopeKey.GLOBAL, 17f);
         if (!engine.hasStoredValue(VayDefaults.CHAT_BUBBLE_RADIUS, VayScopeKey.GLOBAL)) {
