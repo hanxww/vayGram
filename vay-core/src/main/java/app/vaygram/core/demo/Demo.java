@@ -14,6 +14,11 @@ public final class Demo {
         VaySettingsRegistry registry = VayDefaults.createRegistry();
         VaySettingsEngine engine = new VaySettingsEngine(registry, new InMemoryVaySettingsStore());
 
+        engine.seedIfAbsent(VayDefaults.CHAT_BUBBLE_RADIUS, VayScopeKey.GLOBAL, 17f);
+        if (!engine.hasStoredValue(VayDefaults.CHAT_BUBBLE_RADIUS, VayScopeKey.GLOBAL)) {
+            throw new IllegalStateException("seedIfAbsent failed");
+        }
+
         engine.addListener(change -> System.out.println("changed: " + change));
         System.out.println("vayGram settings registered: " + registry.size());
         System.out.println("default bubble radius: " + engine.get(VayDefaults.CHAT_BUBBLE_RADIUS));
