@@ -48,6 +48,22 @@ public final class Demo {
             throw new IllegalStateException("Preset round-trip smoke test failed");
         }
         System.out.println("preset applied: " + applied + " setting");
+        float beforePreview = engine.get(VayDefaults.CHAT_BUBBLE_RADIUS);
+        engine.preview(VayDefaults.CHAT_BUBBLE_RADIUS, VayScopeKey.GLOBAL, 8f);
+        if (engine.get(VayDefaults.CHAT_BUBBLE_RADIUS) != 8f) {
+            throw new IllegalStateException("Live preview did not apply");
+        }
+        engine.cancelPreview(VayDefaults.CHAT_BUBBLE_RADIUS, VayScopeKey.GLOBAL, beforePreview);
+        if (engine.get(VayDefaults.CHAT_BUBBLE_RADIUS) != beforePreview) {
+            throw new IllegalStateException("Live preview cancel failed");
+        }
+
+        engine.preview(VayDefaults.CHAT_BUBBLE_RADIUS, VayScopeKey.GLOBAL, 9f);
+        engine.commitPreview(VayDefaults.CHAT_BUBBLE_RADIUS, VayScopeKey.GLOBAL, beforePreview, 9f);
+        if (engine.get(VayDefaults.CHAT_BUBBLE_RADIUS) != 9f) {
+            throw new IllegalStateException("Live preview commit failed");
+        }
+        System.out.println("live preview smoke test passed");
 
         engine.set(VayDefaults.THEME_AMOLED, true);
         System.out.println("modified global settings: " + engine.countModified(VayScopeKey.GLOBAL));
