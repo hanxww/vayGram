@@ -235,7 +235,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java b
 +    }
 +
 +    private void applyVayNavigationAppearance() {
-+        final boolean labelsVisible = VayAppearance.showBottomNavigationLabels();
++        final boolean labelsVisible = VayAppearance.showBottomNavigationLabels(currentAccount);
 +        final float motionScale = VayAppearance.animationScale();
 +        animatorTabsVisible.setDuration(VayAppearance.animationDurationMs(380));
 +
@@ -247,6 +247,8 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java b
 +                }
 +            }
 +        }
++
++        DialogsActivity.vaySetMainTabsHeight(VayAppearance.bottomNavigationHeightDp(currentAccount));
 +
 +        if (tabsView != null) {
 +            final ViewGroup.LayoutParams params = tabsView.getLayoutParams();
