@@ -145,13 +145,41 @@ public final class VaySettingsEngine {
                 continue;
             }
             Object before = getUnchecked(setting, scope);
-            setUncheckedWithHistory(setting, scope, entry.getValue());
+            Object value = coercePresetValue(setting, entry.getValue());
+            if (value == null) {
+                continue;
+            }
+            setUncheckedWithHistory(setting, scope, value);
             Object after = getUnchecked(setting, scope);
             if (!Objects.equals(before, after)) {
                 changed++;
             }
         }
         return changed;
+    }
+
+    private Object coercePresetValue(VaySetting<?> setting, Object value) {
+        if (value == null) {
+            return null;
+        }
+        try {
+            switch (setting.getType()) {
+                case BOOLEAN:
+                    return value instanceof Boolean ? value : Boolean.parseBoolean(String.valueOf(value));
+                case INTEGER:
+                    return value instanceof Number ? ((Number) value).intValue() : Integer.parseInt(String.valueOf(value));
+                case FLOAT:
+                    return value instanceof Number ? ((Number) value).floatValue() : Float.parseFloat(String.valueOf(value));
+                case STRING:
+                case ENUM:
+                case COLOR:
+                    return String.valueOf(value);
+                default:
+                    return value;
+            }
+        } catch (RuntimeException ignored) {
+            return null;
+        }
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
