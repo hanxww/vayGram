@@ -26,7 +26,7 @@
 - [x] Undo / Redo controls
 - [x] scope-aware settings screen foundation
 - [x] live numeric preview with cancel/apply
-- [ ] embedded visual preview host
+- [x] embedded visual preview host — live chat/list/navigation preview
 
 ## M2 — First visible mods
 - [x] chat bubble radius — bidirectional sync with Telegram renderer
