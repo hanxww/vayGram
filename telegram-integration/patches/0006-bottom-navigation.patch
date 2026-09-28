@@ -41,7 +41,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Components/glass/GlassT
          super(context);
          imageView = new RLottieImageView(context);
          addView(imageView, LayoutHelper.createFrame(44, 44, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, -6, 0, 0));
-@@ -115,12 +118,58 @@
+@@ -115,12 +118,68 @@
      }
  
      @Override
@@ -67,6 +67,16 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Components/glass/GlassT
 +            updateVayMainTabLayout();
 +            requestLayout();
 +        }
++    }
++
++    public void setVayMainTabMotionScale(float scale) {
++        if (!vayMainTab) {
++            return;
++        }
++        final float clamped = Math.max(0f, Math.min(2f, scale));
++        isSelectedAnimator.setDuration(Math.max(1L, Math.round(320f * clamped)));
++        isHasCounterAnimator.setDuration(Math.max(1L, Math.round(380f * clamped)));
++        isHasCounterErrorAnimator.setDuration(Math.max(1L, Math.round(380f * clamped)));
 +    }
 +
 +    private void updateVayMainTabLayout() {
@@ -106,7 +116,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Components/glass/GlassT
          if (hasVisualWidth) {
              final float offset = (visualWidth - getMeasuredWidth()) / 2f;
              imageView.setTranslationX(offset);
-@@ -400,9 +449,10 @@
+@@ -400,9 +459,10 @@
      public static GlassTabView createMainTab(Context context, Theme.ResourcesProvider resourcesProvider, TabAnimation tabAnimation, @StringRes int stringRes) {
          GlassTabView tab = new GlassTabView(context);
          tab.resourcesProvider = resourcesProvider;
@@ -120,7 +130,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Components/glass/GlassT
          tab.imageView.setLayoutParams(LayoutHelper.createFrame(24, 24, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 4, 0, 0));
          tab.colorDefault = Theme.getColor(Theme.key_glass_tabUnselected, resourcesProvider);
          tab.colorSelected = Theme.getColor(Theme.key_glass_tabSelected, resourcesProvider);
-@@ -412,9 +462,10 @@
+@@ -412,9 +472,10 @@
      }
  
      public static GlassTabView createAvatar(Context context, Theme.ResourcesProvider resourcesProvider, int currentAccount, @StringRes int stringRes) {
@@ -134,7 +144,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Components/glass/GlassT
  
          TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(UserConfig.getInstance(currentAccount).getClientUserId());
          AvatarDrawable avatarDrawable = new AvatarDrawable(user);
-@@ -513,9 +564,12 @@
+@@ -513,9 +574,12 @@
      }
  
      @Override
@@ -150,7 +160,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Components/glass/GlassT
  
      private TextPaint scaledTextPaint;
  
-@@ -520,13 +574,16 @@
+@@ -520,13 +584,16 @@
      private TextPaint scaledTextPaint;
  
      @Override
@@ -205,7 +215,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java b
  
          tabsView = new MainTabsLayout(context, resourceProvider);
          tabsView.setClipChildren(false);
-@@ -391,12 +395,46 @@
+@@ -391,12 +395,49 @@
              updateLayout.updateAppUpdateViews(currentAccount, false);
          }
  
@@ -223,11 +233,14 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java b
 +
 +    private void applyVayNavigationAppearance() {
 +        final boolean labelsVisible = VayAppearance.showBottomNavigationLabels();
++        final float motionScale = VayAppearance.animationScale();
++        animatorTabsVisible.setDuration(VayAppearance.animationDurationMs(380));
 +
 +        if (tabs != null) {
 +            for (GlassTabView tab : tabs) {
 +                if (tab != null) {
 +                    tab.setVayMainTabLabelVisible(labelsVisible);
++                    tab.setVayMainTabMotionScale(motionScale);
 +                }
 +            }
 +        }
@@ -258,7 +271,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java b
          if (tabsView == null) {
              return;
          }
-@@ -957,9 +995,12 @@
+@@ -957,9 +998,12 @@
  
      @Override
      public void didReceivedNotification(int id, int account, Object... args) {
