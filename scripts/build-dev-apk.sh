@@ -25,7 +25,7 @@ bash "$ROOT/scripts/bootstrap-telegram.sh" "$WORKDIR"
 echo "[vayGram] generating a project-local development signing key..."
 KEYSTORE="$WORKDIR/TMessagesProj/config/release.keystore"
 rm -f "$KEYSTORE"
-keytool -genkeypair -v   -keystore "$KEYSTORE"   -storepass android   -alias androidkey   -keypass android   -keyalg RSA   -keysize 2048   -validity 10000   -dname "CN=vayGram Dev, OU=Development, O=vayGram, L=Tallinn, C=EE" >/dev/null
+keytool -genkeypair -v   -keystore "$KEYSTORE"   -storepass android   -alias androidkey   -keypass android   -keyalg RSA   -keysize 2048   -validity 10000   -dname "CN=vayGram Dev, OU=Development, O=vayGram, C=XX" >/dev/null
 
 echo "[vayGram] building afatDebug..."
 (
