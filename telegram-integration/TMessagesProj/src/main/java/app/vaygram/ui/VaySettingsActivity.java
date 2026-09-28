@@ -72,6 +72,7 @@ public final class VaySettingsActivity extends BaseFragment {
     private static final int ACTION_OPEN_PARENT_SCOPE = 8;
     private static final int ACTION_OPEN_ACCOUNT_SCOPE = 9;
     private static final int ACTION_SCOPE_INFO = 10;
+    private static final int ACTION_PALETTE_EDITOR = 11;
 
     private static final int RECENT_LIMIT = 5;
 
@@ -246,6 +247,15 @@ public final class VaySettingsActivity extends BaseFragment {
             rows.add(Row.action(ACTION_REDO, "Redo", "Restore undone change"));
         }
 
+        int paletteOverrides = VayTelegram.themePalette().countOverrides();
+        rows.add(Row.action(
+                ACTION_PALETTE_EDITOR,
+                "Palette editor",
+                paletteOverrides == 0
+                        ? "Semantic theme colors"
+                        : paletteOverrides + (paletteOverrides == 1 ? " color override" : " color overrides")
+        ));
+
         int modified = VayTelegram.settings().countCustomized(scopeKey);
         rows.add(Row.action(
                 ACTION_EXPORT_PRESET,
@@ -379,6 +389,8 @@ public final class VaySettingsActivity extends BaseFragment {
             openParentScope();
         } else if (action == ACTION_OPEN_ACCOUNT_SCOPE) {
             presentFragment(VaySettingsActivity.forAccount(currentAccount));
+        } else if (action == ACTION_PALETTE_EDITOR) {
+            presentFragment(new VayPaletteActivity());
         }
     }
 
