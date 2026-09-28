@@ -3,7 +3,13 @@ package app.vaygram.telegram;
 import app.vaygram.core.settings.VayDefaults;
 
 public final class VayAppearance {
+    private static volatile boolean amoledSurfacesEnabled;
+
     private VayAppearance() {}
+
+    static void setAmoledSurfacesEnabled(boolean enabled) {
+        amoledSurfacesEnabled = enabled;
+    }
 
     public static float chatBubbleRadiusDp() {
         return VayTelegram.settings().get(VayDefaults.CHAT_BUBBLE_RADIUS);
@@ -68,6 +74,6 @@ public final class VayAppearance {
     }
 
     public static boolean useAmoledSurfaces() {
-        return VayTelegram.settings().get(VayDefaults.THEME_AMOLED);
+        return amoledSurfacesEnabled;
     }
 }

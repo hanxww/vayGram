@@ -36,7 +36,7 @@
 - [x] avatar roundness
 - [x] bottom bar height / labels
 - [x] animation scale — wired to vayGram-controlled main navigation motion
-- [ ] AMOLED surface mode
+- [x] AMOLED surface mode — pure-black supported surfaces in dark themes
 - [ ] compact mode
 
 ## M3 — Presets

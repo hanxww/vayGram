@@ -67,6 +67,16 @@ must_grep 'applyVayNavigationAppearance\(\)' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java" \
   "live bottom navigation refresh"
 
+must_grep 'vayApplyAmoledSurface' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/ActionBar/Theme.java" \
+  "AMOLED surface color hook"
+must_grep 'key_chat_messagePanelBackground' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/ActionBar/Theme.java" \
+  "AMOLED chat composer surface"
+must_grep 'Theme\.refreshThemeColors\(\)' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/telegram/VayTelegram.java" \
+  "live AMOLED theme refresh"
+
 must_grep '^APP_PACKAGE=app\.vaygram\.messenger$' \
   "$TMP/telegram/gradle.properties" \
   "vayGram application id"

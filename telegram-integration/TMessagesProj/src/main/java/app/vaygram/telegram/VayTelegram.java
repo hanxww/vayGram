@@ -5,6 +5,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.DialogsActivity;
 
 import app.vaygram.android.VayAndroid;
@@ -44,6 +45,7 @@ public final class VayTelegram {
 
         syncBubbleRadius(engine.get(VayDefaults.CHAT_BUBBLE_RADIUS));
         syncMainTabsHeight(engine.get(VayDefaults.NAV_HEIGHT));
+        VayAppearance.setAmoledSurfacesEnabled(engine.get(VayDefaults.THEME_AMOLED));
 
         engine.addListener(change -> {
             if (!VayScopeKey.GLOBAL.equals(change.getScope())) {
@@ -67,6 +69,9 @@ public final class VayTelegram {
             } else if (VayDefaults.NAV_SHOW_LABELS.getId().equals(settingId)
                     || VayDefaults.MOTION_SCALE.getId().equals(settingId)) {
                 notifyMainTabsAppearanceChanged();
+            } else if (VayDefaults.THEME_AMOLED.getId().equals(settingId)) {
+                VayAppearance.setAmoledSurfacesEnabled(Boolean.TRUE.equals(change.getNewValue()));
+                Theme.refreshThemeColors();
             }
 
             if (VayDefaults.DIALOG_ROW_HEIGHT.getId().equals(settingId)
