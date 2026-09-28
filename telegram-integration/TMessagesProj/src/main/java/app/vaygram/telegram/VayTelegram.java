@@ -4,6 +4,8 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.UserConfig;
+import org.telegram.ui.DialogsActivity;
 
 import app.vaygram.android.VayAndroid;
 import app.vaygram.core.settings.VayDefaults;
