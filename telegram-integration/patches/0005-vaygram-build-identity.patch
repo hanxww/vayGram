@@ -1,0 +1,122 @@
+diff --git a/TMessagesProj/build.gradle b/TMessagesProj/build.gradle
+--- a/TMessagesProj/build.gradle
++++ b/TMessagesProj/build.gradle
+@@ -112,8 +112,11 @@
+     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
+ }
+ 
+-android {
+-    compileSdkVersion 36
++def vayGramApiId = System.getenv("VAYGRAM_API_ID") ?: getProps("VAYGRAM_API_ID") ?: "0"
++def vayGramApiHash = System.getenv("VAYGRAM_API_HASH") ?: getProps("VAYGRAM_API_HASH") ?: ""
++
++android {
++    compileSdkVersion 36
+     buildToolsVersion '36.0.0'
+     ndkVersion "27.2.12479018"
+ 
+@@ -139,11 +142,14 @@
+     }
+ 
+ 
+-    defaultConfig {
+-        minSdkVersion 21
+-        targetSdkVersion 36
+-
+-        vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
++    defaultConfig {
++        minSdkVersion 21
++        targetSdkVersion 36
++
++        buildConfigField "int", "VAYGRAM_API_ID", vayGramApiId
++        buildConfigField "String", "VAYGRAM_API_HASH", "\"" + vayGramApiHash + "\""
++
++        vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
+ 
+         multiDexEnabled true
+ 
+@@ -250,7 +256,9 @@
+         return "";
+     }
+ }
+-apply plugin: 'com.google.gms.google-services'
++if (file('google-services.json').exists()) {
++    apply plugin: 'com.google.gms.google-services'
++}
+ 
+ task checkVisibility {
+     doFirst {
+diff --git a/TMessagesProj_App/build.gradle b/TMessagesProj_App/build.gradle
+--- a/TMessagesProj_App/build.gradle
++++ b/TMessagesProj_App/build.gradle
+@@ -205,4 +205,6 @@
+     }
+ }
+ 
+-apply plugin: 'com.google.gms.google-services'
++if (rootProject.file('TMessagesProj/google-services.json').exists()) {
++    apply plugin: 'com.google.gms.google-services'
++}
+diff --git a/TMessagesProj/src/main/java/org/telegram/messenger/BuildVars.java b/TMessagesProj/src/main/java/org/telegram/messenger/BuildVars.java
+--- a/TMessagesProj/src/main/java/org/telegram/messenger/BuildVars.java
++++ b/TMessagesProj/src/main/java/org/telegram/messenger/BuildVars.java
+@@ -12,7 +12,9 @@
+ import android.content.SharedPreferences;
+ import android.os.Build;
+ 
+-import com.android.billingclient.api.ProductDetails;
++import com.android.billingclient.api.ProductDetails;
++
++import app.vaygram.telegram.VayBuild;
+ 
+ import java.util.Objects;
+ 
+@@ -26,22 +28,22 @@
+     public static boolean NO_SCOPED_STORAGE = Build.VERSION.SDK_INT <= 29;
+     public static String BUILD_VERSION_STRING = BuildConfig.BUILD_VERSION_STRING;
+ 
+-    public static int APP_ID = 4;
+-    public static String APP_HASH = "014b35b6184100b085b0d0572f9b5103";
+-
+-    // SafetyNet key for Google Identity SDK, set it to empty to disable
+-    public static String SAFETYNET_KEY = "AIzaSyDqt8P-7F7CPCseMkOiVRgb1LY8RN1bvH8";
+-    public static String PLAYSTORE_APP_URL = "https://play.google.com/store/apps/details?id=org.telegram.messenger";
+-    public static String HUAWEI_STORE_URL = "https://appgallery.huawei.com/app/C101184875";
+-    public static String GOOGLE_AUTH_CLIENT_ID = "760348033671-81kmi3pi84p11ub8hp9a1funsv0rn2p9.apps.googleusercontent.com";
+-
+-    public static String HUAWEI_APP_ID = "101184875";
+-
+-    // You can use this flag to disable Google Play Billing (If you're making fork and want it to be in Google Play)
+-    public static boolean IS_BILLING_UNAVAILABLE = false;
+-
+-    // works only on official app ids, disable on your forks
+-    public static boolean SUPPORTS_PASSKEYS = true;
++    public static int APP_ID = BuildConfig.VAYGRAM_API_ID;
++    public static String APP_HASH = BuildConfig.VAYGRAM_API_HASH;
++
++    // Official Telegram app-only credentials/features are intentionally disabled in vayGram.
++    public static String SAFETYNET_KEY = "";
++    public static String PLAYSTORE_APP_URL = VayBuild.DEVELOPMENT_CHANNEL;
++    public static String HUAWEI_STORE_URL = "";
++    public static String GOOGLE_AUTH_CLIENT_ID = "";
++
++    public static String HUAWEI_APP_ID = "";
++
++    // vayGram does not reuse Telegram's store billing identity.
++    public static boolean IS_BILLING_UNAVAILABLE = true;
++
++    // Passkeys currently work only for official app identities.
++    public static boolean SUPPORTS_PASSKEYS = false;
+ 
+     static {
+         if (ApplicationLoader.applicationContext != null) {
+@@ -82,7 +84,8 @@
+     private static Boolean betaApp;
+     public static boolean isBetaApp() {
+         if (betaApp == null) {
+-            betaApp = ApplicationLoader.applicationContext != null && "org.telegram.messenger.beta".equals(ApplicationLoader.applicationContext.getPackageName());
++            betaApp = ApplicationLoader.applicationContext != null
++                    && (VayBuild.PACKAGE_ID + ".beta").equals(ApplicationLoader.applicationContext.getPackageName());
+         }
+         return betaApp;
+     }

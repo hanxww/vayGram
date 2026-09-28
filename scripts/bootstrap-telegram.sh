@@ -25,6 +25,11 @@ git -C "$WORKDIR" remote add origin "$repo"
 git -C "$WORKDIR" fetch -q --depth 1 origin "$commit"
 git -C "$WORKDIR" checkout -q --detach FETCH_HEAD
 
+if [[ "${VAYGRAM_WITH_SUBMODULES:-0}" == "1" ]]; then
+  echo "[vayGram] fetching Telegram submodules for a real Android build..."
+  git -C "$WORKDIR" submodule update --init --recursive --depth 1
+fi
+
 TARGET="$WORKDIR/TMessagesProj/src/main/java/app/vaygram"
 mkdir -p "$TARGET"
 
@@ -38,10 +43,16 @@ for patch in "$ROOT"/telegram-integration/patches/*.patch; do
   git -C "$WORKDIR" apply "$patch"
 done
 
+echo "[vayGram] applying vayGram application identity..."
+bash "$ROOT/scripts/apply-vaygram-branding.sh" "$WORKDIR"
+
 echo
 echo "[vayGram] overlay ready."
 echo "[vayGram] Telegram source: $WORKDIR"
 echo "[vayGram] vayGram package: $TARGET"
 echo
-echo "Next: configure Telegram build credentials/api keys according to upstream README,"
-echo "then open the generated checkout in Android Studio."
+echo "For a build-ready checkout use:"
+echo "  VAYGRAM_WITH_SUBMODULES=1 bash scripts/bootstrap-telegram.sh"
+echo
+echo "Telegram API credentials are read from VAYGRAM_API_ID / VAYGRAM_API_HASH"
+echo "or matching keys in local.properties. Official Telegram API credentials are not reused."

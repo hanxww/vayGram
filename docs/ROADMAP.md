@@ -30,7 +30,7 @@
 
 ## M2 — First visible mods
 - [x] chat bubble radius — bidirectional sync with Telegram renderer
-- [ ] chat message spacing
+- [x] chat message spacing
 - [x] chat list row height
 - [x] avatar size
 - [x] avatar roundness
@@ -54,10 +54,10 @@
 
 ## M5 — Branding and builds
 - [ ] final vayGram icon assets
-- [ ] distinct application id and account type
-- [ ] vayGram application labels
-- [ ] dev version suffix
+- [x] distinct application id and account type
+- [x] vayGram application labels
+- [x] dev version suffix
 - [ ] own Firebase configuration
-- [ ] own Telegram API credentials
-- [ ] signing configuration
+- [x] own Telegram API credential injection (secrets not committed)
+- [x] isolated development signing configuration
 - [ ] first installable 0.1-dev APK
