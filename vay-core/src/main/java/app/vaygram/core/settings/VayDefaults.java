@@ -28,7 +28,7 @@ public final class VayDefaults {
             .build();
 
     public static final VaySetting<Integer> DIALOG_ROW_HEIGHT = VaySetting
-            .builder("dialogs.row.height", VaySettingType.INTEGER, 72)
+            .builder("dialogs.row.height", VaySettingType.INTEGER, 70)
             .title("Chat row height")
             .description("Height of each row in the chat list")
             .category("Chat List")
