@@ -14,6 +14,11 @@ public final class Demo {
         VaySettingsRegistry registry = VayDefaults.createRegistry();
         VaySettingsEngine engine = new VaySettingsEngine(registry, new InMemoryVaySettingsStore());
 
+        engine.seedIfAbsent(VayDefaults.CHAT_BUBBLE_RADIUS, VayScopeKey.GLOBAL, 17f);
+        if (!engine.hasStoredValue(VayDefaults.CHAT_BUBBLE_RADIUS, VayScopeKey.GLOBAL)) {
+            throw new IllegalStateException("seedIfAbsent failed");
+        }
+
         engine.addListener(change -> System.out.println("changed: " + change));
         System.out.println("vayGram settings registered: " + registry.size());
         System.out.println("default bubble radius: " + engine.get(VayDefaults.CHAT_BUBBLE_RADIUS));
@@ -34,5 +39,11 @@ public final class Demo {
         System.out.println("chat after undo: " + engine.get(VayDefaults.CHAT_BUBBLE_RADIUS, chat));
         engine.redo();
         System.out.println("chat after redo: " + engine.get(VayDefaults.CHAT_BUBBLE_RADIUS, chat));
+
+        engine.set(VayDefaults.THEME_AMOLED, true);
+        System.out.println("modified global settings: " + engine.countModified(VayScopeKey.GLOBAL));
+        System.out.println("amoled modified: " + engine.isModified(VayDefaults.THEME_AMOLED));
+        engine.resetAll(VayScopeKey.GLOBAL);
+        System.out.println("modified global settings after reset: " + engine.countModified(VayScopeKey.GLOBAL));
     }
 }

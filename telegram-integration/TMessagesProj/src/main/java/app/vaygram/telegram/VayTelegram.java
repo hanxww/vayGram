@@ -1,8 +1,12 @@
 package app.vaygram.telegram;
 
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.SharedConfig;
 
 import app.vaygram.android.VayAndroid;
+import app.vaygram.core.settings.VayDefaults;
+import app.vaygram.core.settings.VayScopeKey;
 import app.vaygram.core.settings.VaySettingsEngine;
 import app.vaygram.core.settings.VaySettingsRegistry;
 
@@ -20,8 +24,45 @@ public final class VayTelegram {
                 return;
             }
             VayAndroid.initialize(ApplicationLoader.applicationContext);
+            installTelegramBridges();
             initialized = true;
         }
+    }
+
+    private static void installTelegramBridges() {
+        VaySettingsEngine engine = VayAndroid.settings();
+
+        // Preserve an existing Telegram appearance choice on the first vayGram run.
+        engine.seedIfAbsent(
+                VayDefaults.CHAT_BUBBLE_RADIUS,
+                VayScopeKey.GLOBAL,
+                (float) SharedConfig.bubbleRadius
+        );
+
+        syncBubbleRadius(engine.get(VayDefaults.CHAT_BUBBLE_RADIUS));
+
+        engine.addListener(change -> {
+            if (VayDefaults.CHAT_BUBBLE_RADIUS.getId().equals(change.getSettingId())
+                    && VayScopeKey.GLOBAL.equals(change.getScope())) {
+                Object value = change.getNewValue();
+                if (value instanceof Number) {
+                    syncBubbleRadius(((Number) value).floatValue());
+                }
+            }
+        });
+    }
+
+    private static void syncBubbleRadius(float value) {
+        int radius = Math.max(0, Math.round(value));
+        if (SharedConfig.bubbleRadius == radius) {
+            return;
+        }
+
+        SharedConfig.bubbleRadius = radius;
+        MessagesController.getGlobalMainSettings()
+                .edit()
+                .putInt("bubbleRadius", radius)
+                .apply();
     }
 
     public static VaySettingsEngine settings() {

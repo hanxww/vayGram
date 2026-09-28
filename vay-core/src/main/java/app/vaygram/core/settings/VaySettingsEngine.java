@@ -42,6 +42,20 @@ public final class VaySettingsEngine {
         return setting.normalize((T) stored);
     }
 
+    public synchronized boolean hasStoredValue(VaySetting<?> setting, VayScopeKey scope) {
+        assertScopeAllowed(setting, scope);
+        return store.get(storageKey(setting, scope)) != null;
+    }
+
+    public synchronized <T> boolean seedIfAbsent(VaySetting<T> setting, VayScopeKey scope, T value) {
+        assertScopeAllowed(setting, scope);
+        if (hasStoredValue(setting, scope)) {
+            return false;
+        }
+        store.put(storageKey(setting, scope), setting.normalize(value));
+        return true;
+    }
+
     public synchronized <T> void set(VaySetting<T> setting, T value) {
         set(setting, VayScopeKey.GLOBAL, value);
     }
@@ -59,6 +73,10 @@ public final class VaySettingsEngine {
         notifyListeners(change);
     }
 
+    public synchronized <T> void reset(VaySetting<T> setting) {
+        reset(setting, VayScopeKey.GLOBAL);
+    }
+
     public synchronized <T> void reset(VaySetting<T> setting, VayScopeKey scope) {
         assertScopeAllowed(setting, scope);
         T oldValue = get(setting, scope);
@@ -71,6 +89,37 @@ public final class VaySettingsEngine {
             record(change);
             notifyListeners(change);
         }
+    }
+
+    public synchronized boolean isModified(VaySetting<?> setting) {
+        return isModified(setting, VayScopeKey.GLOBAL);
+    }
+
+    public synchronized boolean isModified(VaySetting<?> setting, VayScopeKey scope) {
+        assertScopeAllowed(setting, scope);
+        return !Objects.equals(getUnchecked(setting, scope), setting.getDefaultValue());
+    }
+
+    public synchronized int countModified(VayScopeKey scope) {
+        int count = 0;
+        for (VaySetting<?> setting : registry.all()) {
+            if (setting.getScopes().contains(scope.getScope()) && isModified(setting, scope)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public synchronized int resetAll(VayScopeKey scope) {
+        int resetCount = 0;
+        for (VaySetting<?> setting : registry.all()) {
+            if (!setting.getScopes().contains(scope.getScope()) || !isModified(setting, scope)) {
+                continue;
+            }
+            resetUnchecked(setting, scope);
+            resetCount++;
+        }
+        return resetCount;
     }
 
     public synchronized boolean canUndo() { return !undoStack.isEmpty(); }
@@ -123,6 +172,16 @@ public final class VaySettingsEngine {
         store.put(storageKey(setting, scope), normalized);
         notifyListeners(new VaySettingChange(
                 setting.getId(), scope, oldValue, normalized, System.currentTimeMillis()));
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private Object getUnchecked(VaySetting setting, VayScopeKey scope) {
+        return get(setting, scope);
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private void resetUnchecked(VaySetting setting, VayScopeKey scope) {
+        reset(setting, scope);
     }
 
     private VaySetting<?> requireSetting(String id) {

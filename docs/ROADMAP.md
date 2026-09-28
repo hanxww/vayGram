@@ -10,23 +10,29 @@
 - [x] listeners for live preview
 - [x] Android persistence adapter
 - [x] numeric range metadata for generated controls
+- [x] migration seed API
 
 ## M1 — First UI
-- [ ] Vay Settings entry in Telegram settings
+- [x] Vay Settings entry in Telegram settings
 - [x] generated categories
 - [x] search
 - [x] Basic / Advanced / Insane switcher
 - [x] boolean controls
 - [x] generated numeric controls
-- [ ] recently changed
-- [ ] reset controls
-- [ ] live preview host
+- [x] recently changed
+- [x] changed-value indicators
+- [x] per-setting reset
+- [x] reset all customized values
+- [x] Undo / Redo controls
+- [x] scope-aware settings screen foundation
+- [ ] embedded live preview host
 
 ## M2 — First visible mods
-- [ ] chat bubble radius
+- [x] chat bubble radius — bidirectional sync with Telegram renderer
 - [ ] chat message spacing
-- [ ] chat list row height
-- [ ] avatar size / radius
+- [x] chat list row height
+- [ ] avatar size
+- [x] avatar roundness
 - [ ] bottom bar height / labels
 - [ ] animation scale
 - [ ] AMOLED surface mode
@@ -35,8 +41,8 @@
 ## M3 — Presets
 - [ ] settings profiles
 - [ ] import/export
-- [ ] per-account overrides
-- [ ] per-chat overrides
+- [ ] per-account overrides UI
+- [ ] per-chat overrides UI
 
 ## M4 — Theme Engine
 - [ ] token registry
@@ -44,3 +50,13 @@
 - [ ] Material You bridge
 - [ ] gradients
 - [ ] blur/transparency controls
+
+## M5 — Branding and builds
+- [ ] final vayGram icon assets
+- [ ] distinct application id and account type
+- [ ] vayGram application labels
+- [ ] dev version suffix
+- [ ] own Firebase configuration
+- [ ] own Telegram API credentials
+- [ ] signing configuration
+- [ ] first installable 0.1-dev APK
