@@ -1,0 +1,40 @@
+diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java b/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java
+--- a/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java
++++ b/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java
+@@ -692,7 +692,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Avat
+         Theme.createDialogsResources(context);
+         drawMonoforumAvatar = false;
+         drawCommunityAvatar = false;
+-        avatarImage.setRoundRadius(dp(26));
++        avatarImage.setRoundRadius(dp(app.vaygram.telegram.VayAppearance.dialogAvatarRadiusDp(52f)));
+         for (int i = 0; i < thumbImage.length; ++i) {
+             thumbImage[i] = new ImageReceiver(this);
+             thumbImage[i].ignoreNotifications = true;
+@@ -1017,7 +1017,8 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Avat
+     }
+ 
+     private int getCollapsedHeight() {
+-        int height = dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? heightThreeLines : heightDefault);
++        int baseHeight = useForceThreeLines || SharedConfig.useThreeLinesLayout ? heightThreeLines : app.vaygram.telegram.VayAppearance.dialogRowHeightDp();
++        int height = dp(baseHeight);
+         if (useSeparator || true) {
+             height += 1;
+         }
+@@ -3220,7 +3221,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Avat
+             }
+             drawMonoforumAvatar = false;
+             drawCommunityAvatar = false;
+-            avatarImage.setRoundRadius(dp(26));
++            avatarImage.setRoundRadius(dp(app.vaygram.telegram.VayAppearance.dialogAvatarRadiusDp(52f)));
+             drawUnmute = false;
+         } else {
+             int oldUnreadCount = unreadCount;
+@@ -3672,7 +3673,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Avat
+             } else if (chat != null && chat.forum && currentDialogFolderId == 0 && !useFromUserAsAvatar || !isSavedDialog && user != null && user.self && MessagesController.getInstance(currentAccount).savedViewAsChats) {
+                 avatarRadius = dp(16);
+             } else {
+-                avatarRadius = dp(28);
++                avatarRadius = dp(app.vaygram.telegram.VayAppearance.dialogAvatarRadiusDp(56f));
+             }
+ 
+             avatarImage.setRoundRadius(avatarRadius);
