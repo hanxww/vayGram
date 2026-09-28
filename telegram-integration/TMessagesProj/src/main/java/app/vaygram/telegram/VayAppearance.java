@@ -60,6 +60,13 @@ public final class VayAppearance {
         return VayTelegram.settings().get(VayDefaults.MOTION_SCALE);
     }
 
+    public static long animationDurationMs(long baseDurationMs) {
+        if (baseDurationMs <= 0) {
+            return 1L;
+        }
+        return Math.max(1L, Math.round(baseDurationMs * animationScale()));
+    }
+
     public static boolean useAmoledSurfaces() {
         return VayTelegram.settings().get(VayDefaults.THEME_AMOLED);
     }
