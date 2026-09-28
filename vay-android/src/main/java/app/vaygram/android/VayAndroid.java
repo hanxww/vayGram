@@ -4,15 +4,18 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import app.vaygram.android.settings.SharedPreferencesVaySettingsStore;
+import app.vaygram.android.settings.VayPresetRepository;
 import app.vaygram.core.settings.VayDefaults;
 import app.vaygram.core.settings.VaySettingsEngine;
 import app.vaygram.core.settings.VaySettingsRegistry;
 
 public final class VayAndroid {
     private static final String PREFS_NAME = "vaygram_settings_v1";
+    private static final String PRESETS_PREFS_NAME = "vaygram_presets_v1";
 
     private static volatile VaySettingsRegistry registry;
     private static volatile VaySettingsEngine settings;
+    private static volatile VayPresetRepository presets;
 
     private VayAndroid() {}
 
@@ -34,6 +37,10 @@ public final class VayAndroid {
                     registry,
                     new SharedPreferencesVaySettingsStore(preferences)
             );
+            presets = new VayPresetRepository(appContext.getSharedPreferences(
+                    PRESETS_PREFS_NAME,
+                    Context.MODE_PRIVATE
+            ));
         }
     }
 
@@ -47,6 +54,14 @@ public final class VayAndroid {
 
     public static VaySettingsRegistry registry() {
         VaySettingsRegistry result = registry;
+        if (result == null) {
+            throw new IllegalStateException("VayAndroid.initialize(context) must be called first");
+        }
+        return result;
+    }
+
+    public static VayPresetRepository presets() {
+        VayPresetRepository result = presets;
         if (result == null) {
             throw new IllegalStateException("VayAndroid.initialize(context) must be called first");
         }

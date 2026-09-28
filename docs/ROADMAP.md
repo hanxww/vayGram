@@ -40,7 +40,7 @@
 - [x] compact mode — non-destructive density overlay
 
 ## M3 — Presets
-- [ ] settings profiles
+- [x] settings profiles — persistent save/apply/delete UI
 - [x] import/export
 - [ ] per-account overrides UI
 - [ ] per-chat overrides UI

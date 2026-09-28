@@ -57,6 +57,8 @@ public final class VaySettingsActivity extends BaseFragment {
     private static final int ACTION_RESET_ALL = 3;
     private static final int ACTION_EXPORT_PRESET = 4;
     private static final int ACTION_IMPORT_PRESET = 5;
+    private static final int ACTION_SAVE_PROFILE = 6;
+    private static final int ACTION_SAVED_PROFILES = 7;
 
     private static final int RECENT_LIMIT = 5;
 
@@ -175,6 +177,13 @@ public final class VaySettingsActivity extends BaseFragment {
                 modified > 0 ? modified + (modified == 1 ? " customized setting" : " customized settings") : "Current values"
         ));
         rows.add(Row.action(ACTION_IMPORT_PRESET, "Import preset", "Paste vayGram JSON"));
+        rows.add(Row.action(ACTION_SAVE_PROFILE, "Save profile", "Save all current values"));
+        int savedProfiles = VayTelegram.presets().count();
+        rows.add(Row.action(
+                ACTION_SAVED_PROFILES,
+                "Saved profiles",
+                savedProfiles == 0 ? "None yet" : savedProfiles + (savedProfiles == 1 ? " profile" : " profiles")
+        ));
 
         if (modified > 0) {
             rows.add(Row.action(
@@ -286,7 +295,116 @@ public final class VaySettingsActivity extends BaseFragment {
             copyPreset();
         } else if (action == ACTION_IMPORT_PRESET) {
             showImportPresetDialog();
+        } else if (action == ACTION_SAVE_PROFILE) {
+            showSaveProfileDialog();
+        } else if (action == ACTION_SAVED_PROFILES) {
+            showSavedProfilesDialog();
         }
+    }
+
+    private void showSaveProfileDialog() {
+        Context context = getParentActivity();
+        if (context == null) {
+            return;
+        }
+
+        EditText input = new EditText(context);
+        input.setSingleLine(true);
+        input.setHint("Profile name");
+        int padding = AndroidUtilities.dp(20);
+        input.setPadding(padding, padding, padding, padding);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Save vayGram profile");
+        builder.setMessage("Profiles store the current values in this scope. Saving the same name again replaces it.");
+        builder.setView(input);
+        builder.setNegativeButton("Cancel", null);
+        builder.setPositiveButton("Save", (dialog, which) -> {
+            String name = input.getText().toString().trim();
+            if (TextUtils.isEmpty(name)) {
+                Toast.makeText(context, "Profile name is required", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            VaySettingsPreset preset = VayTelegram.settings().capturePreset(
+                    name,
+                    scopeKey,
+                    false
+            );
+            VayTelegram.presets().save(preset);
+            Toast.makeText(context, "Profile saved", Toast.LENGTH_SHORT).show();
+            rebuildRows();
+        });
+        showDialog(builder.create());
+    }
+
+    private void showSavedProfilesDialog() {
+        Context context = getParentActivity();
+        if (context == null) {
+            return;
+        }
+
+        List<VaySettingsPreset> presets = VayTelegram.presets().list();
+        if (presets.isEmpty()) {
+            Toast.makeText(context, "No saved vayGram profiles yet", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        CharSequence[] names = new CharSequence[presets.size()];
+        for (int i = 0; i < presets.size(); i++) {
+            VaySettingsPreset preset = presets.get(i);
+            names[i] = preset.getName() + "  ·  " + preset.size() + " values";
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Saved vayGram profiles");
+        builder.setItems(names, (dialog, which) -> showProfileActions(presets.get(which)));
+        builder.setNegativeButton("Close", null);
+        showDialog(builder.create());
+    }
+
+    private void showProfileActions(VaySettingsPreset preset) {
+        Context context = getParentActivity();
+        if (context == null) {
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(preset.getName());
+        builder.setMessage(
+                preset.size() + (preset.size() == 1 ? " saved value" : " saved values")
+                        + "\n\nOnly settings compatible with the current scope are applied."
+        );
+        builder.setNegativeButton("Cancel", null);
+        builder.setNeutralButton("Delete", (dialog, which) -> showDeleteProfileDialog(preset));
+        builder.setPositiveButton("Apply", (dialog, which) -> {
+            int changed = VayTelegram.settings().applyPreset(preset, scopeKey);
+            Toast.makeText(
+                    context,
+                    changed + (changed == 1 ? " setting applied" : " settings applied"),
+                    Toast.LENGTH_SHORT
+            ).show();
+            rebuildRows();
+        });
+        showDialog(builder.create());
+    }
+
+    private void showDeleteProfileDialog(VaySettingsPreset preset) {
+        Context context = getParentActivity();
+        if (context == null) {
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Delete profile?");
+        builder.setMessage(preset.getName());
+        builder.setNegativeButton("Cancel", null);
+        builder.setPositiveButton("Delete", (dialog, which) -> {
+            VayTelegram.presets().delete(preset.getName());
+            Toast.makeText(context, "Profile deleted", Toast.LENGTH_SHORT).show();
+            rebuildRows();
+        });
+        showDialog(builder.create());
     }
 
     private void copyPreset() {

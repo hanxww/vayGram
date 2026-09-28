@@ -33,10 +33,18 @@ must_grep() {
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" "Vay Settings UI"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/core/settings/VaySettingsEngine.java" "VayCore settings engine"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/VayAndroid.java" "Android settings bridge"
+must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/settings/VayPresetRepository.java" "persistent preset repository"
 
 must_grep 'presentSettingFragment\(new app\.vaygram\.ui\.VaySettingsActivity\(\)\)' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/SettingsActivity.java" \
   "Settings entry hook"
+
+must_grep 'ACTION_SAVE_PROFILE' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
+  "save profile settings action"
+must_grep 'VayTelegram\.presets\(\)\.save' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
+  "persistent profile save UI"
 
 must_grep 'VayAppearance\.dialogRowHeightDp\(\)' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java" \
