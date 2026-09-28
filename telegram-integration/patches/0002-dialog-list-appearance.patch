@@ -13,7 +13,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java b
 +        Theme.createDialogsResources(context);
 +        drawMonoforumAvatar = false;
 +        drawCommunityAvatar = false;
-+        avatarImage.setRoundRadius(dp(app.vaygram.telegram.VayAppearance.dialogAvatarRadiusDp(52f)));
++        avatarImage.setRoundRadius(dp(app.vaygram.telegram.VayAppearance.dialogAvatarRadiusDp(account, 0L, 52f)));
 +        for (int i = 0; i < thumbImage.length; ++i) {
              thumbImage[i] = new ImageReceiver(this);
              thumbImage[i].ignoreNotifications = true;
@@ -26,7 +26,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java b
 -        int height = dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? heightThreeLines : heightDefault);
 +    private int getCollapsedHeight() {
 +        int baseHeight = useForceThreeLines || SharedConfig.useThreeLinesLayout
-+                ? Math.max(heightThreeLines, app.vaygram.telegram.VayAppearance.dialogRowHeightDp())
++                ? Math.max(heightThreeLines, app.vaygram.telegram.VayAppearance.dialogRowHeightDp(currentAccount, currentDialogId))
 +                : app.vaygram.telegram.VayAppearance.dialogRowHeightDp();
 +        int height = dp(baseHeight);
          if (useSeparator || true) {
@@ -40,7 +40,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java b
 -        if (isTransitionSupport) {
 +    public void buildLayout() {
 +        if (isDialogCell) {
-+            messagePaddingStart = app.vaygram.telegram.VayAppearance.dialogMessagePaddingStartDp(avatarStart);
++            messagePaddingStart = app.vaygram.telegram.VayAppearance.dialogMessagePaddingStartDp(currentAccount, currentDialogId, avatarStart);
 +        }
 +        if (isTransitionSupport) {
              return;
@@ -108,11 +108,11 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java b
 +        final boolean threeLineLayout = useForceThreeLines || SharedConfig.useThreeLinesLayout;
 +        final float telegramAvatarSize = threeLineLayout ? 56f : 52f;
 +        final float vayAvatarSize = isDialogCell
-+                ? app.vaygram.telegram.VayAppearance.dialogAvatarSizeDp(telegramAvatarSize)
++                ? app.vaygram.telegram.VayAppearance.dialogAvatarSizeDp(currentAccount, currentDialogId, telegramAvatarSize)
 +                : telegramAvatarSize;
 +        if (threeLineLayout) {
 +            avatarTop = isDialogCell
-+                    ? dp(Math.max(2f, (Math.max(heightThreeLines, app.vaygram.telegram.VayAppearance.dialogRowHeightDp()) - vayAvatarSize) / 2f + 1f))
++                    ? dp(Math.max(2f, (Math.max(heightThreeLines, app.vaygram.telegram.VayAppearance.dialogRowHeightDp(currentAccount, currentDialogId)) - vayAvatarSize) / 2f + 1f))
 +                    : dp(11);
 +            messageNameTop = dp(32);
 +            timeTop = dp(13);
@@ -137,7 +137,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java b
 +            }
 +        } else {
 +            avatarTop = isDialogCell
-+                    ? dp(Math.max(2f, (app.vaygram.telegram.VayAppearance.dialogRowHeightDp() - vayAvatarSize) / 2f))
++                    ? dp(Math.max(2f, (app.vaygram.telegram.VayAppearance.dialogRowHeightDp(currentAccount, currentDialogId) - vayAvatarSize) / 2f))
 +                    : dp(9);
 +            messageNameTop = dp(31);
 +            timeTop = dp(16);
@@ -174,7 +174,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java b
 -            drawUnmute = false;
 +            drawMonoforumAvatar = false;
 +            drawCommunityAvatar = false;
-+            avatarImage.setRoundRadius(dp(app.vaygram.telegram.VayAppearance.dialogAvatarRadiusDp(52f)));
++            avatarImage.setRoundRadius(dp(app.vaygram.telegram.VayAppearance.dialogAvatarRadiusDp(account, 0L, 52f)));
 +            drawUnmute = false;
          } else {
              int oldUnreadCount = unreadCount;
@@ -189,7 +189,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java b
 -
 -            avatarImage.setRoundRadius(avatarRadius);
 +            } else {
-+                avatarRadius = dp(app.vaygram.telegram.VayAppearance.dialogAvatarRadiusDp(56f));
++                avatarRadius = dp(app.vaygram.telegram.VayAppearance.dialogAvatarRadiusDp(currentAccount, currentDialogId, 56f));
 +            }
 +
 +            avatarImage.setRoundRadius(avatarRadius);
