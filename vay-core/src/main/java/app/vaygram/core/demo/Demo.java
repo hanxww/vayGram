@@ -34,5 +34,11 @@ public final class Demo {
         System.out.println("chat after undo: " + engine.get(VayDefaults.CHAT_BUBBLE_RADIUS, chat));
         engine.redo();
         System.out.println("chat after redo: " + engine.get(VayDefaults.CHAT_BUBBLE_RADIUS, chat));
+
+        engine.set(VayDefaults.THEME_AMOLED, true);
+        System.out.println("modified global settings: " + engine.countModified(VayScopeKey.GLOBAL));
+        System.out.println("amoled modified: " + engine.isModified(VayDefaults.THEME_AMOLED));
+        engine.resetAll(VayScopeKey.GLOBAL);
+        System.out.println("modified global settings after reset: " + engine.countModified(VayScopeKey.GLOBAL));
     }
 }
