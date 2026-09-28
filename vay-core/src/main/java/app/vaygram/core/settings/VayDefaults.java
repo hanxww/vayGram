@@ -16,9 +16,9 @@ public final class VayDefaults {
             .build();
 
     public static final VaySetting<Float> CHAT_MESSAGE_SPACING = VaySetting
-            .builder("chat.message.spacing", VaySettingType.FLOAT, 2f)
+            .builder("chat.message.spacing", VaySettingType.FLOAT, 0f)
             .title("Message spacing")
-            .description("Vertical spacing between messages")
+            .description("Additional vertical spacing between messages")
             .category("Chats / Layout")
             .visibility(VayVisibilityLevel.ADVANCED)
             .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT, VaySettingScope.CHAT)
