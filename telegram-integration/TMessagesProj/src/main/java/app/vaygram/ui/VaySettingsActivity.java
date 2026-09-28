@@ -62,6 +62,7 @@ public final class VaySettingsActivity extends BaseFragment {
     private static final int ACTION_SAVED_PROFILES = 7;
     private static final int ACTION_OPEN_PARENT_SCOPE = 8;
     private static final int ACTION_OPEN_ACCOUNT_SCOPE = 9;
+    private static final int ACTION_SCOPE_INFO = 10;
 
     private static final int RECENT_LIMIT = 5;
 
@@ -190,7 +191,7 @@ public final class VaySettingsActivity extends BaseFragment {
     private void addControlRows() {
         rows.add(Row.header("Controls"));
         rows.add(Row.mode());
-        rows.add(Row.action(0, "Scope", scopeTitle));
+        rows.add(Row.action(ACTION_SCOPE_INFO, "Scope", scopeTitle));
 
         if (VayScopeKey.GLOBAL.equals(scopeKey)) {
             rows.add(Row.action(
@@ -479,7 +480,7 @@ public final class VaySettingsActivity extends BaseFragment {
         if (context == null) {
             return;
         }
-        boolean modifiedOnly = VayTelegram.settings().countModified(scopeKey) > 0;
+        boolean modifiedOnly = VayTelegram.settings().countCustomized(scopeKey) > 0;
         VaySettingsPreset preset = VayTelegram.settings().capturePreset(
                 "vayGram preset",
                 scopeKey,
@@ -583,7 +584,7 @@ public final class VaySettingsActivity extends BaseFragment {
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     private void toggleBoolean(VaySetting setting) {
-        Object value = VayTelegram.settings().get(setting, scopeKey);
+        Object value = getValue(setting);
         VayTelegram.settings().set(setting, scopeKey, !(Boolean) value);
     }
 
@@ -616,6 +617,11 @@ public final class VaySettingsActivity extends BaseFragment {
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
+    private void clearStoredPreviewValue(VaySetting setting) {
+        VayTelegram.settings().clearStoredValue(setting, scopeKey);
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
     private void resetSetting(VaySetting setting) {
         VayTelegram.settings().reset(setting, scopeKey);
     }
@@ -641,6 +647,7 @@ public final class VaySettingsActivity extends BaseFragment {
         final int stepCount = Math.max(1, (int) Math.round((max - min) / step));
         final Number current = (Number) getValue(setting);
         final Object originalValue = current;
+        final boolean hadStoredValue = VayTelegram.settings().hasStoredValue(setting, scopeKey);
         final boolean[] settled = {false};
 
         int currentProgress = (int) Math.round((current.doubleValue() - min) / step);
@@ -698,14 +705,25 @@ public final class VaySettingsActivity extends BaseFragment {
         builder.setView(container);
         builder.setNegativeButton("Cancel", (dialog, which) -> {
             settled[0] = true;
-            cancelPreviewValue(setting, originalValue);
+            if (hadStoredValue || VayScopeKey.GLOBAL.equals(scopeKey)) {
+                cancelPreviewValue(setting, originalValue);
+            } else {
+                clearStoredPreviewValue(setting);
+            }
             rebuildRows();
         });
-        builder.setNeutralButton("Default", (dialog, which) -> {
-            settled[0] = true;
-            commitPreviewValue(setting, originalValue, setting.getDefaultValue());
-            rebuildRows();
-        });
+        builder.setNeutralButton(
+                VayScopeKey.GLOBAL.equals(scopeKey) ? "Default" : "Inherit",
+                (dialog, which) -> {
+                    settled[0] = true;
+                    if (VayScopeKey.GLOBAL.equals(scopeKey)) {
+                        commitPreviewValue(setting, originalValue, setting.getDefaultValue());
+                    } else {
+                        resetSetting(setting);
+                    }
+                    rebuildRows();
+                }
+        );
         builder.setPositiveButton("Apply", (dialog, which) -> {
             settled[0] = true;
             double raw = min + seekBar.getProgress() * step;
@@ -714,7 +732,11 @@ public final class VaySettingsActivity extends BaseFragment {
         });
         builder.setOnDismissListener(dialog -> {
             if (!settled[0]) {
-                cancelPreviewValue(setting, originalValue);
+                if (hadStoredValue || VayScopeKey.GLOBAL.equals(scopeKey)) {
+                    cancelPreviewValue(setting, originalValue);
+                } else {
+                    clearStoredPreviewValue(setting);
+                }
                 rebuildRows();
             }
         });
@@ -761,6 +783,8 @@ public final class VaySettingsActivity extends BaseFragment {
         String title = setting.getTitle();
         if (isModified(setting)) {
             title = "• " + title;
+        } else if (isInherited(setting)) {
+            title = title + "  ·  inherited";
         }
         if (recent) {
             title = title + "  ·  recent";
@@ -847,7 +871,11 @@ public final class VaySettingsActivity extends BaseFragment {
                 TextSettingsCell cell = (TextSettingsCell) holder.itemView;
                 String value = formatValue(row.setting);
                 if (isModified(row.setting)) {
-                    value += "  ·  modified";
+                    value += VayScopeKey.GLOBAL.equals(scopeKey)
+                            ? "  ·  modified"
+                            : "  ·  override";
+                } else if (isInherited(row.setting)) {
+                    value += "  ·  inherited";
                 }
                 cell.setTextAndValue(
                         displayTitle(row.setting, row.recent),
