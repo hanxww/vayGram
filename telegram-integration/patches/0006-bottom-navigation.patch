@@ -218,7 +218,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java b
  
          tabsView = new MainTabsLayout(context, resourceProvider);
          tabsView.setClipChildren(false);
-@@ -391,12 +395,49 @@
+@@ -391,12 +395,51 @@
              updateLayout.updateAppUpdateViews(currentAccount, false);
          }
  
@@ -276,7 +276,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java b
          if (tabsView == null) {
              return;
          }
-@@ -957,9 +998,12 @@
+@@ -957,9 +1000,12 @@
  
      @Override
      public void didReceivedNotification(int id, int account, Object... args) {
