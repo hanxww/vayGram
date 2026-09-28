@@ -27,7 +27,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java b
 +    private int getCollapsedHeight() {
 +        int baseHeight = useForceThreeLines || SharedConfig.useThreeLinesLayout
 +                ? Math.max(heightThreeLines, app.vaygram.telegram.VayAppearance.dialogRowHeightDp(currentAccount, currentDialogId))
-+                : app.vaygram.telegram.VayAppearance.dialogRowHeightDp();
++                : app.vaygram.telegram.VayAppearance.dialogRowHeightDp(currentAccount, currentDialogId);
 +        int height = dp(baseHeight);
          if (useSeparator || true) {
              height += 1;
@@ -174,7 +174,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java b
 -            drawUnmute = false;
 +            drawMonoforumAvatar = false;
 +            drawCommunityAvatar = false;
-+            avatarImage.setRoundRadius(dp(app.vaygram.telegram.VayAppearance.dialogAvatarRadiusDp(account, 0L, 52f)));
++            avatarImage.setRoundRadius(dp(app.vaygram.telegram.VayAppearance.dialogAvatarRadiusDp(currentAccount, currentDialogId, 52f)));
 +            drawUnmute = false;
          } else {
              int oldUnreadCount = unreadCount;
