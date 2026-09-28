@@ -42,6 +42,20 @@ public final class VaySettingsEngine {
         return setting.normalize((T) stored);
     }
 
+    public synchronized boolean hasStoredValue(VaySetting<?> setting, VayScopeKey scope) {
+        assertScopeAllowed(setting, scope);
+        return store.get(storageKey(setting, scope)) != null;
+    }
+
+    public synchronized <T> boolean seedIfAbsent(VaySetting<T> setting, VayScopeKey scope, T value) {
+        assertScopeAllowed(setting, scope);
+        if (hasStoredValue(setting, scope)) {
+            return false;
+        }
+        store.put(storageKey(setting, scope), setting.normalize(value));
+        return true;
+    }
+
     public synchronized <T> void set(VaySetting<T> setting, T value) {
         set(setting, VayScopeKey.GLOBAL, value);
     }
