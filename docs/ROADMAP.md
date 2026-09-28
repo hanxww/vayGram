@@ -46,7 +46,7 @@
 - [x] per-chat overrides UI — chat menu entry + inherited values
 
 ## M4 — Theme Engine
-- [ ] token registry
+- [x] token registry — semantic tokens + Telegram mapping bridge
 - [ ] palette editor
 - [ ] Material You bridge
 - [ ] gradients

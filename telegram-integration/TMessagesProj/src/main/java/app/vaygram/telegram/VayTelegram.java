@@ -14,6 +14,7 @@ import app.vaygram.core.settings.VayDefaults;
 import app.vaygram.core.settings.VayScopeKey;
 import app.vaygram.core.settings.VaySettingsEngine;
 import app.vaygram.core.settings.VaySettingsRegistry;
+import app.vaygram.core.theme.VayThemeTokenRegistry;
 
 public final class VayTelegram {
     private static volatile boolean initialized;
@@ -170,5 +171,10 @@ public final class VayTelegram {
     public static VayPresetRepository presets() {
         ensureInitialized();
         return VayAndroid.presets();
+    }
+
+    public static VayThemeTokenRegistry themeTokens() {
+        ensureInitialized();
+        return VayAndroid.themeTokens();
     }
 }
