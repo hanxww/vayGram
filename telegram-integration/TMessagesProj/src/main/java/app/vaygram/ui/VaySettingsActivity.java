@@ -43,6 +43,7 @@ import app.vaygram.core.settings.VayScopeKey;
 import app.vaygram.core.settings.VaySetting;
 import app.vaygram.core.settings.VaySettingChange;
 import app.vaygram.core.settings.VaySettingType;
+import app.vaygram.core.settings.VaySettingScope;
 import app.vaygram.core.settings.VaySettingsPreset;
 import app.vaygram.core.settings.VayVisibilityLevel;
 import app.vaygram.telegram.VayTelegram;
@@ -59,10 +60,14 @@ public final class VaySettingsActivity extends BaseFragment {
     private static final int ACTION_IMPORT_PRESET = 5;
     private static final int ACTION_SAVE_PROFILE = 6;
     private static final int ACTION_SAVED_PROFILES = 7;
+    private static final int ACTION_OPEN_PARENT_SCOPE = 8;
+    private static final int ACTION_OPEN_ACCOUNT_SCOPE = 9;
 
     private static final int RECENT_LIMIT = 5;
 
     private final VayScopeKey scopeKey;
+    private final VayScopeKey parentScopeKey;
+    private final String scopeTitle;
 
     private RecyclerListView listView;
     private ListAdapter adapter;
@@ -72,11 +77,37 @@ public final class VaySettingsActivity extends BaseFragment {
     private VayVisibilityLevel visibilityLevel = VayVisibilityLevel.ADVANCED;
 
     public VaySettingsActivity() {
-        this(VayScopeKey.GLOBAL);
+        this(VayScopeKey.GLOBAL, null, "Global");
     }
 
     public VaySettingsActivity(VayScopeKey scopeKey) {
+        this(scopeKey, null, scopeKey == null || VayScopeKey.GLOBAL.equals(scopeKey) ? "Global" : scopeKey.getScope().name());
+    }
+
+    private VaySettingsActivity(
+            VayScopeKey scopeKey,
+            VayScopeKey parentScopeKey,
+            String scopeTitle
+    ) {
         this.scopeKey = scopeKey == null ? VayScopeKey.GLOBAL : scopeKey;
+        this.parentScopeKey = parentScopeKey;
+        this.scopeTitle = TextUtils.isEmpty(scopeTitle) ? this.scopeKey.getScope().name() : scopeTitle;
+    }
+
+    public static VaySettingsActivity forAccount(int account) {
+        return new VaySettingsActivity(
+                VayTelegram.accountScope(account),
+                VayScopeKey.GLOBAL,
+                "This account"
+        );
+    }
+
+    public static VaySettingsActivity forChat(int account, long dialogId) {
+        return new VaySettingsActivity(
+                VayTelegram.chatScope(account, dialogId),
+                VayTelegram.accountScope(account),
+                "This chat"
+        );
     }
 
     @Override
@@ -85,7 +116,9 @@ public final class VaySettingsActivity extends BaseFragment {
 
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
-        actionBar.setTitle("vayGram Settings");
+        actionBar.setTitle(VayScopeKey.GLOBAL.equals(scopeKey)
+                ? "vayGram Settings"
+                : "vayGram · " + scopeTitle);
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -157,6 +190,21 @@ public final class VaySettingsActivity extends BaseFragment {
     private void addControlRows() {
         rows.add(Row.header("Controls"));
         rows.add(Row.mode());
+        rows.add(Row.action(0, "Scope", scopeTitle));
+
+        if (VayScopeKey.GLOBAL.equals(scopeKey)) {
+            rows.add(Row.action(
+                    ACTION_OPEN_ACCOUNT_SCOPE,
+                    "This account",
+                    "Account-specific overrides"
+            ));
+        } else if (parentScopeKey != null) {
+            rows.add(Row.action(
+                    ACTION_OPEN_PARENT_SCOPE,
+                    parentScopeKey.getScope() == VaySettingScope.GLOBAL ? "Global defaults" : "Account defaults",
+                    "View inherited settings"
+            ));
+        }
 
         if (VayTelegram.settings().canUndo()) {
             VaySettingChange last = firstRecentChange();
@@ -170,7 +218,7 @@ public final class VaySettingsActivity extends BaseFragment {
             rows.add(Row.action(ACTION_REDO, "Redo", "Restore undone change"));
         }
 
-        int modified = VayTelegram.settings().countModified(scopeKey);
+        int modified = VayTelegram.settings().countCustomized(scopeKey);
         rows.add(Row.action(
                 ACTION_EXPORT_PRESET,
                 "Copy preset",
@@ -299,6 +347,25 @@ public final class VaySettingsActivity extends BaseFragment {
             showSaveProfileDialog();
         } else if (action == ACTION_SAVED_PROFILES) {
             showSavedProfilesDialog();
+        } else if (action == ACTION_OPEN_PARENT_SCOPE) {
+            openParentScope();
+        } else if (action == ACTION_OPEN_ACCOUNT_SCOPE) {
+            presentFragment(VaySettingsActivity.forAccount(currentAccount));
+        }
+    }
+
+    private void openParentScope() {
+        if (parentScopeKey == null) {
+            return;
+        }
+        if (parentScopeKey.getScope() == VaySettingScope.GLOBAL) {
+            presentFragment(new VaySettingsActivity());
+        } else if (parentScopeKey.getScope() == VaySettingScope.ACCOUNT) {
+            presentFragment(new VaySettingsActivity(
+                    parentScopeKey,
+                    VayScopeKey.GLOBAL,
+                    "This account"
+            ));
         }
     }
 
@@ -493,7 +560,7 @@ public final class VaySettingsActivity extends BaseFragment {
             return;
         }
 
-        int modified = VayTelegram.settings().countModified(scopeKey);
+        int modified = VayTelegram.settings().countCustomized(scopeKey);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Reset vayGram settings?");
         builder.setMessage("Reset " + modified + (modified == 1 ? " customized setting" : " customized settings") + " in this scope.");
@@ -522,7 +589,10 @@ public final class VaySettingsActivity extends BaseFragment {
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     private Object getValue(VaySetting setting) {
-        return VayTelegram.settings().get(setting, scopeKey);
+        if (VayScopeKey.GLOBAL.equals(scopeKey)) {
+            return VayTelegram.settings().get(setting, scopeKey);
+        }
+        return VayTelegram.settings().getResolved(setting, scopeKey, parentScopeKey);
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
@@ -551,7 +621,12 @@ public final class VaySettingsActivity extends BaseFragment {
     }
 
     private boolean isModified(VaySetting<?> setting) {
-        return VayTelegram.settings().isModified(setting, scopeKey);
+        return VayTelegram.settings().isCustomizedAtScope(setting, scopeKey);
+    }
+
+    private boolean isInherited(VaySetting<?> setting) {
+        return !VayScopeKey.GLOBAL.equals(scopeKey)
+                && !VayTelegram.settings().hasStoredValue(setting, scopeKey);
     }
 
     private void showNumberEditor(VaySetting<?> setting) {
