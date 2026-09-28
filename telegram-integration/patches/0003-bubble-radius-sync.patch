@@ -1,0 +1,11 @@
+diff --git a/TMessagesProj/src/main/java/org/telegram/ui/ThemeActivity.java b/TMessagesProj/src/main/java/org/telegram/ui/ThemeActivity.java
+--- a/TMessagesProj/src/main/java/org/telegram/ui/ThemeActivity.java
++++ b/TMessagesProj/src/main/java/org/telegram/ui/ThemeActivity.java
+@@ -467,6 +467,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
+             SharedPreferences.Editor editor = preferences.edit();
+             editor.putInt("bubbleRadius", SharedConfig.bubbleRadius);
+             editor.commit();
++            app.vaygram.telegram.VayTelegram.settings().set(app.vaygram.core.settings.VayDefaults.CHAT_BUBBLE_RADIUS, (float) size);
+ 
+             RecyclerView.ViewHolder holder = listView.findViewHolderForAdapterPosition(textSizeRow);
+             if (holder != null && holder.itemView instanceof TextSizeCell) {
