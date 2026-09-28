@@ -52,7 +52,7 @@ replacements = {
         'android:action="org.telegram.messenger.OPEN_ACCOUNT"':
             f'android:action="{package_id}.OPEN_ACCOUNT"',
         'android:targetPackage="org.telegram.messenger"':
-            f'android:targetPackage="{package_id}"',
+            f'android:targetPackage="{package_id}.beta"',
     },
     res_root / "xml" / "shortcuts.xml": {
         'android:name="org.telegram.messenger.SHORTCUT_SHARE"':
