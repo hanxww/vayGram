@@ -91,6 +91,22 @@ must_grep 'VayDefaults\.COMPACT_MODE' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/telegram/VayTelegram.java" \
   "compact mode Telegram bridge"
 
+must_grep 'getResolved' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/core/settings/VaySettingsEngine.java" \
+  "scope inheritance engine"
+must_grep 'forAccount\(int account\)' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
+  "account override settings UI"
+must_grep 'forChat\(int account, long dialogId\)' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
+  "chat override settings UI"
+must_grep 'vay_chat_settings' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/ChatActivity.java" \
+  "chat menu settings entry"
+must_grep 'chatMessageSpacingDp\(currentMessageObject\.currentAccount, currentMessageObject\.getDialogId\(\)\)' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/Cells/ChatMessageCell.java" \
+  "per-chat message spacing hook"
+
 must_grep '^APP_PACKAGE=app\.vaygram\.messenger$' \
   "$TMP/telegram/gradle.properties" \
   "vayGram application id"
