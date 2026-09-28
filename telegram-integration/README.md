@@ -1,30 +1,40 @@
 # Telegram integration overlay
 
-This directory contains vayGram source files that are designed to be copied into the Telegram Android tree.
+This directory contains vayGram-owned code and small patches designed to be overlaid on the pinned Telegram Android source tree.
 
-Target:
+The goal is to keep upstream changes reviewable: large features live under `app.vaygram.*`, while Telegram classes receive only narrow hooks.
 
-```text
-TMessagesProj/src/main/java/app/vaygram/
-```
-
-The overlay deliberately avoids copying or modifying large Telegram classes. Integration should happen through small hooks.
-
-## Current stage
+## Current integration
 
 Implemented:
 
-- Android persistent settings store
-- Telegram bootstrap bridge
-- generated Vay Settings screen
-- search
-- Basic / Advanced / Insane mode switcher
-- boolean controls
-- generated numeric slider dialogs
+- vayGram entry in Telegram Settings
+- persistent Vay Settings storage
+- search and Basic / Advanced / Insane modes
+- live numeric preview with undo/reset support
+- bubble radius integration
+- chat-list row height
+- avatar size and roundness
+- additional message spacing
+- separate vayGram package/account identity
+- external Telegram API credential injection
+- dev branding transform
+- local and GitHub Actions dev APK pipelines
 
-Still required before the first real APK:
+## Overlay flow
 
-- add one row to Telegram's main Settings screen that opens `VaySettingsActivity`
-- place VayCore/VayAndroid sources under the Telegram module
-- add the first rendering hooks (bubble radius, avatar size, etc.)
-- add localization resources and vayGram branding
+```text
+Pinned Telegram Android
+        +
+VayCore / VayAndroid / Vay UI
+        +
+small upstream patches
+        +
+vayGram branding transform
+        =
+vayGram worktree
+```
+
+Use `scripts/bootstrap-telegram.sh` for a source worktree or `scripts/build-dev-apk.sh` for a full local dev build.
+
+See `docs/BUILDING.md`.
