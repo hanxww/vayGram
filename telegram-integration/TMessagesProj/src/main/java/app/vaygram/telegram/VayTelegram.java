@@ -14,7 +14,10 @@ import app.vaygram.core.settings.VayDefaults;
 import app.vaygram.core.settings.VayScopeKey;
 import app.vaygram.core.settings.VaySettingsEngine;
 import app.vaygram.core.settings.VaySettingsRegistry;
+import app.vaygram.core.theme.VayThemePalette;
+import app.vaygram.core.theme.VayThemeToken;
 import app.vaygram.core.theme.VayThemeTokenRegistry;
+import app.vaygram.theme.VayThemeBridge;
 
 public final class VayTelegram {
     private static volatile boolean initialized;
@@ -37,6 +40,7 @@ public final class VayTelegram {
 
     private static void installTelegramBridges() {
         VaySettingsEngine engine = VayAndroid.settings();
+        VayThemeBridge.refreshPalette(VayAndroid.themePalette());
 
         // Preserve an existing Telegram appearance choice on the first vayGram run.
         engine.seedIfAbsent(
@@ -176,5 +180,47 @@ public final class VayTelegram {
     public static VayThemeTokenRegistry themeTokens() {
         ensureInitialized();
         return VayAndroid.themeTokens();
+    }
+
+    public static VayThemePalette themePalette() {
+        ensureInitialized();
+        return VayAndroid.themePalette();
+    }
+
+    public static void previewThemeColor(VayThemeToken token, int color) {
+        themePalette().setColor(token, color);
+        applyThemePalette();
+    }
+
+    public static void restoreThemeColorPreview(VayThemeToken token, Integer originalOverride) {
+        if (originalOverride == null) {
+            themePalette().reset(token);
+        } else {
+            themePalette().setColor(token, originalOverride);
+        }
+        applyThemePalette();
+    }
+
+    public static void commitThemeColor(VayThemeToken token, int color) {
+        ensureInitialized();
+        VayAndroid.saveThemeColor(token, color);
+        applyThemePalette();
+    }
+
+    public static void resetThemeColor(VayThemeToken token) {
+        ensureInitialized();
+        VayAndroid.resetThemeColor(token);
+        applyThemePalette();
+    }
+
+    public static void resetThemePalette() {
+        ensureInitialized();
+        VayAndroid.resetThemePalette();
+        applyThemePalette();
+    }
+
+    private static void applyThemePalette() {
+        VayThemeBridge.refreshPalette(VayAndroid.themePalette());
+        Theme.refreshThemeColors(false, true);
     }
 }
