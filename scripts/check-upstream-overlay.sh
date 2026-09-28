@@ -60,6 +60,9 @@ must_grep 'vaySetMainTabsHeight\(int height\)' \
 must_grep 'setVayMainTabLabelVisible' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/Components/glass/GlassTabView.java" \
   "bottom bar label visibility hook"
+must_grep 'setVayMainTabMotionScale' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/Components/glass/GlassTabView.java" \
+  "bottom bar motion scale hook"
 must_grep 'applyVayNavigationAppearance\(\)' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java" \
   "live bottom navigation refresh"
