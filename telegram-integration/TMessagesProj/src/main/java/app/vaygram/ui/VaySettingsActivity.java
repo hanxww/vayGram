@@ -2,6 +2,7 @@ package app.vaygram.ui;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -24,16 +25,19 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextSettingsCell;
-import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
+import app.vaygram.core.settings.VayScopeKey;
 import app.vaygram.core.settings.VaySetting;
+import app.vaygram.core.settings.VaySettingChange;
 import app.vaygram.core.settings.VaySettingType;
 import app.vaygram.core.settings.VayVisibilityLevel;
 import app.vaygram.telegram.VayTelegram;
@@ -43,12 +47,28 @@ public final class VaySettingsActivity extends BaseFragment {
     private static final int TYPE_CHECK = 1;
     private static final int TYPE_VALUE = 2;
 
+    private static final int ACTION_UNDO = 1;
+    private static final int ACTION_REDO = 2;
+    private static final int ACTION_RESET_ALL = 3;
+
+    private static final int RECENT_LIMIT = 5;
+
+    private final VayScopeKey scopeKey;
+
     private RecyclerListView listView;
     private ListAdapter adapter;
     private final ArrayList<Row> rows = new ArrayList<>();
 
     private String query = "";
     private VayVisibilityLevel visibilityLevel = VayVisibilityLevel.ADVANCED;
+
+    public VaySettingsActivity() {
+        this(VayScopeKey.GLOBAL);
+    }
+
+    public VaySettingsActivity(VayScopeKey scopeKey) {
+        this.scopeKey = scopeKey == null ? VayScopeKey.GLOBAL : scopeKey;
+    }
 
     @Override
     public View createView(Context context) {
@@ -83,6 +103,7 @@ public final class VaySettingsActivity extends BaseFragment {
         listView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         listView.setAdapter(adapter = new ListAdapter(context));
         listView.setOnItemClickListener((view, position) -> onRowClicked(position));
+        listView.setOnItemLongClickListener((view, position) -> onRowLongClicked(view, position));
 
         fragmentView = listView;
         actionBar.setAdaptiveBackground(listView);
@@ -92,11 +113,18 @@ public final class VaySettingsActivity extends BaseFragment {
 
     private void rebuildRows() {
         rows.clear();
-        rows.add(Row.mode());
+
+        if (TextUtils.isEmpty(query)) {
+            addControlRows();
+            addRecentRows();
+        }
 
         List<VaySetting<?>> visible = VayTelegram.registry().search(query, visibilityLevel);
         Map<String, List<VaySetting<?>>> grouped = new LinkedHashMap<>();
         for (VaySetting<?> setting : visible) {
+            if (!setting.getScopes().contains(scopeKey.getScope())) {
+                continue;
+            }
             List<VaySetting<?>> category = grouped.get(setting.getCategory());
             if (category == null) {
                 category = new ArrayList<>();
@@ -108,7 +136,7 @@ public final class VaySettingsActivity extends BaseFragment {
         for (Map.Entry<String, List<VaySetting<?>>> entry : grouped.entrySet()) {
             rows.add(Row.header(entry.getKey()));
             for (VaySetting<?> setting : entry.getValue()) {
-                rows.add(Row.setting(setting));
+                rows.add(Row.setting(setting, false));
             }
         }
 
@@ -117,28 +145,165 @@ public final class VaySettingsActivity extends BaseFragment {
         }
     }
 
+    private void addControlRows() {
+        rows.add(Row.header("Controls"));
+        rows.add(Row.mode());
+
+        if (VayTelegram.settings().canUndo()) {
+            VaySettingChange last = firstRecentChange();
+            rows.add(Row.action(
+                    ACTION_UNDO,
+                    "Undo",
+                    last == null ? "Last change" : titleForSettingId(last.getSettingId())
+            ));
+        }
+        if (VayTelegram.settings().canRedo()) {
+            rows.add(Row.action(ACTION_REDO, "Redo", "Restore undone change"));
+        }
+
+        int modified = VayTelegram.settings().countModified(scopeKey);
+        if (modified > 0) {
+            rows.add(Row.action(
+                    ACTION_RESET_ALL,
+                    "Reset customized values",
+                    modified + (modified == 1 ? " setting" : " settings")
+            ));
+        }
+    }
+
+    private void addRecentRows() {
+        List<VaySettingChange> changes = VayTelegram.settings().recentChanges();
+        if (changes.isEmpty()) {
+            return;
+        }
+
+        Set<String> seen = new LinkedHashSet<>();
+        ArrayList<VaySetting<?>> recent = new ArrayList<>();
+        for (VaySettingChange change : changes) {
+            if (!scopeKey.equals(change.getScope()) || !seen.add(change.getSettingId())) {
+                continue;
+            }
+            VaySetting<?> setting = VayTelegram.registry().find(change.getSettingId());
+            if (setting != null
+                    && setting.getScopes().contains(scopeKey.getScope())
+                    && setting.getVisibilityLevel().isVisibleAt(visibilityLevel)) {
+                recent.add(setting);
+            }
+            if (recent.size() >= RECENT_LIMIT) {
+                break;
+            }
+        }
+
+        if (recent.isEmpty()) {
+            return;
+        }
+
+        rows.add(Row.header("Recently changed"));
+        for (VaySetting<?> setting : recent) {
+            rows.add(Row.setting(setting, true));
+        }
+    }
+
+    private VaySettingChange firstRecentChange() {
+        List<VaySettingChange> changes = VayTelegram.settings().recentChanges();
+        return changes.isEmpty() ? null : changes.get(0);
+    }
+
+    private String titleForSettingId(String settingId) {
+        VaySetting<?> setting = VayTelegram.registry().find(settingId);
+        return setting == null ? settingId : setting.getTitle();
+    }
+
     private void onRowClicked(int position) {
         if (position < 0 || position >= rows.size()) {
             return;
         }
         Row row = rows.get(position);
+
         if (row.mode) {
             visibilityLevel = nextLevel(visibilityLevel);
             rebuildRows();
             return;
         }
+
+        if (row.action != 0) {
+            performAction(row.action);
+            return;
+        }
+
         if (row.setting == null) {
             return;
         }
 
         if (row.setting.getType() == VaySettingType.BOOLEAN) {
             toggleBoolean(row.setting);
-            adapter.notifyItemChanged(position);
+            rebuildRows();
         } else if ((row.setting.getType() == VaySettingType.INTEGER
                 || row.setting.getType() == VaySettingType.FLOAT)
                 && row.setting.hasNumericRange()) {
             showNumberEditor(row.setting);
         }
+    }
+
+    private boolean onRowLongClicked(View view, int position) {
+        if (position < 0 || position >= rows.size()) {
+            return false;
+        }
+        Row row = rows.get(position);
+        if (row.setting == null || !isModified(row.setting)) {
+            return false;
+        }
+
+        view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+        showResetSettingDialog(row.setting);
+        return true;
+    }
+
+    private void performAction(int action) {
+        if (action == ACTION_UNDO) {
+            VayTelegram.settings().undo();
+            rebuildRows();
+        } else if (action == ACTION_REDO) {
+            VayTelegram.settings().redo();
+            rebuildRows();
+        } else if (action == ACTION_RESET_ALL) {
+            showResetAllDialog();
+        }
+    }
+
+    private void showResetSettingDialog(VaySetting<?> setting) {
+        Context context = getParentActivity();
+        if (context == null) {
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Reset setting?");
+        builder.setMessage(setting.getTitle() + "\n\nDefault: " + formatDefaultValue(setting));
+        builder.setNegativeButton("Cancel", null);
+        builder.setPositiveButton("Reset", (dialog, which) -> {
+            resetSetting(setting);
+            rebuildRows();
+        });
+        showDialog(builder.create());
+    }
+
+    private void showResetAllDialog() {
+        Context context = getParentActivity();
+        if (context == null) {
+            return;
+        }
+
+        int modified = VayTelegram.settings().countModified(scopeKey);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Reset vayGram settings?");
+        builder.setMessage("Reset " + modified + (modified == 1 ? " customized setting" : " customized settings") + " in this scope.");
+        builder.setNegativeButton("Cancel", null);
+        builder.setPositiveButton("Reset", (dialog, which) -> {
+            VayTelegram.settings().resetAll(scopeKey);
+            rebuildRows();
+        });
+        showDialog(builder.create());
     }
 
     private VayVisibilityLevel nextLevel(VayVisibilityLevel level) {
@@ -152,18 +317,27 @@ public final class VaySettingsActivity extends BaseFragment {
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     private void toggleBoolean(VaySetting setting) {
-        Object value = VayTelegram.settings().get(setting);
-        VayTelegram.settings().set(setting, !(Boolean) value);
+        Object value = VayTelegram.settings().get(setting, scopeKey);
+        VayTelegram.settings().set(setting, scopeKey, !(Boolean) value);
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     private Object getValue(VaySetting setting) {
-        return VayTelegram.settings().get(setting);
+        return VayTelegram.settings().get(setting, scopeKey);
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     private void setValue(VaySetting setting, Object value) {
-        VayTelegram.settings().set(setting, value);
+        VayTelegram.settings().set(setting, scopeKey, value);
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private void resetSetting(VaySetting setting) {
+        VayTelegram.settings().reset(setting, scopeKey);
+    }
+
+    private boolean isModified(VaySetting<?> setting) {
+        return VayTelegram.settings().isModified(setting, scopeKey);
     }
 
     private void showNumberEditor(VaySetting<?> setting) {
@@ -227,6 +401,10 @@ public final class VaySettingsActivity extends BaseFragment {
         }
         builder.setView(container);
         builder.setNegativeButton("Cancel", null);
+        builder.setNeutralButton("Default", (dialog, which) -> {
+            resetSetting(setting);
+            rebuildRows();
+        });
         builder.setPositiveButton("Apply", (dialog, which) -> {
             double raw = min + seekBar.getProgress() * step;
             if (setting.getType() == VaySettingType.INTEGER) {
@@ -234,13 +412,21 @@ public final class VaySettingsActivity extends BaseFragment {
             } else {
                 setValue(setting, (float) raw);
             }
-            adapter.notifyDataSetChanged();
+            rebuildRows();
         });
         showDialog(builder.create());
     }
 
     private String formatValue(VaySetting<?> setting) {
         Object value = getValue(setting);
+        if (value instanceof Number) {
+            return formatNumber(setting, ((Number) value).doubleValue());
+        }
+        return String.valueOf(value);
+    }
+
+    private String formatDefaultValue(VaySetting<?> setting) {
+        Object value = setting.getDefaultValue();
         if (value instanceof Number) {
             return formatNumber(setting, ((Number) value).doubleValue());
         }
@@ -260,6 +446,17 @@ public final class VaySettingsActivity extends BaseFragment {
         return String.format(Locale.US, "%.2f", value);
     }
 
+    private String displayTitle(VaySetting<?> setting, boolean recent) {
+        String title = setting.getTitle();
+        if (isModified(setting)) {
+            title = "• " + title;
+        }
+        if (recent) {
+            title = title + "  ·  recent";
+        }
+        return title;
+    }
+
     private final class ListAdapter extends RecyclerListView.SelectionAdapter {
         private final Context context;
 
@@ -275,7 +472,7 @@ public final class VaySettingsActivity extends BaseFragment {
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             Row row = rows.get(holder.getAdapterPosition());
-            return row.mode || row.setting != null;
+            return row.mode || row.action != 0 || row.setting != null;
         }
 
         @Override
@@ -325,15 +522,25 @@ public final class VaySettingsActivity extends BaseFragment {
                 return;
             }
 
+            if (row.action != 0) {
+                TextSettingsCell cell = (TextSettingsCell) holder.itemView;
+                cell.setTextAndValue(row.actionTitle, row.actionValue, false);
+                return;
+            }
+
             if (type == TYPE_CHECK) {
                 TextCheckCell cell = (TextCheckCell) holder.itemView;
                 boolean checked = (Boolean) getValue(row.setting);
-                cell.setTextAndCheck(row.setting.getTitle(), checked, false);
+                cell.setTextAndCheck(displayTitle(row.setting, row.recent), checked, false);
             } else {
                 TextSettingsCell cell = (TextSettingsCell) holder.itemView;
+                String value = formatValue(row.setting);
+                if (isModified(row.setting)) {
+                    value += "  ·  modified";
+                }
                 cell.setTextAndValue(
-                        row.setting.getTitle(),
-                        formatValue(row.setting),
+                        displayTitle(row.setting, row.recent),
+                        value,
                         false
                 );
             }
@@ -344,23 +551,43 @@ public final class VaySettingsActivity extends BaseFragment {
         private final String header;
         private final VaySetting<?> setting;
         private final boolean mode;
+        private final boolean recent;
+        private final int action;
+        private final String actionTitle;
+        private final String actionValue;
 
-        private Row(String header, VaySetting<?> setting, boolean mode) {
+        private Row(
+                String header,
+                VaySetting<?> setting,
+                boolean mode,
+                boolean recent,
+                int action,
+                String actionTitle,
+                String actionValue
+        ) {
             this.header = header;
             this.setting = setting;
             this.mode = mode;
+            this.recent = recent;
+            this.action = action;
+            this.actionTitle = actionTitle;
+            this.actionValue = actionValue;
         }
 
         private static Row header(String title) {
-            return new Row(title, null, false);
+            return new Row(title, null, false, false, 0, null, null);
         }
 
-        private static Row setting(VaySetting<?> setting) {
-            return new Row(null, setting, false);
+        private static Row setting(VaySetting<?> setting, boolean recent) {
+            return new Row(null, setting, false, recent, 0, null, null);
         }
 
         private static Row mode() {
-            return new Row(null, null, true);
+            return new Row(null, null, true, false, 0, null, null);
+        }
+
+        private static Row action(int action, String title, String value) {
+            return new Row(null, null, false, false, action, title, value);
         }
     }
 }
