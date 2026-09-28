@@ -1,5 +1,7 @@
 package app.vaygram.ui;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.HapticFeedbackConstants;
@@ -9,6 +11,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,10 +38,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import app.vaygram.android.settings.VayPresetJson;
 import app.vaygram.core.settings.VayScopeKey;
 import app.vaygram.core.settings.VaySetting;
 import app.vaygram.core.settings.VaySettingChange;
 import app.vaygram.core.settings.VaySettingType;
+import app.vaygram.core.settings.VaySettingsPreset;
 import app.vaygram.core.settings.VayVisibilityLevel;
 import app.vaygram.telegram.VayTelegram;
 
@@ -50,6 +55,8 @@ public final class VaySettingsActivity extends BaseFragment {
     private static final int ACTION_UNDO = 1;
     private static final int ACTION_REDO = 2;
     private static final int ACTION_RESET_ALL = 3;
+    private static final int ACTION_EXPORT_PRESET = 4;
+    private static final int ACTION_IMPORT_PRESET = 5;
 
     private static final int RECENT_LIMIT = 5;
 
@@ -162,6 +169,13 @@ public final class VaySettingsActivity extends BaseFragment {
         }
 
         int modified = VayTelegram.settings().countModified(scopeKey);
+        rows.add(Row.action(
+                ACTION_EXPORT_PRESET,
+                "Copy preset",
+                modified > 0 ? modified + (modified == 1 ? " customized setting" : " customized settings") : "Current values"
+        ));
+        rows.add(Row.action(ACTION_IMPORT_PRESET, "Import preset", "Paste vayGram JSON"));
+
         if (modified > 0) {
             rows.add(Row.action(
                     ACTION_RESET_ALL,
@@ -268,7 +282,74 @@ public final class VaySettingsActivity extends BaseFragment {
             rebuildRows();
         } else if (action == ACTION_RESET_ALL) {
             showResetAllDialog();
+        } else if (action == ACTION_EXPORT_PRESET) {
+            copyPreset();
+        } else if (action == ACTION_IMPORT_PRESET) {
+            showImportPresetDialog();
         }
+    }
+
+    private void copyPreset() {
+        Context context = getParentActivity();
+        if (context == null) {
+            return;
+        }
+        boolean modifiedOnly = VayTelegram.settings().countModified(scopeKey) > 0;
+        VaySettingsPreset preset = VayTelegram.settings().capturePreset(
+                "vayGram preset",
+                scopeKey,
+                modifiedOnly
+        );
+        String json = VayPresetJson.encode(preset);
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        if (clipboard != null) {
+            clipboard.setPrimaryClip(ClipData.newPlainText("vayGram preset", json));
+            Toast.makeText(context, "vayGram preset copied", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void showImportPresetDialog() {
+        Context context = getParentActivity();
+        if (context == null) {
+            return;
+        }
+
+        EditText input = new EditText(context);
+        input.setHint("{\"schema\":1,...}");
+        input.setMinLines(5);
+        input.setMaxLines(12);
+        int padding = AndroidUtilities.dp(20);
+        input.setPadding(padding, padding, padding, padding);
+
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        if (clipboard != null && clipboard.hasPrimaryClip() && clipboard.getPrimaryClip() != null
+                && clipboard.getPrimaryClip().getItemCount() > 0) {
+            CharSequence clip = clipboard.getPrimaryClip().getItemAt(0).coerceToText(context);
+            if (clip != null && clip.toString().trim().startsWith("{")) {
+                input.setText(clip);
+            }
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Import vayGram preset");
+        builder.setMessage("Only known settings compatible with this scope will be applied.");
+        builder.setView(input);
+        builder.setNegativeButton("Cancel", null);
+        builder.setPositiveButton("Import", (dialog, which) -> {
+            try {
+                VaySettingsPreset preset = VayPresetJson.decode(input.getText().toString());
+                int changed = VayTelegram.settings().applyPreset(preset, scopeKey);
+                Toast.makeText(
+                        context,
+                        changed + (changed == 1 ? " setting applied" : " settings applied"),
+                        Toast.LENGTH_SHORT
+                ).show();
+                rebuildRows();
+            } catch (RuntimeException e) {
+                Toast.makeText(context, "Invalid vayGram preset", Toast.LENGTH_SHORT).show();
+            }
+        });
+        showDialog(builder.create());
     }
 
     private void showResetSettingDialog(VaySetting<?> setting) {
