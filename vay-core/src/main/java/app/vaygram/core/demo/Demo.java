@@ -69,6 +69,9 @@ public final class Demo {
         System.out.println("live preview smoke test passed");
 
         engine.set(VayDefaults.THEME_AMOLED, true);
+        if (!engine.get(VayDefaults.THEME_AMOLED)) {
+            throw new IllegalStateException("AMOLED setting did not persist");
+        }
         System.out.println("modified global settings: " + engine.countModified(VayScopeKey.GLOBAL));
         System.out.println("amoled modified: " + engine.isModified(VayDefaults.THEME_AMOLED));
         engine.resetAll(VayScopeKey.GLOBAL);
