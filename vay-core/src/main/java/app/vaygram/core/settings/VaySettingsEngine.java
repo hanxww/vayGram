@@ -74,6 +74,57 @@ public final class VaySettingsEngine {
         notifyListeners(change);
     }
 
+    public synchronized <T> void preview(VaySetting<T> setting, VayScopeKey scope, T value) {
+        assertScopeAllowed(setting, scope);
+        T normalized = setting.normalize(value);
+        T oldValue = get(setting, scope);
+        if (Objects.equals(oldValue, normalized)) {
+            return;
+        }
+        store.put(storageKey(setting, scope), normalized);
+        notifyListeners(new VaySettingChange(
+                setting.getId(), scope, oldValue, normalized, System.currentTimeMillis()));
+    }
+
+    public synchronized <T> void commitPreview(
+            VaySetting<T> setting,
+            VayScopeKey scope,
+            T originalValue,
+            T finalValue
+    ) {
+        assertScopeAllowed(setting, scope);
+        T original = setting.normalize(originalValue);
+        T normalized = setting.normalize(finalValue);
+        T current = get(setting, scope);
+
+        if (!Objects.equals(current, normalized)) {
+            store.put(storageKey(setting, scope), normalized);
+            notifyListeners(new VaySettingChange(
+                    setting.getId(), scope, current, normalized, System.currentTimeMillis()));
+        }
+
+        if (!Objects.equals(original, normalized)) {
+            record(new VaySettingChange(
+                    setting.getId(), scope, original, normalized, System.currentTimeMillis()));
+        }
+    }
+
+    public synchronized <T> void cancelPreview(
+            VaySetting<T> setting,
+            VayScopeKey scope,
+            T originalValue
+    ) {
+        assertScopeAllowed(setting, scope);
+        T original = setting.normalize(originalValue);
+        T current = get(setting, scope);
+        if (Objects.equals(current, original)) {
+            return;
+        }
+        store.put(storageKey(setting, scope), original);
+        notifyListeners(new VaySettingChange(
+                setting.getId(), scope, current, original, System.currentTimeMillis()));
+    }
+
     public synchronized <T> void reset(VaySetting<T> setting) {
         reset(setting, VayScopeKey.GLOBAL);
     }
