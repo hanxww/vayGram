@@ -3,6 +3,10 @@ package app.vaygram.ui;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.text.TextUtils;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
@@ -39,11 +43,13 @@ import java.util.Map;
 import java.util.Set;
 
 import app.vaygram.android.settings.VayPresetJson;
+import app.vaygram.core.settings.VayDefaults;
 import app.vaygram.core.settings.VayScopeKey;
 import app.vaygram.core.settings.VaySetting;
 import app.vaygram.core.settings.VaySettingChange;
 import app.vaygram.core.settings.VaySettingType;
 import app.vaygram.core.settings.VaySettingScope;
+import app.vaygram.core.settings.VaySettingsListener;
 import app.vaygram.core.settings.VaySettingsPreset;
 import app.vaygram.core.settings.VayVisibilityLevel;
 import app.vaygram.telegram.VayTelegram;
@@ -52,6 +58,7 @@ public final class VaySettingsActivity extends BaseFragment {
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_CHECK = 1;
     private static final int TYPE_VALUE = 2;
+    private static final int TYPE_PREVIEW = 3;
 
     private static final int ACTION_UNDO = 1;
     private static final int ACTION_REDO = 2;
@@ -72,7 +79,14 @@ public final class VaySettingsActivity extends BaseFragment {
 
     private RecyclerListView listView;
     private ListAdapter adapter;
+    private VayPreviewView previewView;
     private final ArrayList<Row> rows = new ArrayList<>();
+    private final VaySettingsListener previewListener = change ->
+            AndroidUtilities.runOnUIThread(() -> {
+                if (previewView != null) {
+                    previewView.invalidate();
+                }
+            });
 
     private String query = "";
     private VayVisibilityLevel visibilityLevel = VayVisibilityLevel.ADVANCED;
@@ -114,6 +128,8 @@ public final class VaySettingsActivity extends BaseFragment {
     @Override
     public View createView(Context context) {
         VayTelegram.ensureInitialized();
+        VayTelegram.settings().removeListener(previewListener);
+        VayTelegram.settings().addListener(previewListener);
 
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
@@ -154,10 +170,19 @@ public final class VaySettingsActivity extends BaseFragment {
         return fragmentView;
     }
 
+    @Override
+    public void onFragmentDestroy() {
+        VayTelegram.settings().removeListener(previewListener);
+        previewView = null;
+        super.onFragmentDestroy();
+    }
+
     private void rebuildRows() {
         rows.clear();
 
         if (TextUtils.isEmpty(query)) {
+            rows.add(Row.header("Live Preview"));
+            rows.add(Row.preview());
             addControlRows();
             addRecentRows();
         }
@@ -635,6 +660,29 @@ public final class VaySettingsActivity extends BaseFragment {
                 && !VayTelegram.settings().hasStoredValue(setting, scopeKey);
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private Object getPreviewValue(VaySetting setting) {
+        if (setting.getScopes().contains(scopeKey.getScope())) {
+            return getValue(setting);
+        }
+        if (parentScopeKey != null && setting.getScopes().contains(parentScopeKey.getScope())) {
+            return VayTelegram.settings().getResolved(
+                    setting,
+                    parentScopeKey,
+                    VayScopeKey.GLOBAL
+            );
+        }
+        if (setting.getScopes().contains(VaySettingScope.ACCOUNT)
+                && !VayScopeKey.GLOBAL.equals(scopeKey)) {
+            return VayTelegram.settings().getResolved(
+                    setting,
+                    VayTelegram.accountScope(currentAccount),
+                    VayScopeKey.GLOBAL
+            );
+        }
+        return VayTelegram.settings().get(setting, VayScopeKey.GLOBAL);
+    }
+
     private void showNumberEditor(VaySetting<?> setting) {
         Context context = getParentActivity();
         if (context == null) {
@@ -807,7 +855,7 @@ public final class VaySettingsActivity extends BaseFragment {
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             Row row = rows.get(holder.getAdapterPosition());
-            return row.mode || row.action != 0 || row.setting != null;
+            return !row.preview && (row.mode || row.action != 0 || row.setting != null);
         }
 
         @Override
@@ -815,6 +863,9 @@ public final class VaySettingsActivity extends BaseFragment {
             Row row = rows.get(position);
             if (row.header != null) {
                 return TYPE_HEADER;
+            }
+            if (row.preview) {
+                return TYPE_PREVIEW;
             }
             if (row.setting != null && row.setting.getType() == VaySettingType.BOOLEAN) {
                 return TYPE_CHECK;
@@ -826,7 +877,14 @@ public final class VaySettingsActivity extends BaseFragment {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view;
-            if (viewType == TYPE_HEADER) {
+            if (viewType == TYPE_PREVIEW) {
+                previewView = new VayPreviewView(context);
+                previewView.setLayoutParams(new RecyclerView.LayoutParams(
+                        RecyclerView.LayoutParams.MATCH_PARENT,
+                        AndroidUtilities.dp(260)
+                ));
+                return new RecyclerListView.Holder(previewView);
+            } else if (viewType == TYPE_HEADER) {
                 view = new HeaderCell(context);
             } else if (viewType == TYPE_CHECK) {
                 view = new TextCheckCell(context);
@@ -848,6 +906,12 @@ public final class VaySettingsActivity extends BaseFragment {
 
             if (type == TYPE_HEADER) {
                 ((HeaderCell) holder.itemView).setText(row.header);
+                return;
+            }
+
+            if (type == TYPE_PREVIEW) {
+                previewView = (VayPreviewView) holder.itemView;
+                previewView.invalidate();
                 return;
             }
 
@@ -891,6 +955,7 @@ public final class VaySettingsActivity extends BaseFragment {
         private final VaySetting<?> setting;
         private final boolean mode;
         private final boolean recent;
+        private final boolean preview;
         private final int action;
         private final String actionTitle;
         private final String actionValue;
@@ -900,6 +965,7 @@ public final class VaySettingsActivity extends BaseFragment {
                 VaySetting<?> setting,
                 boolean mode,
                 boolean recent,
+                boolean preview,
                 int action,
                 String actionTitle,
                 String actionValue
@@ -908,25 +974,178 @@ public final class VaySettingsActivity extends BaseFragment {
             this.setting = setting;
             this.mode = mode;
             this.recent = recent;
+            this.preview = preview;
             this.action = action;
             this.actionTitle = actionTitle;
             this.actionValue = actionValue;
         }
 
         private static Row header(String title) {
-            return new Row(title, null, false, false, 0, null, null);
+            return new Row(title, null, false, false, false, 0, null, null);
         }
 
         private static Row setting(VaySetting<?> setting, boolean recent) {
-            return new Row(null, setting, false, recent, 0, null, null);
+            return new Row(null, setting, false, recent, false, 0, null, null);
         }
 
         private static Row mode() {
-            return new Row(null, null, true, false, 0, null, null);
+            return new Row(null, null, true, false, false, 0, null, null);
         }
 
         private static Row action(int action, String title, String value) {
-            return new Row(null, null, false, false, action, title, value);
+            return new Row(null, null, false, false, false, action, title, value);
+        }
+
+        private static Row preview() {
+            return new Row(null, null, false, false, true, 0, null, null);
+        }
+    }
+
+    private final class VayPreviewView extends View {
+        private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private final RectF rect = new RectF();
+
+        private VayPreviewView(Context context) {
+            super(context);
+            setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+        }
+
+        @Override
+        protected void onDraw(Canvas canvas) {
+            super.onDraw(canvas);
+
+            final float left = AndroidUtilities.dp(16);
+            final float top = AndroidUtilities.dp(8);
+            final float right = getWidth() - AndroidUtilities.dp(16);
+            final float bottom = getHeight() - AndroidUtilities.dp(8);
+
+            final boolean amoled = Boolean.TRUE.equals(getPreviewValue(VayDefaults.THEME_AMOLED))
+                    && Theme.isCurrentThemeDark();
+            final boolean compact = Boolean.TRUE.equals(getPreviewValue(VayDefaults.COMPACT_MODE));
+
+            int surfaceColor = amoled
+                    ? Color.BLACK
+                    : Theme.getColor(Theme.key_windowBackgroundWhite);
+            paint.setColor(surfaceColor);
+            rect.set(left, top, right, bottom);
+            canvas.drawRoundRect(rect, AndroidUtilities.dp(18), AndroidUtilities.dp(18), paint);
+
+            float rowHeight = ((Number) getPreviewValue(VayDefaults.DIALOG_ROW_HEIGHT)).floatValue();
+            float avatarSize = ((Number) getPreviewValue(VayDefaults.AVATAR_SIZE)).floatValue();
+            float avatarRoundness = ((Number) getPreviewValue(VayDefaults.AVATAR_RADIUS)).floatValue();
+            if (compact) {
+                rowHeight = Math.min(rowHeight, 60f);
+                avatarSize = Math.min(avatarSize, 46f);
+            }
+
+            final float rowTop = top + AndroidUtilities.dp(14);
+            final float avatarDp = Math.max(28f, Math.min(60f, avatarSize));
+            final float avatarPx = AndroidUtilities.dp(avatarDp);
+            final float avatarLeft = left + AndroidUtilities.dp(16);
+            final float avatarTop = rowTop + Math.max(
+                    0,
+                    (AndroidUtilities.dp(Math.min(rowHeight, 72f)) - avatarPx) / 2f
+            );
+            final float avatarRadiusPx = avatarPx * Math.max(0f, Math.min(50f, avatarRoundness)) / 100f;
+
+            paint.setColor(Theme.getColor(Theme.key_featuredStickers_addButton));
+            rect.set(avatarLeft, avatarTop, avatarLeft + avatarPx, avatarTop + avatarPx);
+            canvas.drawRoundRect(rect, avatarRadiusPx, avatarRadiusPx, paint);
+
+            final float textLeft = avatarLeft + avatarPx + AndroidUtilities.dp(12);
+            paint.setColor(Theme.getColor(Theme.key_chats_name));
+            rect.set(textLeft, rowTop + AndroidUtilities.dp(10), right - AndroidUtilities.dp(26), rowTop + AndroidUtilities.dp(16));
+            canvas.drawRoundRect(rect, AndroidUtilities.dp(3), AndroidUtilities.dp(3), paint);
+
+            paint.setColor(Theme.getColor(Theme.key_chats_message));
+            rect.set(textLeft, rowTop + AndroidUtilities.dp(28), right - AndroidUtilities.dp(62), rowTop + AndroidUtilities.dp(33));
+            canvas.drawRoundRect(rect, AndroidUtilities.dp(3), AndroidUtilities.dp(3), paint);
+
+            final float bubbleRadius = ((Number) getPreviewValue(VayDefaults.CHAT_BUBBLE_RADIUS)).floatValue();
+            final float messageSpacing = compact
+                    ? 0f
+                    : ((Number) getPreviewValue(VayDefaults.CHAT_MESSAGE_SPACING)).floatValue();
+            final float bubbleHeight = AndroidUtilities.dp(34);
+            final float bubbleRadiusPx = Math.min(
+                    bubbleHeight / 2f,
+                    AndroidUtilities.dp(Math.max(0f, bubbleRadius))
+            );
+
+            float incomingTop = top + AndroidUtilities.dp(86);
+            paint.setColor(Theme.getColor(Theme.key_chat_inBubble));
+            rect.set(
+                    left + AndroidUtilities.dp(18),
+                    incomingTop,
+                    left + AndroidUtilities.dp(18 + 148),
+                    incomingTop + bubbleHeight
+            );
+            canvas.drawRoundRect(rect, bubbleRadiusPx, bubbleRadiusPx, paint);
+
+            paint.setColor(Theme.getColor(Theme.key_chat_inMessageText));
+            rect.set(
+                    left + AndroidUtilities.dp(30),
+                    incomingTop + AndroidUtilities.dp(15),
+                    left + AndroidUtilities.dp(118),
+                    incomingTop + AndroidUtilities.dp(19)
+            );
+            canvas.drawRoundRect(rect, AndroidUtilities.dp(2), AndroidUtilities.dp(2), paint);
+
+            float outgoingTop = incomingTop + bubbleHeight
+                    + AndroidUtilities.dp(8 + Math.min(24f, messageSpacing));
+            paint.setColor(Theme.getColor(Theme.key_chat_outBubble));
+            rect.set(
+                    right - AndroidUtilities.dp(164),
+                    outgoingTop,
+                    right - AndroidUtilities.dp(18),
+                    outgoingTop + bubbleHeight
+            );
+            canvas.drawRoundRect(rect, bubbleRadiusPx, bubbleRadiusPx, paint);
+
+            paint.setColor(Theme.getColor(Theme.key_chat_outMessageText));
+            rect.set(
+                    right - AndroidUtilities.dp(148),
+                    outgoingTop + AndroidUtilities.dp(15),
+                    right - AndroidUtilities.dp(58),
+                    outgoingTop + AndroidUtilities.dp(19)
+            );
+            canvas.drawRoundRect(rect, AndroidUtilities.dp(2), AndroidUtilities.dp(2), paint);
+
+            int navHeight = ((Number) getPreviewValue(VayDefaults.NAV_HEIGHT)).intValue();
+            boolean navLabels = Boolean.TRUE.equals(getPreviewValue(VayDefaults.NAV_SHOW_LABELS));
+            if (compact) {
+                navHeight = Math.min(navHeight, 52);
+                navLabels = false;
+            }
+
+            final float navTop = bottom - AndroidUtilities.dp(Math.min(88, Math.max(48, navHeight)));
+            paint.setColor(Theme.getColor(Theme.key_windowBackgroundGray));
+            rect.set(left + AndroidUtilities.dp(8), navTop, right - AndroidUtilities.dp(8), bottom - AndroidUtilities.dp(8));
+            canvas.drawRoundRect(
+                    rect,
+                    AndroidUtilities.dp(Math.min(28, navHeight / 2f)),
+                    AndroidUtilities.dp(Math.min(28, navHeight / 2f)),
+                    paint
+            );
+
+            final float navWidth = rect.width();
+            final float iconY = navTop + AndroidUtilities.dp(navLabels ? 17 : Math.max(14, navHeight / 2f - 4));
+            for (int i = 0; i < 4; i++) {
+                float cx = rect.left + navWidth * (i + 0.5f) / 4f;
+                paint.setColor(Theme.getColor(i == 0 ? Theme.key_glass_tabSelected : Theme.key_glass_tabUnselected));
+                canvas.drawCircle(cx, iconY, AndroidUtilities.dp(i == 0 ? 5 : 4), paint);
+
+                if (navLabels) {
+                    paint.setTextAlign(Paint.Align.CENTER);
+                    paint.setTextSize(AndroidUtilities.dp(8));
+                    canvas.drawText(
+                            i == 0 ? "Chats" : "Tab",
+                            cx,
+                            iconY + AndroidUtilities.dp(16),
+                            paint
+                    );
+                }
+            }
+            paint.setTextAlign(Paint.Align.LEFT);
         }
     }
 }
