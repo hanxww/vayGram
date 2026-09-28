@@ -4,7 +4,7 @@ public final class VayDefaults {
     private VayDefaults() {}
 
     public static final VaySetting<Float> CHAT_BUBBLE_RADIUS = VaySetting
-            .builder("chat.bubble.radius", VaySettingType.FLOAT, 18f)
+            .builder("chat.bubble.radius", VaySettingType.FLOAT, 17f)
             .title("Bubble radius")
             .description("Corner radius of message bubbles")
             .category("Chats / Bubbles")
