@@ -63,15 +63,9 @@ public final class VayTelegram {
                 if (value instanceof Number) {
                     syncMainTabsHeight(((Number) value).intValue());
                 }
-                NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(
-                        NotificationCenter.updateInterfaces,
-                        0
-                );
+                notifyMainTabsAppearanceChanged();
             } else if (VayDefaults.NAV_SHOW_LABELS.getId().equals(settingId)) {
-                NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(
-                        NotificationCenter.updateInterfaces,
-                        0
-                );
+                notifyMainTabsAppearanceChanged();
             }
 
             if (VayDefaults.DIALOG_ROW_HEIGHT.getId().equals(settingId)
@@ -87,6 +81,15 @@ public final class VayTelegram {
 
     private static void syncMainTabsHeight(int value) {
         DialogsActivity.vaySetMainTabsHeight(Math.max(48, Math.min(88, value)));
+    }
+
+    private static void notifyMainTabsAppearanceChanged() {
+        for (int account = 0; account < UserConfig.MAX_ACCOUNT_COUNT; account++) {
+            NotificationCenter.getInstance(account).postNotificationName(
+                    NotificationCenter.updateInterfaces,
+                    0
+            );
+        }
     }
 
     private static void syncBubbleRadius(float value) {
