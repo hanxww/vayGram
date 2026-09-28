@@ -74,15 +74,15 @@ public final class VayDefaults {
             .build();
 
     public static final VaySetting<Integer> NAV_HEIGHT = VaySetting
-            .builder("navigation.bottom.height", VaySettingType.INTEGER, 64)
+            .builder("navigation.bottom.height", VaySettingType.INTEGER, 56)
             .title("Bottom bar height")
             .description("Height of the bottom navigation bar")
             .category("Navigation")
             .visibility(VayVisibilityLevel.ADVANCED)
             .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
             .tags("bottom bar", "height", "navigation", "панель")
-            .range(48, 96, 1)
-            .validator(v -> clamp(v, 48, 96))
+            .range(48, 88, 1)
+            .validator(v -> clamp(v, 48, 88))
             .build();
 
     public static final VaySetting<Float> MOTION_SCALE = VaySetting
