@@ -1,0 +1,6 @@
+# Copy these keys into Telegram's generated local.properties,
+# or export them as environment variables before running build-dev-apk.sh.
+#
+# Get your own credentials from Telegram's developer portal.
+VAYGRAM_API_ID=123456
+VAYGRAM_API_HASH=0123456789abcdef0123456789abcdef
