@@ -413,6 +413,21 @@ public final class VaySettingsActivity extends BaseFragment {
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
+    private void previewValue(VaySetting setting, Object value) {
+        VayTelegram.settings().preview(setting, scopeKey, value);
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private void commitPreviewValue(VaySetting setting, Object originalValue, Object finalValue) {
+        VayTelegram.settings().commitPreview(setting, scopeKey, originalValue, finalValue);
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private void cancelPreviewValue(VaySetting setting, Object originalValue) {
+        VayTelegram.settings().cancelPreview(setting, scopeKey, originalValue);
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
     private void resetSetting(VaySetting setting) {
         VayTelegram.settings().reset(setting, scopeKey);
     }
@@ -432,6 +447,9 @@ public final class VaySettingsActivity extends BaseFragment {
         final double step = setting.getStepValue();
         final int stepCount = Math.max(1, (int) Math.round((max - min) / step));
         final Number current = (Number) getValue(setting);
+        final Object originalValue = current;
+        final boolean[] settled = {false};
+
         int currentProgress = (int) Math.round((current.doubleValue() - min) / step);
         currentProgress = Math.max(0, Math.min(stepCount, currentProgress));
 
@@ -466,6 +484,10 @@ public final class VaySettingsActivity extends BaseFragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 updateLabel.run();
+                if (fromUser) {
+                    double raw = min + progress * step;
+                    previewValue(setting, numericValue(setting, raw));
+                }
             }
 
             @Override
@@ -481,21 +503,36 @@ public final class VaySettingsActivity extends BaseFragment {
             builder.setMessage(setting.getDescription());
         }
         builder.setView(container);
-        builder.setNegativeButton("Cancel", null);
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+            settled[0] = true;
+            cancelPreviewValue(setting, originalValue);
+            rebuildRows();
+        });
         builder.setNeutralButton("Default", (dialog, which) -> {
-            resetSetting(setting);
+            settled[0] = true;
+            commitPreviewValue(setting, originalValue, setting.getDefaultValue());
             rebuildRows();
         });
         builder.setPositiveButton("Apply", (dialog, which) -> {
+            settled[0] = true;
             double raw = min + seekBar.getProgress() * step;
-            if (setting.getType() == VaySettingType.INTEGER) {
-                setValue(setting, (int) Math.round(raw));
-            } else {
-                setValue(setting, (float) raw);
-            }
+            commitPreviewValue(setting, originalValue, numericValue(setting, raw));
             rebuildRows();
         });
+        builder.setOnDismissListener(dialog -> {
+            if (!settled[0]) {
+                cancelPreviewValue(setting, originalValue);
+                rebuildRows();
+            }
+        });
         showDialog(builder.create());
+    }
+
+    private Object numericValue(VaySetting<?> setting, double raw) {
+        if (setting.getType() == VaySettingType.INTEGER) {
+            return (int) Math.round(raw);
+        }
+        return (float) raw;
     }
 
     private String formatValue(VaySetting<?> setting) {
