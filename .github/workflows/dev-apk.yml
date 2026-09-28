@@ -1,0 +1,36 @@
+name: dev-apk
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      VAYGRAM_API_ID: ${{ secrets.VAYGRAM_API_ID }}
+      VAYGRAM_API_HASH: ${{ secrets.VAYGRAM_API_HASH }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK components
+        run: |
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager             "platforms;android-36"             "build-tools;36.0.0"             "ndk;27.2.12479018"             "cmake;3.22.1"
+
+      - name: Build vayGram 0.1-dev APK
+        run: bash scripts/build-dev-apk.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vayGram-0.1-dev
+          path: .work/artifacts/vayGram-0.1-dev.apk
+          if-no-files-found: error
