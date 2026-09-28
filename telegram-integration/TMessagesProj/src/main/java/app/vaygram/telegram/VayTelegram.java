@@ -64,7 +64,8 @@ public final class VayTelegram {
                     syncMainTabsHeight(((Number) value).intValue());
                 }
                 notifyMainTabsAppearanceChanged();
-            } else if (VayDefaults.NAV_SHOW_LABELS.getId().equals(settingId)) {
+            } else if (VayDefaults.NAV_SHOW_LABELS.getId().equals(settingId)
+                    || VayDefaults.MOTION_SCALE.getId().equals(settingId)) {
                 notifyMainTabsAppearanceChanged();
             }
 
