@@ -22,10 +22,18 @@ fi
 export VAYGRAM_WITH_SUBMODULES=1
 bash "$ROOT/scripts/bootstrap-telegram.sh" "$WORKDIR"
 
-echo "[vayGram] generating a project-local development signing key..."
+DEV_KEYSTORE="${VAYGRAM_DEV_KEYSTORE:-$ROOT/.work/keys/vaygram-dev.keystore}"
 KEYSTORE="$WORKDIR/TMessagesProj/config/release.keystore"
-rm -f "$KEYSTORE"
-keytool -genkeypair -v   -keystore "$KEYSTORE"   -storepass android   -alias androidkey   -keypass android   -keyalg RSA   -keysize 2048   -validity 10000   -dname "CN=vayGram Dev, OU=Development, O=vayGram, C=XX" >/dev/null
+
+if [[ ! -f "$DEV_KEYSTORE" ]]; then
+  echo "[vayGram] generating a project-local development signing key..."
+  mkdir -p "$(dirname "$DEV_KEYSTORE")"
+  keytool -genkeypair -v   -keystore "$DEV_KEYSTORE"   -storepass android   -alias androidkey   -keypass android   -keyalg RSA   -keysize 2048   -validity 10000   -dname "CN=vayGram Dev, OU=Development, O=vayGram, C=XX" >/dev/null
+else
+  echo "[vayGram] reusing local development signing key."
+fi
+
+cp "$DEV_KEYSTORE" "$KEYSTORE"
 
 echo "[vayGram] building afatDebug..."
 (
