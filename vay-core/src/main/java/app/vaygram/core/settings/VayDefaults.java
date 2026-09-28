@@ -88,7 +88,7 @@ public final class VayDefaults {
     public static final VaySetting<Float> MOTION_SCALE = VaySetting
             .builder("motion.scale", VaySettingType.FLOAT, 1f)
             .title("Animation scale")
-            .description("Global multiplier for vayGram animation durations")
+            .description("Multiplier for vayGram-controlled UI animation durations")
             .category("Motion")
             .visibility(VayVisibilityLevel.BASIC)
             .scopes(VaySettingScope.GLOBAL)
