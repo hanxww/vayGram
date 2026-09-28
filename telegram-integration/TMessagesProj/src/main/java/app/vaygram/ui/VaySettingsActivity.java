@@ -52,7 +52,9 @@ import app.vaygram.core.settings.VaySettingScope;
 import app.vaygram.core.settings.VaySettingsListener;
 import app.vaygram.core.settings.VaySettingsPreset;
 import app.vaygram.core.settings.VayVisibilityLevel;
+import app.vaygram.core.theme.VayThemeTokens;
 import app.vaygram.telegram.VayTelegram;
+import app.vaygram.theme.VayThemeBridge;
 
 public final class VaySettingsActivity extends BaseFragment {
     private static final int TYPE_HEADER = 0;
@@ -1007,7 +1009,7 @@ public final class VaySettingsActivity extends BaseFragment {
 
         private VayPreviewView(Context context) {
             super(context);
-            setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+            setBackgroundColor(VayThemeBridge.color(VayThemeTokens.SURFACE_SECONDARY));
         }
 
         @Override
@@ -1025,7 +1027,7 @@ public final class VaySettingsActivity extends BaseFragment {
 
             int surfaceColor = amoled
                     ? Color.BLACK
-                    : Theme.getColor(Theme.key_windowBackgroundWhite);
+                    : VayThemeBridge.color(VayThemeTokens.SURFACE_PRIMARY);
             paint.setColor(surfaceColor);
             rect.set(left, top, right, bottom);
             canvas.drawRoundRect(rect, AndroidUtilities.dp(18), AndroidUtilities.dp(18), paint);
@@ -1048,16 +1050,16 @@ public final class VaySettingsActivity extends BaseFragment {
             );
             final float avatarRadiusPx = avatarPx * Math.max(0f, Math.min(50f, avatarRoundness)) / 100f;
 
-            paint.setColor(Theme.getColor(Theme.key_featuredStickers_addButton));
+            paint.setColor(VayThemeBridge.color(VayThemeTokens.ACCENT_PRIMARY));
             rect.set(avatarLeft, avatarTop, avatarLeft + avatarPx, avatarTop + avatarPx);
             canvas.drawRoundRect(rect, avatarRadiusPx, avatarRadiusPx, paint);
 
             final float textLeft = avatarLeft + avatarPx + AndroidUtilities.dp(12);
-            paint.setColor(Theme.getColor(Theme.key_chats_name));
+            paint.setColor(VayThemeBridge.color(VayThemeTokens.TEXT_PRIMARY));
             rect.set(textLeft, rowTop + AndroidUtilities.dp(10), right - AndroidUtilities.dp(26), rowTop + AndroidUtilities.dp(16));
             canvas.drawRoundRect(rect, AndroidUtilities.dp(3), AndroidUtilities.dp(3), paint);
 
-            paint.setColor(Theme.getColor(Theme.key_chats_message));
+            paint.setColor(VayThemeBridge.color(VayThemeTokens.TEXT_SECONDARY));
             rect.set(textLeft, rowTop + AndroidUtilities.dp(28), right - AndroidUtilities.dp(62), rowTop + AndroidUtilities.dp(33));
             canvas.drawRoundRect(rect, AndroidUtilities.dp(3), AndroidUtilities.dp(3), paint);
 
@@ -1072,7 +1074,7 @@ public final class VaySettingsActivity extends BaseFragment {
             );
 
             float incomingTop = top + AndroidUtilities.dp(86);
-            paint.setColor(Theme.getColor(Theme.key_chat_inBubble));
+            paint.setColor(VayThemeBridge.color(VayThemeTokens.CHAT_BUBBLE_IN));
             rect.set(
                     left + AndroidUtilities.dp(18),
                     incomingTop,
@@ -1081,7 +1083,7 @@ public final class VaySettingsActivity extends BaseFragment {
             );
             canvas.drawRoundRect(rect, bubbleRadiusPx, bubbleRadiusPx, paint);
 
-            paint.setColor(Theme.getColor(Theme.key_chat_messageTextIn));
+            paint.setColor(VayThemeBridge.color(VayThemeTokens.CHAT_TEXT_IN));
             rect.set(
                     left + AndroidUtilities.dp(30),
                     incomingTop + AndroidUtilities.dp(15),
@@ -1092,7 +1094,7 @@ public final class VaySettingsActivity extends BaseFragment {
 
             float outgoingTop = incomingTop + bubbleHeight
                     + AndroidUtilities.dp(8 + Math.min(24f, messageSpacing));
-            paint.setColor(Theme.getColor(Theme.key_chat_outBubble));
+            paint.setColor(VayThemeBridge.color(VayThemeTokens.CHAT_BUBBLE_OUT));
             rect.set(
                     right - AndroidUtilities.dp(164),
                     outgoingTop,
@@ -1101,7 +1103,7 @@ public final class VaySettingsActivity extends BaseFragment {
             );
             canvas.drawRoundRect(rect, bubbleRadiusPx, bubbleRadiusPx, paint);
 
-            paint.setColor(Theme.getColor(Theme.key_chat_messageTextOut));
+            paint.setColor(VayThemeBridge.color(VayThemeTokens.CHAT_TEXT_OUT));
             rect.set(
                     right - AndroidUtilities.dp(148),
                     outgoingTop + AndroidUtilities.dp(15),
@@ -1118,7 +1120,7 @@ public final class VaySettingsActivity extends BaseFragment {
             }
 
             final float navTop = bottom - AndroidUtilities.dp(Math.min(88, Math.max(48, navHeight)));
-            paint.setColor(Theme.getColor(Theme.key_windowBackgroundGray));
+            paint.setColor(VayThemeBridge.color(VayThemeTokens.NAV_SURFACE));
             rect.set(left + AndroidUtilities.dp(8), navTop, right - AndroidUtilities.dp(8), bottom - AndroidUtilities.dp(8));
             canvas.drawRoundRect(
                     rect,
@@ -1131,7 +1133,9 @@ public final class VaySettingsActivity extends BaseFragment {
             final float iconY = navTop + AndroidUtilities.dp(navLabels ? 17 : Math.max(14, navHeight / 2f - 4));
             for (int i = 0; i < 4; i++) {
                 float cx = rect.left + navWidth * (i + 0.5f) / 4f;
-                paint.setColor(Theme.getColor(i == 0 ? Theme.key_glass_tabSelected : Theme.key_glass_tabUnselected));
+                paint.setColor(VayThemeBridge.color(
+                        i == 0 ? VayThemeTokens.NAV_ICON_ACTIVE : VayThemeTokens.NAV_ICON_INACTIVE
+                ));
                 canvas.drawCircle(cx, iconY, AndroidUtilities.dp(i == 0 ? 5 : 4), paint);
 
                 if (navLabels) {
