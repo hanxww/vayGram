@@ -42,8 +42,8 @@
 ## M3 — Presets
 - [x] settings profiles — persistent save/apply/delete UI
 - [x] import/export
-- [ ] per-account overrides UI
-- [ ] per-chat overrides UI
+- [x] per-account overrides UI — inherited values + explicit overrides
+- [x] per-chat overrides UI — chat menu entry + inherited values
 
 ## M4 — Theme Engine
 - [ ] token registry
