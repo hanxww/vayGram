@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "\${BASH_SOURCE[0]}")/.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 UPSTREAM_FILE="$ROOT/telegram-integration/UPSTREAM"
-WORKDIR="\${1:-$ROOT/.work/telegram}"
+WORKDIR="${1:-$ROOT/.work/telegram}"
 
 if [[ ! -f "$UPSTREAM_FILE" ]]; then
   echo "Missing $UPSTREAM_FILE" >&2
