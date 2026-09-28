@@ -72,6 +72,15 @@ public final class Demo {
         if (!engine.get(VayDefaults.THEME_AMOLED)) {
             throw new IllegalStateException("AMOLED setting did not persist");
         }
+
+        engine.set(VayDefaults.DIALOG_ROW_HEIGHT, 82);
+        engine.set(VayDefaults.NAV_HEIGHT, 74);
+        engine.set(VayDefaults.COMPACT_MODE, true);
+        if (!engine.get(VayDefaults.COMPACT_MODE)
+                || engine.get(VayDefaults.DIALOG_ROW_HEIGHT) != 82
+                || engine.get(VayDefaults.NAV_HEIGHT) != 74) {
+            throw new IllegalStateException("Compact mode must preserve underlying custom values");
+        }
         System.out.println("modified global settings: " + engine.countModified(VayScopeKey.GLOBAL));
         System.out.println("amoled modified: " + engine.isModified(VayDefaults.THEME_AMOLED));
         engine.resetAll(VayScopeKey.GLOBAL);
