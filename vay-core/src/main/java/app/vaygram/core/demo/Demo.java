@@ -30,9 +30,22 @@ public final class Demo {
         engine.set(VayDefaults.CHAT_BUBBLE_RADIUS, 12f);
         System.out.println("new bubble radius: " + engine.get(VayDefaults.CHAT_BUBBLE_RADIUS));
 
-        VayScopeKey chat = new VayScopeKey(VaySettingScope.CHAT, "123456");
+        VayScopeKey account = new VayScopeKey(VaySettingScope.ACCOUNT, "account-1");
+        VayScopeKey chat = new VayScopeKey(VaySettingScope.CHAT, "account-1:123456");
+
+        engine.set(VayDefaults.CHAT_BUBBLE_RADIUS, account, 7f);
+        if (engine.getResolved(VayDefaults.CHAT_BUBBLE_RADIUS, chat, account) != 7f) {
+            throw new IllegalStateException("Chat scope did not inherit account override");
+        }
+
         engine.set(VayDefaults.CHAT_BUBBLE_RADIUS, chat, 4f);
-        System.out.println("chat override: " + engine.get(VayDefaults.CHAT_BUBBLE_RADIUS, chat));
+        if (engine.getResolved(VayDefaults.CHAT_BUBBLE_RADIUS, chat, account) != 4f) {
+            throw new IllegalStateException("Chat override did not win over account override");
+        }
+        if (engine.countCustomized(chat) != 1) {
+            throw new IllegalStateException("Explicit chat override was not counted");
+        }
+        System.out.println("chat override: " + engine.getResolved(VayDefaults.CHAT_BUBBLE_RADIUS, chat, account));
 
         System.out.println("search 'аватар' in Advanced:");
         for (VaySetting<?> setting : registry.search("аватар", VayVisibilityLevel.ADVANCED)) {
@@ -40,9 +53,15 @@ public final class Demo {
         }
 
         engine.undo();
-        System.out.println("chat after undo: " + engine.get(VayDefaults.CHAT_BUBBLE_RADIUS, chat));
+        System.out.println("chat after undo: " + engine.getResolved(VayDefaults.CHAT_BUBBLE_RADIUS, chat, account));
         engine.redo();
-        System.out.println("chat after redo: " + engine.get(VayDefaults.CHAT_BUBBLE_RADIUS, chat));
+        System.out.println("chat after redo: " + engine.getResolved(VayDefaults.CHAT_BUBBLE_RADIUS, chat, account));
+
+        engine.clearStoredValue(VayDefaults.CHAT_BUBBLE_RADIUS, chat);
+        if (engine.hasStoredValue(VayDefaults.CHAT_BUBBLE_RADIUS, chat)
+                || engine.getResolved(VayDefaults.CHAT_BUBBLE_RADIUS, chat, account) != 7f) {
+            throw new IllegalStateException("Clearing chat override did not restore account inheritance");
+        }
 
         VaySettingsPreset preset = engine.capturePreset("demo", VayScopeKey.GLOBAL, true);
         engine.set(VayDefaults.CHAT_BUBBLE_RADIUS, 30f);

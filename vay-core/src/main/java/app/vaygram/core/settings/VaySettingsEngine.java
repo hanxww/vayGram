@@ -48,6 +48,53 @@ public final class VaySettingsEngine {
         return store.get(storageKey(setting, scope)) != null;
     }
 
+    public synchronized <T> T getResolved(
+            VaySetting<T> setting,
+            VayScopeKey scope,
+            VayScopeKey parentScope
+    ) {
+        assertScopeAllowed(setting, scope);
+
+        if (hasStoredValue(setting, scope)) {
+            return get(setting, scope);
+        }
+
+        if (parentScope != null
+                && setting.getScopes().contains(parentScope.getScope())
+                && hasStoredValue(setting, parentScope)) {
+            return get(setting, parentScope);
+        }
+
+        if (setting.getScopes().contains(VaySettingScope.GLOBAL)) {
+            return get(setting, VayScopeKey.GLOBAL);
+        }
+
+        if (parentScope != null && setting.getScopes().contains(parentScope.getScope())) {
+            return get(setting, parentScope);
+        }
+
+        return setting.getDefaultValue();
+    }
+
+    public synchronized boolean isCustomizedAtScope(VaySetting<?> setting, VayScopeKey scope) {
+        assertScopeAllowed(setting, scope);
+        if (VayScopeKey.GLOBAL.equals(scope)) {
+            return isModified(setting, scope);
+        }
+        return hasStoredValue(setting, scope);
+    }
+
+    public synchronized int countCustomized(VayScopeKey scope) {
+        int count = 0;
+        for (VaySetting<?> setting : registry.all()) {
+            if (setting.getScopes().contains(scope.getScope())
+                    && isCustomizedAtScope(setting, scope)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     public synchronized <T> boolean seedIfAbsent(VaySetting<T> setting, VayScopeKey scope, T value) {
         assertScopeAllowed(setting, scope);
         if (hasStoredValue(setting, scope)) {
@@ -125,6 +172,22 @@ public final class VaySettingsEngine {
                 setting.getId(), scope, current, original, System.currentTimeMillis()));
     }
 
+    public synchronized <T> void clearStoredValue(VaySetting<T> setting, VayScopeKey scope) {
+        assertScopeAllowed(setting, scope);
+        if (!hasStoredValue(setting, scope)) {
+            return;
+        }
+        T oldValue = get(setting, scope);
+        store.remove(storageKey(setting, scope));
+        notifyListeners(new VaySettingChange(
+                setting.getId(),
+                scope,
+                oldValue,
+                setting.getDefaultValue(),
+                System.currentTimeMillis()
+        ));
+    }
+
     public synchronized <T> void reset(VaySetting<T> setting) {
         reset(setting, VayScopeKey.GLOBAL);
     }
@@ -165,7 +228,8 @@ public final class VaySettingsEngine {
     public synchronized int resetAll(VayScopeKey scope) {
         int resetCount = 0;
         for (VaySetting<?> setting : registry.all()) {
-            if (!setting.getScopes().contains(scope.getScope()) || !isModified(setting, scope)) {
+            if (!setting.getScopes().contains(scope.getScope())
+                    || !isCustomizedAtScope(setting, scope)) {
                 continue;
             }
             resetUnchecked(setting, scope);
@@ -180,7 +244,7 @@ public final class VaySettingsEngine {
             if (!setting.getScopes().contains(scope.getScope())) {
                 continue;
             }
-            if (modifiedOnly && !isModified(setting, scope)) {
+            if (modifiedOnly && !isCustomizedAtScope(setting, scope)) {
                 continue;
             }
             values.put(setting.getId(), getUnchecked(setting, scope));

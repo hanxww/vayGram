@@ -15,7 +15,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Cells/ChatMessageCell.j
 +
 +        final int vayMessageSpacing = currentMessageObject == null
 +                ? 0
-+                : AndroidUtilities.dp(app.vaygram.telegram.VayAppearance.chatMessageSpacingDp());
++                : AndroidUtilities.dp(app.vaygram.telegram.VayAppearance.chatMessageSpacingDp(currentMessageObject.currentAccount, currentMessageObject.getDialogId()));
 +
 +        setMeasuredDimension(
 +            isWidthAdaptive() ? getBoundsRight() - getBoundsLeft() : MeasureSpec.getSize(widthMeasureSpec),
