@@ -46,7 +46,7 @@ must_grep 'VayTelegram\.presets\(\)\.save' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
   "persistent profile save UI"
 
-must_grep 'VayAppearance\.dialogRowHeightDp\(\)' \
+must_grep 'VayAppearance\.dialogRowHeightDp\(currentAccount, currentDialogId\)' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java" \
   "dialog row height hook"
 must_grep 'VayAppearance\.dialogAvatarSizeDp' \
