@@ -40,7 +40,7 @@
 
 ## M3 — Presets
 - [ ] settings profiles
-- [ ] import/export
+- [x] import/export
 - [ ] per-account overrides UI
 - [ ] per-chat overrides UI
 

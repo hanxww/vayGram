@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public final class VaySettingsEngine {
@@ -120,6 +121,81 @@ public final class VaySettingsEngine {
             resetCount++;
         }
         return resetCount;
+    }
+
+    public synchronized VaySettingsPreset capturePreset(String name, VayScopeKey scope, boolean modifiedOnly) {
+        Map<String, Object> values = new java.util.LinkedHashMap<>();
+        for (VaySetting<?> setting : registry.all()) {
+            if (!setting.getScopes().contains(scope.getScope())) {
+                continue;
+            }
+            if (modifiedOnly && !isModified(setting, scope)) {
+                continue;
+            }
+            values.put(setting.getId(), getUnchecked(setting, scope));
+        }
+        return new VaySettingsPreset(name, 1, values);
+    }
+
+    public synchronized int applyPreset(VaySettingsPreset preset, VayScopeKey scope) {
+        int changed = 0;
+        for (Map.Entry<String, Object> entry : preset.getValues().entrySet()) {
+            VaySetting<?> setting = registry.find(entry.getKey());
+            if (setting == null || !setting.getScopes().contains(scope.getScope())) {
+                continue;
+            }
+            Object before = getUnchecked(setting, scope);
+            Object value = coercePresetValue(setting, entry.getValue());
+            if (value == null) {
+                continue;
+            }
+            setUncheckedWithHistory(setting, scope, value);
+            Object after = getUnchecked(setting, scope);
+            if (!Objects.equals(before, after)) {
+                changed++;
+            }
+        }
+        return changed;
+    }
+
+    private Object coercePresetValue(VaySetting<?> setting, Object value) {
+        if (value == null) {
+            return null;
+        }
+        try {
+            switch (setting.getType()) {
+                case BOOLEAN:
+                    return value instanceof Boolean ? value : Boolean.parseBoolean(String.valueOf(value));
+                case INTEGER:
+                    return value instanceof Number ? ((Number) value).intValue() : Integer.parseInt(String.valueOf(value));
+                case FLOAT:
+                    return value instanceof Number ? ((Number) value).floatValue() : Float.parseFloat(String.valueOf(value));
+                case STRING:
+                case ENUM:
+                case COLOR:
+                    return String.valueOf(value);
+                default:
+                    return value;
+            }
+        } catch (RuntimeException ignored) {
+            return null;
+        }
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private void setUncheckedWithHistory(VaySetting setting, VayScopeKey scope, Object value) {
+        assertScopeAllowed(setting, scope);
+        Object normalized = setting.normalize(value);
+        Object oldValue = get(setting, scope);
+        if (Objects.equals(oldValue, normalized)) {
+            return;
+        }
+
+        store.put(storageKey(setting, scope), normalized);
+        VaySettingChange change = new VaySettingChange(
+                setting.getId(), scope, oldValue, normalized, System.currentTimeMillis());
+        record(change);
+        notifyListeners(change);
     }
 
     public synchronized boolean canUndo() { return !undoStack.isEmpty(); }

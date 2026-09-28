@@ -6,6 +6,7 @@ import app.vaygram.core.settings.VayScopeKey;
 import app.vaygram.core.settings.VaySetting;
 import app.vaygram.core.settings.VaySettingScope;
 import app.vaygram.core.settings.VaySettingsEngine;
+import app.vaygram.core.settings.VaySettingsPreset;
 import app.vaygram.core.settings.VaySettingsRegistry;
 import app.vaygram.core.settings.VayVisibilityLevel;
 
@@ -39,6 +40,14 @@ public final class Demo {
         System.out.println("chat after undo: " + engine.get(VayDefaults.CHAT_BUBBLE_RADIUS, chat));
         engine.redo();
         System.out.println("chat after redo: " + engine.get(VayDefaults.CHAT_BUBBLE_RADIUS, chat));
+
+        VaySettingsPreset preset = engine.capturePreset("demo", VayScopeKey.GLOBAL, true);
+        engine.set(VayDefaults.CHAT_BUBBLE_RADIUS, 30f);
+        int applied = engine.applyPreset(preset, VayScopeKey.GLOBAL);
+        if (applied != 1 || engine.get(VayDefaults.CHAT_BUBBLE_RADIUS) != 12f) {
+            throw new IllegalStateException("Preset round-trip smoke test failed");
+        }
+        System.out.println("preset applied: " + applied + " setting");
 
         engine.set(VayDefaults.THEME_AMOLED, true);
         System.out.println("modified global settings: " + engine.countModified(VayScopeKey.GLOBAL));
