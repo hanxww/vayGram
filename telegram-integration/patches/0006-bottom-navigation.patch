@@ -144,26 +144,18 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Components/glass/GlassT
  
          TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(UserConfig.getInstance(currentAccount).getClientUserId());
          AvatarDrawable avatarDrawable = new AvatarDrawable(user);
-@@ -513,9 +574,12 @@
+@@ -512,21 +573,27 @@
+         }
      }
  
-     @Override
+-    @Override
 -    public float measureTextWidth() {
 -        return defaultTextPaint.measureText(textView.getText().toString());
 -    }
-+    public float measureTextWidth() {
-+        if (vayMainTab && !vayLabelVisible) {
-+            return dp(24);
-+        }
-+        return defaultTextPaint.measureText(textView.getText().toString());
-+    }
- 
-     private TextPaint scaledTextPaint;
- 
-@@ -520,13 +584,16 @@
-     private TextPaint scaledTextPaint;
- 
-     @Override
+-
+-    private TextPaint scaledTextPaint;
+-
+-    @Override
 -    public float measureTextWidth(float textSizeDp) {
 -        if (scaledTextPaint == null) {
 -            scaledTextPaint = new TextPaint(defaultTextPaint);
@@ -171,6 +163,17 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Components/glass/GlassT
 -        scaledTextPaint.setTextSize(dp(textSizeDp));
 -        return scaledTextPaint.measureText(textView.getText().toString());
 -    }
++    @Override
++    public float measureTextWidth() {
++        if (vayMainTab && !vayLabelVisible) {
++            return dp(24);
++        }
++        return defaultTextPaint.measureText(textView.getText().toString());
++    }
++
++    private TextPaint scaledTextPaint;
++
++    @Override
 +    public float measureTextWidth(float textSizeDp) {
 +        if (vayMainTab && !vayLabelVisible) {
 +            return dp(24);
