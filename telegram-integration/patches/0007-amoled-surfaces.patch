@@ -1,0 +1,75 @@
+diff --git a/TMessagesProj/src/main/java/org/telegram/ui/ActionBar/Theme.java b/TMessagesProj/src/main/java/org/telegram/ui/ActionBar/Theme.java
+--- a/TMessagesProj/src/main/java/org/telegram/ui/ActionBar/Theme.java
++++ b/TMessagesProj/src/main/java/org/telegram/ui/ActionBar/Theme.java
+@@ -8964,14 +8964,14 @@
+     public static int getNonAnimatedColor(int key) {
+         return getColor(key, null, true);
+     }
+ 
+-    public static int getColor(int key, ResourcesProvider provider) {
+-        if (provider != null) {
+-            return provider.getColor(key);
+-        }
+-        return getColor(key);
+-    }
++    public static int getColor(int key, ResourcesProvider provider) {
++        if (provider != null) {
++            return vayApplyAmoledSurface(key, provider.getColor(key));
++        }
++        return getColor(key);
++    }
+ 
+     public static int getCurrentColor(int key) {
+         return currentColors.get(key);
+     }
+@@ -8983,10 +8983,14 @@
+     public static int getColor(int key, boolean[] isDefault) {
+         return getColor(key, isDefault, false);
+     }
+ 
+-    public static int getColor(int key, boolean[] isDefault, boolean ignoreAnimation) {
+-        if (!ignoreAnimation && animatingColors != null) {
++    public static int getColor(int key, boolean[] isDefault, boolean ignoreAnimation) {
++        return vayApplyAmoledSurface(key, getColorRaw(key, isDefault, ignoreAnimation));
++    }
++
++    private static int getColorRaw(int key, boolean[] isDefault, boolean ignoreAnimation) {
++        if (!ignoreAnimation && animatingColors != null) {
+             int index = animatingColors.indexOfKey(key);
+             if (index >= 0) {
+                 return animatingColors.valueAt(index);
+             }
+@@ -9043,11 +9047,30 @@
+         }
+         return color;
+     }
+ 
+-    private static boolean isMyMessagesBubbles(int key) {
+-        return key >= myMessagesBubblesStartIndex && key < myMessagesBubblesEndIndex;
+-    }
++    private static int vayApplyAmoledSurface(int key, int color) {
++        if (!app.vaygram.telegram.VayAppearance.useAmoledSurfaces() || !isCurrentThemeDark()) {
++            return color;
++        }
++
++        if (key == key_windowBackgroundWhite
++                || key == key_windowBackgroundGray
++                || key == key_actionBarDefault
++                || key == key_actionBarDefaultArchived
++                || key == key_dialogBackground
++                || key == key_dialogBackgroundGray
++                || key == key_chat_messagePanelBackground
++                || key == key_chat_topPanelBackground
++                || key == key_chat_emojiPanelBackground) {
++            return 0xff000000;
++        }
++        return color;
++    }
++
++    private static boolean isMyMessagesBubbles(int key) {
++        return key >= myMessagesBubblesStartIndex && key < myMessagesBubblesEndIndex;
++    }
+ 
+ 
+     private static boolean isMyMessages(int key) {
+         return key >= myMessagesStartIndex && key < myMessagesEndIndex;
