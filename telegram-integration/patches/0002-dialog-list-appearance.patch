@@ -1,40 +1,198 @@
 diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java b/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java
 --- a/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java
 +++ b/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java
-@@ -692,7 +692,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Avat
-         Theme.createDialogsResources(context);
-         drawMonoforumAvatar = false;
-         drawCommunityAvatar = false;
+@@ -689,11 +689,11 @@
+         storyParams.allowLongress = true;
+         this.resourcesProvider = resourcesProvider;
+         parentFragment = fragment;
+-        Theme.createDialogsResources(context);
+-        drawMonoforumAvatar = false;
+-        drawCommunityAvatar = false;
 -        avatarImage.setRoundRadius(dp(26));
+-        for (int i = 0; i < thumbImage.length; ++i) {
++        Theme.createDialogsResources(context);
++        drawMonoforumAvatar = false;
++        drawCommunityAvatar = false;
 +        avatarImage.setRoundRadius(dp(app.vaygram.telegram.VayAppearance.dialogAvatarRadiusDp(52f)));
-         for (int i = 0; i < thumbImage.length; ++i) {
++        for (int i = 0; i < thumbImage.length; ++i) {
              thumbImage[i] = new ImageReceiver(this);
              thumbImage[i].ignoreNotifications = true;
-@@ -1017,7 +1017,8 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Avat
+             thumbImage[i].setRoundRadius(dp(2));
+@@ -1016,8 +1016,11 @@
+         return height;
      }
  
-     private int getCollapsedHeight() {
+-    private int getCollapsedHeight() {
 -        int height = dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? heightThreeLines : heightDefault);
-+        int baseHeight = useForceThreeLines || SharedConfig.useThreeLinesLayout ? heightThreeLines : app.vaygram.telegram.VayAppearance.dialogRowHeightDp();
++    private int getCollapsedHeight() {
++        int baseHeight = useForceThreeLines || SharedConfig.useThreeLinesLayout
++                ? Math.max(heightThreeLines, app.vaygram.telegram.VayAppearance.dialogRowHeightDp())
++                : app.vaygram.telegram.VayAppearance.dialogRowHeightDp();
 +        int height = dp(baseHeight);
          if (useSeparator || true) {
              height += 1;
          }
-@@ -3220,7 +3221,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Avat
+@@ -1232,8 +1235,11 @@
+     private static final float BADGE_DRAWABLE_SIZE = 16;
+     private static final float BADGE_DRAWABLE_OFFSET = (BADGE_SIZE - BADGE_DRAWABLE_SIZE) / 2f;
+ 
+-    public void buildLayout() {
+-        if (isTransitionSupport) {
++    public void buildLayout() {
++        if (isDialogCell) {
++            messagePaddingStart = app.vaygram.telegram.VayAppearance.dialogMessagePaddingStartDp(avatarStart);
++        }
++        if (isTransitionSupport) {
+             return;
+         }
+         if (isDialogCell) {
+@@ -2418,57 +2424,66 @@
+         animatedEmojiStackName = AnimatedEmojiSpan.update(AnimatedEmojiDrawable.CACHE_TYPE_MESSAGES, this, animatedEmojiStackName, nameLayout);
+ 
+ 
+-        int messageWidth;
+-        int avatarLeft;
+-        int avatarTop;
+-        int thumbLeft;
+-        if (useForceThreeLines || SharedConfig.useThreeLinesLayout) {
+-            avatarTop = dp(11);
+-            messageNameTop = dp(32);
+-            timeTop = dp(13);
+-            errorTop = dp(42.33f);
+-            pinTop = dp(43);
+-            countTop = dp(42.33f);
+-            checkDrawTop = dp(13);
+-            messageWidth = getMeasuredWidth() - dp(messagePaddingStart + 21);
+-
+-            if (LocaleController.isRTL) {
+-                buttonLeft = typingLeft = messageLeft = messageNameLeft = dp(16);
+-                avatarLeft = getMeasuredWidth() - dp(56 + avatarStart);
+-                thumbLeft = avatarLeft - dp(13 + 18);
+-            } else {
+-                buttonLeft = typingLeft = messageLeft = messageNameLeft = dp(messagePaddingStart + 6);
+-                avatarLeft = dp(avatarStart);
+-                thumbLeft = avatarLeft + dp(56 + 13);
+-            }
+-            storyParams.originalAvatarRect.set(avatarLeft, avatarTop, avatarLeft + dp(56), avatarTop + dp(56));
+-            for (int i = 0; i < thumbImage.length; ++i) {
+-                thumbImage[i].setImageCoords(thumbLeft + (thumbSize + 2) * i, avatarTop + dp(31) + (twoLinesForName ? dp(20) : 0) - (!(useForceThreeLines || SharedConfig.useThreeLinesLayout) && tags != null && !tags.isEmpty() ? dp(9) : 0), dp(18), dp(18));
+-            }
+-        } else {
+-            avatarTop = dp(9);
+-            messageNameTop = dp(31);
+-            timeTop = dp(16);
+-            errorTop = dp(38);
+-            pinTop = dp(39);
+-            countTop = isTopic ? dp(35f) : dp(38f);
+-            checkDrawTop = dp(17);
+-            messageWidth = getMeasuredWidth() - dp(messagePaddingStart + 20 - (LocaleController.isRTL ? 0 : 12));
+-
+-            if (LocaleController.isRTL) {
+-                buttonLeft = typingLeft = messageLeft = messageNameLeft = dp(22);
+-                avatarLeft = getMeasuredWidth() - dp(52 + avatarStart);
+-                thumbLeft = avatarLeft - dp(11 + (thumbsCount * (thumbSize + 2) - 2));
+-            } else {
+-                buttonLeft = typingLeft = messageLeft = messageNameLeft = dp(messagePaddingStart + 4);
+-                avatarLeft = dp(avatarStart);
+-                thumbLeft = avatarLeft + dp(56 + 11);
+-            }
+-            storyParams.originalAvatarRect.set(avatarLeft, avatarTop, avatarLeft + dp(52), avatarTop + dp(52));
+-            for (int i = 0; i < thumbImage.length; ++i) {
+-                thumbImage[i].setImageCoords(thumbLeft + (thumbSize + 2) * i, avatarTop + dp(30) + (twoLinesForName ? dp(20) : 0) - (!(useForceThreeLines || SharedConfig.useThreeLinesLayout) && tags != null && !tags.isEmpty() ? dp(9) : 0), dp(thumbSize), dp(thumbSize));
+-            }
+-        }
++        int messageWidth;
++        int avatarLeft;
++        int avatarTop;
++        int thumbLeft;
++        final boolean threeLineLayout = useForceThreeLines || SharedConfig.useThreeLinesLayout;
++        final float telegramAvatarSize = threeLineLayout ? 56f : 52f;
++        final float vayAvatarSize = isDialogCell
++                ? app.vaygram.telegram.VayAppearance.dialogAvatarSizeDp(telegramAvatarSize)
++                : telegramAvatarSize;
++        if (threeLineLayout) {
++            avatarTop = isDialogCell
++                    ? dp(Math.max(2f, (Math.max(heightThreeLines, app.vaygram.telegram.VayAppearance.dialogRowHeightDp()) - vayAvatarSize) / 2f + 1f))
++                    : dp(11);
++            messageNameTop = dp(32);
++            timeTop = dp(13);
++            errorTop = dp(42.33f);
++            pinTop = dp(43);
++            countTop = dp(42.33f);
++            checkDrawTop = dp(13);
++            messageWidth = getMeasuredWidth() - dp(messagePaddingStart + 21);
++
++            if (LocaleController.isRTL) {
++                buttonLeft = typingLeft = messageLeft = messageNameLeft = dp(16);
++                avatarLeft = getMeasuredWidth() - dp(vayAvatarSize + avatarStart);
++                thumbLeft = avatarLeft - dp(13 + 18);
++            } else {
++                buttonLeft = typingLeft = messageLeft = messageNameLeft = dp(messagePaddingStart + 6);
++                avatarLeft = dp(avatarStart);
++                thumbLeft = avatarLeft + dp(vayAvatarSize + 13);
++            }
++            storyParams.originalAvatarRect.set(avatarLeft, avatarTop, avatarLeft + dp(vayAvatarSize), avatarTop + dp(vayAvatarSize));
++            for (int i = 0; i < thumbImage.length; ++i) {
++                thumbImage[i].setImageCoords(thumbLeft + (thumbSize + 2) * i, avatarTop + dp(31) + (twoLinesForName ? dp(20) : 0) - (!threeLineLayout && tags != null && !tags.isEmpty() ? dp(9) : 0), dp(18), dp(18));
++            }
++        } else {
++            avatarTop = isDialogCell
++                    ? dp(Math.max(2f, (app.vaygram.telegram.VayAppearance.dialogRowHeightDp() - vayAvatarSize) / 2f))
++                    : dp(9);
++            messageNameTop = dp(31);
++            timeTop = dp(16);
++            errorTop = dp(38);
++            pinTop = dp(39);
++            countTop = isTopic ? dp(35f) : dp(38f);
++            checkDrawTop = dp(17);
++            messageWidth = getMeasuredWidth() - dp(messagePaddingStart + 20 - (LocaleController.isRTL ? 0 : 12));
++
++            if (LocaleController.isRTL) {
++                buttonLeft = typingLeft = messageLeft = messageNameLeft = dp(22);
++                avatarLeft = getMeasuredWidth() - dp(vayAvatarSize + avatarStart);
++                thumbLeft = avatarLeft - dp(11 + (thumbsCount * (thumbSize + 2) - 2));
++            } else {
++                buttonLeft = typingLeft = messageLeft = messageNameLeft = dp(messagePaddingStart + 4);
++                avatarLeft = dp(avatarStart);
++                thumbLeft = avatarLeft + dp(vayAvatarSize + 15);
++            }
++            storyParams.originalAvatarRect.set(avatarLeft, avatarTop, avatarLeft + dp(vayAvatarSize), avatarTop + dp(vayAvatarSize));
++            for (int i = 0; i < thumbImage.length; ++i) {
++                thumbImage[i].setImageCoords(thumbLeft + (thumbSize + 2) * i, avatarTop + dp(30) + (twoLinesForName ? dp(20) : 0) - (!threeLineLayout && tags != null && !tags.isEmpty() ? dp(9) : 0), dp(thumbSize), dp(thumbSize));
++            }
++        }
+         if (LocaleController.isRTL) {
+             tagsRight = getMeasuredWidth() - dp(messagePaddingStart);
+             tagsLeft = dp(64);
+@@ -3218,10 +3233,10 @@
+             for (int i = 0; i < thumbImage.length; ++i) {
+                 thumbImage[i].setImageBitmap((BitmapDrawable) null);
              }
-             drawMonoforumAvatar = false;
-             drawCommunityAvatar = false;
+-            drawMonoforumAvatar = false;
+-            drawCommunityAvatar = false;
 -            avatarImage.setRoundRadius(dp(26));
+-            drawUnmute = false;
++            drawMonoforumAvatar = false;
++            drawCommunityAvatar = false;
 +            avatarImage.setRoundRadius(dp(app.vaygram.telegram.VayAppearance.dialogAvatarRadiusDp(52f)));
-             drawUnmute = false;
++            drawUnmute = false;
          } else {
              int oldUnreadCount = unreadCount;
-@@ -3672,7 +3673,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Avat
+             boolean oldHasReactionsMentions = reactionMentionCount != 0;
+@@ -3671,11 +3686,11 @@
+                 avatarRadius = dp(12);
              } else if (chat != null && chat.forum && currentDialogFolderId == 0 && !useFromUserAsAvatar || !isSavedDialog && user != null && user.self && MessagesController.getInstance(currentAccount).savedViewAsChats) {
                  avatarRadius = dp(16);
-             } else {
+-            } else {
 -                avatarRadius = dp(28);
+-            }
+-
+-            avatarImage.setRoundRadius(avatarRadius);
++            } else {
 +                avatarRadius = dp(app.vaygram.telegram.VayAppearance.dialogAvatarRadiusDp(56f));
-             }
- 
-             avatarImage.setRoundRadius(avatarRadius);
++            }
++
++            avatarImage.setRoundRadius(avatarRadius);
+         }
+         if (!isTopic && (getMeasuredWidth() != 0 || getMeasuredHeight() != 0)) {
+             rebuildLayout = true;
