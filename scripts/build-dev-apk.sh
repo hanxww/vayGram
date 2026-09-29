@@ -32,12 +32,31 @@ if [[ -n "${VAYGRAM_FIREBASE_JSON_BASE64:-}" ]]; then
   printf '%s' "$VAYGRAM_FIREBASE_JSON_BASE64"     | base64 --decode     > "$WORKDIR/TMessagesProj/google-services.json"
 fi
 
-cat >> "$WORKDIR/local.properties" <<EOF
+python3 - "$WORKDIR/gradle.properties" "$KEYSTORE_PASSWORD" "$KEY_ALIAS" "$KEY_PASSWORD" <<'PY'
+from pathlib import Path
+import re
+import sys
 
-VAYGRAM_KEYSTORE_PASSWORD=$KEYSTORE_PASSWORD
-VAYGRAM_KEY_ALIAS=$KEY_ALIAS
-VAYGRAM_KEY_PASSWORD=$KEY_PASSWORD
-EOF
+path = Path(sys.argv[1])
+store_password = sys.argv[2]
+key_alias = sys.argv[3]
+key_password = sys.argv[4]
+
+text = path.read_text(encoding="utf-8")
+values = {
+    "RELEASE_STORE_PASSWORD": store_password,
+    "RELEASE_KEY_ALIAS": key_alias,
+    "RELEASE_KEY_PASSWORD": key_password,
+}
+for key, value in values.items():
+    pattern = rf"(?m)^{re.escape(key)}=.*$"
+    replacement = f"{key}={value}"
+    if re.search(pattern, text):
+        text = re.sub(pattern, replacement, text)
+    else:
+        text += "\n" + replacement
+path.write_text(text, encoding="utf-8")
+PY
 
 echo "[vayGram] building afatDebug..."
 (
