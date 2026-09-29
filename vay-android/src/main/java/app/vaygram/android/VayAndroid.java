@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import app.vaygram.android.settings.SharedPreferencesVaySettingsStore;
 import app.vaygram.android.settings.VayPresetRepository;
+import app.vaygram.android.theme.VayGradientRepository;
 import app.vaygram.android.theme.VayThemePaletteRepository;
 import app.vaygram.core.settings.VayDefaults;
 import app.vaygram.core.settings.VaySettingsEngine;
@@ -18,6 +19,7 @@ public final class VayAndroid {
     private static final String PREFS_NAME = "vaygram_settings_v1";
     private static final String PRESETS_PREFS_NAME = "vaygram_presets_v1";
     private static final String THEME_PREFS_NAME = "vaygram_theme_palette_v1";
+    private static final String GRADIENT_PREFS_NAME = "vaygram_gradients_v1";
 
     private static volatile VaySettingsRegistry registry;
     private static volatile VaySettingsEngine settings;
@@ -25,6 +27,7 @@ public final class VayAndroid {
     private static volatile VayThemeTokenRegistry themeTokens;
     private static volatile VayThemePalette themePalette;
     private static volatile VayThemePaletteRepository themePaletteRepository;
+    private static volatile VayGradientRepository gradients;
 
     private VayAndroid() {}
 
@@ -49,6 +52,10 @@ public final class VayAndroid {
                     themeTokens
             );
             themePalette.loadColorOverrides(themePaletteRepository.loadColors());
+            gradients = new VayGradientRepository(appContext.getSharedPreferences(
+                    GRADIENT_PREFS_NAME,
+                    Context.MODE_PRIVATE
+            ));
             settings = new VaySettingsEngine(
                     registry,
                     new SharedPreferencesVaySettingsStore(preferences)
@@ -94,6 +101,14 @@ public final class VayAndroid {
 
     public static VayThemePalette themePalette() {
         VayThemePalette result = themePalette;
+        if (result == null) {
+            throw new IllegalStateException("VayAndroid.initialize(context) must be called first");
+        }
+        return result;
+    }
+
+    public static VayGradientRepository gradients() {
+        VayGradientRepository result = gradients;
         if (result == null) {
             throw new IllegalStateException("VayAndroid.initialize(context) must be called first");
         }

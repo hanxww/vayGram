@@ -15,7 +15,10 @@ import app.vaygram.core.settings.VayDefaults;
 import app.vaygram.core.settings.VayScopeKey;
 import app.vaygram.core.settings.VaySettingsEngine;
 import app.vaygram.core.settings.VaySettingsRegistry;
+import app.vaygram.core.theme.VayGradientSpec;
+import app.vaygram.core.theme.VayThemeGradients;
 import app.vaygram.core.theme.VayThemePalette;
+import app.vaygram.core.theme.VayThemeTokens;
 import app.vaygram.core.theme.VayThemeToken;
 import app.vaygram.core.theme.VayThemeTokenRegistry;
 import app.vaygram.theme.VayThemeBridge;
@@ -23,6 +26,7 @@ import app.vaygram.theme.VayThemeBridge;
 public final class VayTelegram {
     private static volatile boolean initialized;
     private static volatile boolean materialYouSupported;
+    private static volatile VayGradientSpec navigationGradient;
 
     private VayTelegram() {}
 
@@ -44,6 +48,7 @@ public final class VayTelegram {
         VaySettingsEngine engine = VayAndroid.settings();
         VayThemeBridge.refreshPalette(VayAndroid.themePalette());
         syncMaterialYou(engine);
+        navigationGradient = VayAndroid.gradients().find(VayThemeGradients.NAVIGATION_BOTTOM);
 
         // Preserve an existing Telegram appearance choice on the first vayGram run.
         engine.seedIfAbsent(
@@ -214,6 +219,49 @@ public final class VayTelegram {
     public static VayThemePalette themePalette() {
         ensureInitialized();
         return VayAndroid.themePalette();
+    }
+
+    public static VayGradientSpec navigationGradient() {
+        ensureInitialized();
+        VayGradientSpec current = navigationGradient;
+        if (current != null) {
+            return current;
+        }
+        return VayThemeGradients.navigationDefaults(
+                VayThemeBridge.color(VayThemeTokens.NAV_SURFACE),
+                VayThemeBridge.color(VayThemeTokens.ACCENT_PRIMARY)
+        );
+    }
+
+    public static VayGradientSpec storedNavigationGradient() {
+        ensureInitialized();
+        return VayAndroid.gradients().find(VayThemeGradients.NAVIGATION_BOTTOM);
+    }
+
+    public static void previewNavigationGradient(VayGradientSpec spec) {
+        ensureInitialized();
+        navigationGradient = spec;
+        notifyMainTabsAppearanceChanged();
+    }
+
+    public static void restoreNavigationGradientPreview(VayGradientSpec original) {
+        ensureInitialized();
+        navigationGradient = original;
+        notifyMainTabsAppearanceChanged();
+    }
+
+    public static void commitNavigationGradient(VayGradientSpec spec) {
+        ensureInitialized();
+        VayAndroid.gradients().save(spec);
+        navigationGradient = spec;
+        notifyMainTabsAppearanceChanged();
+    }
+
+    public static void resetNavigationGradient() {
+        ensureInitialized();
+        VayAndroid.gradients().delete(VayThemeGradients.NAVIGATION_BOTTOM);
+        navigationGradient = null;
+        notifyMainTabsAppearanceChanged();
     }
 
     public static boolean isMaterialYouSupported() {

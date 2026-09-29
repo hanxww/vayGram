@@ -190,21 +190,51 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Components/glass/GlassT
 diff --git a/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java b/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java
 --- a/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java
 +++ b/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java
-@@ -84,8 +84,11 @@
+@@ -10,9 +10,10 @@
+ import android.content.res.Configuration;
+ import android.graphics.Canvas;
+ import android.graphics.Paint;
+-import android.graphics.RectF;
+-import android.graphics.drawable.ShapeDrawable;
+-import android.os.Build;
++import android.graphics.RectF;
++import android.graphics.drawable.GradientDrawable;
++import android.graphics.drawable.ShapeDrawable;
++import android.os.Build;
+ import android.os.Bundle;
+ import android.text.SpannableStringBuilder;
+ import android.text.Spanned;
+@@ -84,8 +85,13 @@
  import java.util.ArrayList;
  import java.util.Collections;
  
 -import me.vkryl.android.animator.BoolAnimator;
 -import me.vkryl.android.animator.FactorAnimator;
++import app.vaygram.core.theme.VayGradientSpec;
 +import app.vaygram.telegram.VayAppearance;
 +import app.vaygram.telegram.VayTelegram;
++import app.vaygram.theme.VayGradientBridge;
 +
 +import me.vkryl.android.animator.BoolAnimator;
 +import me.vkryl.android.animator.FactorAnimator;
  
  public class MainTabsActivity extends ViewPagerActivity implements NotificationCenter.NotificationCenterDelegate, FactorAnimator.Target {
  
-@@ -301,9 +304,10 @@
+@@ -115,9 +121,10 @@
+ 
+     private UpdateLayoutWrapper updateLayoutWrapper;
+     private FrameLayout tabsViewWrapper;
+-    private MainTabsLayout tabsView;
+-    private BlurredBackgroundDrawable tabsViewBackground;
+-    private View fadeView;
++    private MainTabsLayout tabsView;
++    private BlurredBackgroundDrawable tabsViewBackground;
++    private GradientDrawable vayNavigationGradientDrawable;
++    private View fadeView;
+ 
+     public MainTabsActivity() {
+         super();
+@@ -301,9 +308,10 @@
      }
  
      @Override
@@ -218,7 +248,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java b
  
          tabsView = new MainTabsLayout(context, resourceProvider);
          tabsView.setClipChildren(false);
-@@ -391,12 +395,64 @@
+@@ -391,12 +399,85 @@
              updateLayout.updateAppUpdateViews(currentAccount, false);
          }
  
@@ -240,6 +270,10 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java b
 +        final boolean glassBlurEnabled = VayAppearance.glassBlurEnabled(currentAccount);
 +        final int glassBlurRadius = VayAppearance.glassBlurRadiusDp(currentAccount);
 +        final float glassOpacity = VayAppearance.glassOpacity(currentAccount);
++        final VayGradientSpec navigationGradient = VayAppearance.navigationGradient();
++        final int backgroundAlpha = Math.round(
++                255f * Math.max(0.20f, Math.min(1f, glassOpacity))
++        );
 +        animatorTabsVisible.setDuration(VayAppearance.animationDurationMs(380));
 +
 +        if (tabs != null) {
@@ -255,12 +289,31 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java b
 +
 +        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && iBlur3SourceTabGlass != null) {
 +            iBlur3SourceTabGlass.setBlur(
-+                    glassBlurEnabled ? dp(Math.max(0, glassBlurRadius)) : 0f
++                    !navigationGradient.isEnabled() && glassBlurEnabled
++                            ? dp(Math.max(0, glassBlurRadius))
++                            : 0f
 +            );
 +            iBlur3SourceTabGlass.invalidateDisplayListForDrawables();
 +        }
 +
 +        if (tabsView != null) {
++            if (navigationGradient.isEnabled()) {
++                if (vayNavigationGradientDrawable == null) {
++                    vayNavigationGradientDrawable = new GradientDrawable();
++                }
++                VayGradientBridge.apply(
++                        vayNavigationGradientDrawable,
++                        navigationGradient,
++                        dp(DialogsActivity.MAIN_TABS_HEIGHT / 2f),
++                        backgroundAlpha
++                );
++                if (tabsView.getBackground() != vayNavigationGradientDrawable) {
++                    tabsView.setBackground(vayNavigationGradientDrawable);
++                }
++            } else if (tabsViewBackground != null && tabsView.getBackground() != tabsViewBackground) {
++                tabsView.setBackground(tabsViewBackground);
++            }
++
 +            final ViewGroup.LayoutParams params = tabsView.getLayoutParams();
 +            final int height = dp(DialogsActivity.MAIN_TABS_HEIGHT_WITH_MARGINS);
 +            if (params != null && params.height != height) {
@@ -272,9 +325,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java b
 +
 +        if (tabsViewBackground != null) {
 +            tabsViewBackground.setRadius(dp(DialogsActivity.MAIN_TABS_HEIGHT / 2f));
-+            tabsViewBackground.setAlpha(Math.round(
-+                    255f * Math.max(0.20f, Math.min(1f, glassOpacity))
-+            ));
++            tabsViewBackground.setAlpha(backgroundAlpha);
 +        }
 +
 +        if (tabsViewWrapper != null) {
@@ -289,7 +340,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java b
          if (tabsView == null) {
              return;
          }
-@@ -957,9 +1013,12 @@
+@@ -957,9 +1038,12 @@
  
      @Override
      public void didReceivedNotification(int id, int account, Object... args) {

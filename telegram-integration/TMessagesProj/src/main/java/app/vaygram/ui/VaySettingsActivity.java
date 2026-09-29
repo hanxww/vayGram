@@ -5,8 +5,10 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.Shader;
 import android.text.TextUtils;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
@@ -52,6 +54,7 @@ import app.vaygram.core.settings.VaySettingScope;
 import app.vaygram.core.settings.VaySettingsListener;
 import app.vaygram.core.settings.VaySettingsPreset;
 import app.vaygram.core.settings.VayVisibilityLevel;
+import app.vaygram.core.theme.VayGradientSpec;
 import app.vaygram.core.theme.VayThemeTokens;
 import app.vaygram.telegram.VayTelegram;
 import app.vaygram.theme.VayThemeBridge;
@@ -73,6 +76,7 @@ public final class VaySettingsActivity extends BaseFragment {
     private static final int ACTION_OPEN_ACCOUNT_SCOPE = 9;
     private static final int ACTION_SCOPE_INFO = 10;
     private static final int ACTION_PALETTE_EDITOR = 11;
+    private static final int ACTION_GRADIENT_EDITOR = 12;
 
     private static final int RECENT_LIMIT = 5;
 
@@ -256,6 +260,15 @@ public final class VaySettingsActivity extends BaseFragment {
                         : paletteOverrides + (paletteOverrides == 1 ? " color override" : " color overrides")
         ));
 
+        VayGradientSpec navigationGradient = VayTelegram.navigationGradient();
+        rows.add(Row.action(
+                ACTION_GRADIENT_EDITOR,
+                "Gradient editor",
+                navigationGradient.isEnabled()
+                        ? "Bottom navigation · " + navigationGradient.getAngleDegrees() + "°"
+                        : "Bottom navigation · off"
+        ));
+
         int modified = VayTelegram.settings().countCustomized(scopeKey);
         rows.add(Row.action(
                 ACTION_EXPORT_PRESET,
@@ -391,6 +404,8 @@ public final class VaySettingsActivity extends BaseFragment {
             presentFragment(VaySettingsActivity.forAccount(currentAccount));
         } else if (action == ACTION_PALETTE_EDITOR) {
             presentFragment(new VayPaletteActivity());
+        } else if (action == ACTION_GRADIENT_EDITOR) {
+            presentFragment(new VayGradientActivity());
         }
     }
 
@@ -1134,17 +1149,27 @@ public final class VaySettingsActivity extends BaseFragment {
             final float navTop = bottom - AndroidUtilities.dp(Math.min(88, Math.max(48, navHeight)));
             final float glassOpacity = ((Number) getPreviewValue(VayDefaults.GLASS_OPACITY)).floatValue();
             final int navColor = VayThemeBridge.color(VayThemeTokens.NAV_SURFACE);
-            paint.setColor(navColor);
-            paint.setAlpha(Math.round(
+            final int navAlpha = Math.round(
                     Color.alpha(navColor) * Math.max(0.20f, Math.min(1f, glassOpacity))
-            ));
+            );
             rect.set(left + AndroidUtilities.dp(8), navTop, right - AndroidUtilities.dp(8), bottom - AndroidUtilities.dp(8));
+
+            VayGradientSpec navigationGradient = VayTelegram.navigationGradient();
+            if (navigationGradient.isEnabled()) {
+                paint.setShader(createGradientShader(rect, navigationGradient));
+                paint.setAlpha(navAlpha);
+            } else {
+                paint.setShader(null);
+                paint.setColor(navColor);
+                paint.setAlpha(navAlpha);
+            }
             canvas.drawRoundRect(
                     rect,
                     AndroidUtilities.dp(Math.min(28, navHeight / 2f)),
                     AndroidUtilities.dp(Math.min(28, navHeight / 2f)),
                     paint
             );
+            paint.setShader(null);
             paint.setAlpha(255);
 
             final float navWidth = rect.width();
@@ -1168,6 +1193,57 @@ public final class VaySettingsActivity extends BaseFragment {
                 }
             }
             paint.setTextAlign(Paint.Align.LEFT);
+        }
+
+        private Shader createGradientShader(RectF bounds, VayGradientSpec spec) {
+            float x0;
+            float y0;
+            float x1;
+            float y1;
+            switch (spec.getAngleDegrees()) {
+                case 45:
+                    x0 = bounds.left; y0 = bounds.bottom;
+                    x1 = bounds.right; y1 = bounds.top;
+                    break;
+                case 90:
+                    x0 = bounds.centerX(); y0 = bounds.bottom;
+                    x1 = bounds.centerX(); y1 = bounds.top;
+                    break;
+                case 135:
+                    x0 = bounds.right; y0 = bounds.bottom;
+                    x1 = bounds.left; y1 = bounds.top;
+                    break;
+                case 180:
+                    x0 = bounds.right; y0 = bounds.centerY();
+                    x1 = bounds.left; y1 = bounds.centerY();
+                    break;
+                case 225:
+                    x0 = bounds.right; y0 = bounds.top;
+                    x1 = bounds.left; y1 = bounds.bottom;
+                    break;
+                case 270:
+                    x0 = bounds.centerX(); y0 = bounds.top;
+                    x1 = bounds.centerX(); y1 = bounds.bottom;
+                    break;
+                case 315:
+                    x0 = bounds.left; y0 = bounds.top;
+                    x1 = bounds.right; y1 = bounds.bottom;
+                    break;
+                case 0:
+                default:
+                    x0 = bounds.left; y0 = bounds.centerY();
+                    x1 = bounds.right; y1 = bounds.centerY();
+                    break;
+            }
+            return new LinearGradient(
+                    x0,
+                    y0,
+                    x1,
+                    y1,
+                    spec.getStartColor(),
+                    spec.getEndColor(),
+                    Shader.TileMode.CLAMP
+            );
         }
     }
 }

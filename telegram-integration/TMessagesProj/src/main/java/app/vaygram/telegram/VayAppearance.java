@@ -2,6 +2,7 @@ package app.vaygram.telegram;
 
 import app.vaygram.core.settings.VayDefaults;
 import app.vaygram.core.settings.VaySetting;
+import app.vaygram.core.theme.VayGradientSpec;
 
 public final class VayAppearance {
     private static volatile boolean amoledSurfacesEnabled;
@@ -146,6 +147,10 @@ public final class VayAppearance {
 
     public static float glassOpacity(int account) {
         return resolvedForAccount(VayDefaults.GLASS_OPACITY, account);
+    }
+
+    public static VayGradientSpec navigationGradient() {
+        return VayTelegram.navigationGradient();
     }
 
     public static float animationScale() {

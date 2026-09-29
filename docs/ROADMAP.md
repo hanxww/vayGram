@@ -49,7 +49,7 @@
 - [x] token registry — semantic tokens + Telegram mapping bridge
 - [x] palette editor — searchable live token color overrides
 - [x] Material You bridge — Android 12+ dynamic colors with manual override precedence
-- [ ] gradients
+- [x] gradients — reusable spec/editor + live bottom-navigation gradient target
 - [x] blur/transparency controls — live bottom-navigation blur radius and opacity
 
 ## M5 — Branding and builds
