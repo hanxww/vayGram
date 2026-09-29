@@ -60,4 +60,5 @@
 - [ ] own Firebase configuration
 - [x] own Telegram API credential injection (secrets not committed)
 - [x] isolated development signing configuration
+- [x] Android overlay compile CI
 - [ ] first installable 0.1-dev APK
