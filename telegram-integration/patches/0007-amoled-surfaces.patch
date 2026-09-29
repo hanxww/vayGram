@@ -39,7 +39,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/ActionBar/Theme.java b/
              if (index >= 0) {
                  return animatingColors.valueAt(index);
              }
-@@ -9043,11 +9047,30 @@
+@@ -9043,11 +9047,31 @@
          }
          return color;
      }
@@ -48,6 +48,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/ActionBar/Theme.java b/
 -        return key >= myMessagesBubblesStartIndex && key < myMessagesBubblesEndIndex;
 -    }
 +    private static int vayApplyAmoledSurface(int key, int color) {
++        color = app.vaygram.theme.VayThemeBridge.applyColorOverride(key, color);
 +        if (!app.vaygram.telegram.VayAppearance.useAmoledSurfaces() || !isCurrentThemeDark()) {
 +            return color;
 +        }

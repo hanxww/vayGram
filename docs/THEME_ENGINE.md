@@ -31,3 +31,24 @@ Token IDs are stable strings such as `surface.primary`, `chat.bubble.out` and `n
 ## Next steps
 
 The palette editor will store optional color overrides by token ID. The bridge will then resolve an override first and fall back to the mapped Telegram color when no vayGram override exists. Later additions can expose Material You, gradients, opacity and other visual tokens without coupling feature code to Telegram internals.
+
+
+## Palette overrides
+
+The first editor is now implemented.
+
+Each semantic color token can optionally have a vayGram override. Overrides are stored by token ID, persisted in a dedicated Android store, and cached as Telegram theme-key overrides for fast rendering.
+
+The resolution path is:
+
+```text
+vayGram token override
+        |
+        v
+mapped Telegram theme key
+        |
+        v
+Telegram theme fallback
+```
+
+The palette editor supports search, per-token reset, full-palette reset, and live preview while dragging ARGB controls. Cancelling restores the previous override without persisting the preview.

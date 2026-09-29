@@ -47,7 +47,7 @@
 
 ## M4 — Theme Engine
 - [x] token registry — semantic tokens + Telegram mapping bridge
-- [ ] palette editor
+- [x] palette editor — searchable live token color overrides
 - [ ] Material You bridge
 - [ ] gradients
 - [ ] blur/transparency controls
