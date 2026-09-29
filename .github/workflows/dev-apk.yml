@@ -10,6 +10,11 @@ jobs:
     env:
       VAYGRAM_API_ID: ${{ secrets.VAYGRAM_API_ID }}
       VAYGRAM_API_HASH: ${{ secrets.VAYGRAM_API_HASH }}
+      VAYGRAM_FIREBASE_JSON_BASE64: ${{ secrets.VAYGRAM_FIREBASE_JSON_BASE64 }}
+      VAYGRAM_SIGNING_KEYSTORE_BASE64: ${{ secrets.VAYGRAM_SIGNING_KEYSTORE_BASE64 }}
+      VAYGRAM_KEYSTORE_PASSWORD: ${{ secrets.VAYGRAM_KEYSTORE_PASSWORD }}
+      VAYGRAM_KEY_ALIAS: ${{ secrets.VAYGRAM_KEY_ALIAS }}
+      VAYGRAM_KEY_PASSWORD: ${{ secrets.VAYGRAM_KEY_PASSWORD }}
 
     steps:
       - uses: actions/checkout@v4
@@ -26,11 +31,27 @@ jobs:
           yes | sdkmanager --licenses >/dev/null || true
           sdkmanager             "platforms;android-36"             "build-tools;36.0.0"             "ndk;27.2.12479018"             "cmake;3.22.1"
 
+      - name: Restore persistent dev signing key
+        if: env.VAYGRAM_SIGNING_KEYSTORE_BASE64 != ''
+        run: |
+          mkdir -p .work/keys
+          printf '%s' "$VAYGRAM_SIGNING_KEYSTORE_BASE64"             | base64 --decode             > .work/keys/vaygram-dev.keystore
+          echo "VAYGRAM_DEV_KEYSTORE=$GITHUB_WORKSPACE/.work/keys/vaygram-dev.keystore" >> "$GITHUB_ENV"
+
+      - name: Preflight
+        run: bash scripts/preflight-build.sh
+
       - name: Build vayGram 0.1-dev APK
         run: bash scripts/build-dev-apk.sh
+
+      - name: Show build metadata
+        run: cat .work/artifacts/vayGram-0.1-dev-build-info.txt
 
       - uses: actions/upload-artifact@v4
         with:
           name: vayGram-0.1-dev
-          path: .work/artifacts/vayGram-0.1-dev.apk
+          path: |
+            .work/artifacts/vayGram-0.1-dev.apk
+            .work/artifacts/vayGram-0.1-dev.sha256
+            .work/artifacts/vayGram-0.1-dev-build-info.txt
           if-no-files-found: error
