@@ -117,6 +117,16 @@ public final class VayDefaults {
             .tags("amoled", "black", "dark", "черный")
             .build();
 
+    public static final VaySetting<Boolean> THEME_MATERIAL_YOU = VaySetting
+            .builder("theme.material_you", VaySettingType.BOOLEAN, false)
+            .title("Material You palette")
+            .description("Use Android dynamic system colors as the base vayGram palette")
+            .category("Appearance / Theme")
+            .visibility(VayVisibilityLevel.BASIC)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("material you", "dynamic color", "wallpaper", "system palette", "цвета системы")
+            .build();
+
     public static final VaySetting<Boolean> GLASS_BLUR = VaySetting
             .builder("effects.glass.blur", VaySettingType.BOOLEAN, false)
             .title("Glass blur")
@@ -161,6 +171,7 @@ public final class VayDefaults {
         registry.register(COMPACT_MODE);
         registry.register(MOTION_SCALE);
         registry.register(THEME_AMOLED);
+        registry.register(THEME_MATERIAL_YOU);
         registry.register(GLASS_BLUR);
         registry.register(GLASS_BLUR_RADIUS);
         registry.register(PROFILE_AUTHOR_STYLE);
