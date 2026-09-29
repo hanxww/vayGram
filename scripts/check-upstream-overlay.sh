@@ -37,6 +37,7 @@ must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/setting
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/theme/VayThemeBridge.java" "Telegram theme token bridge"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayPaletteActivity.java" "palette editor UI"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/theme/VayThemePaletteRepository.java" "palette persistence repository"
+must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/theme/VayMaterialYouPalette.java" "Android Material You palette resolver"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/core/theme/VayThemeTokenRegistry.java" "semantic theme token registry"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/core/theme/VayThemePalette.java" "theme palette model"
 
@@ -77,6 +78,18 @@ must_grep 'VayTelegram\.commitThemeColor' \
 must_grep 'ACTION_PALETTE_EDITOR' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
   "palette editor settings entry"
+must_grep 'THEME_MATERIAL_YOU' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/core/settings/VayDefaults.java" \
+  "Material You settings registration"
+must_grep 'refreshMaterialYou' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/theme/VayThemeBridge.java" \
+  "Material You theme bridge"
+must_grep 'VayMaterialYouPalette\.resolve' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/telegram/VayTelegram.java" \
+  "Material You Android palette sync"
+must_grep 'ACTION_REFRESH_MATERIAL_YOU' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayPaletteActivity.java" \
+  "Material You palette editor status"
 must_grep 'VayTelegram\.presets\(\)\.save' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
   "persistent profile save UI"
