@@ -50,7 +50,7 @@
 - [x] palette editor — searchable live token color overrides
 - [x] Material You bridge — Android 12+ dynamic colors with manual override precedence
 - [ ] gradients
-- [ ] blur/transparency controls
+- [x] blur/transparency controls — live bottom-navigation blur radius and opacity
 
 ## M5 — Branding and builds
 - [ ] final vayGram icon assets
