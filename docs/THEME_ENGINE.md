@@ -79,6 +79,21 @@ The first live glass controls are wired to Telegram's main bottom navigation sur
 
 The default values preserve Telegram's existing appearance. vayGram only adds the extra blur when the user enables it.
 
-## Next steps
+## Gradients
 
-Gradients are the remaining M4 Theme Engine item. Additional surfaces can opt into the same blur/transparency controls as their rendering hooks are isolated.
+The first reusable gradient model and editor are implemented.
+
+Gradient definitions use a stable target ID plus:
+
+- enabled state;
+- start ARGB color;
+- end ARGB color;
+- angle snapped to 45-degree steps.
+
+The first target is `navigation.bottom`. Its editor supports live color preview, eight directions, enable/disable and reset. Specs are persisted separately from the token palette so gradients can later be attached to more surfaces without changing the color-token model.
+
+When the bottom-navigation gradient is enabled, it temporarily replaces Telegram's glass background drawable for that surface. Disabling or resetting the gradient restores the normal Telegram/vayGram glass surface. Glass opacity still applies to the gradient. The extra RenderNode blur is disabled while a solid gradient background is active to keep the rendering path predictable.
+
+## M4 status
+
+The initial Theme Engine milestone now contains semantic tokens, persistent palette overrides, Material You, AMOLED surfaces, live glass blur/transparency and a reusable gradient system. Future work can expand these primitives to chat headers, composer surfaces, profiles and other targets.
