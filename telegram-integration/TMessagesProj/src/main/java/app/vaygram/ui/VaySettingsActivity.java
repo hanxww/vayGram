@@ -1132,7 +1132,12 @@ public final class VaySettingsActivity extends BaseFragment {
             }
 
             final float navTop = bottom - AndroidUtilities.dp(Math.min(88, Math.max(48, navHeight)));
-            paint.setColor(VayThemeBridge.color(VayThemeTokens.NAV_SURFACE));
+            final float glassOpacity = ((Number) getPreviewValue(VayDefaults.GLASS_OPACITY)).floatValue();
+            final int navColor = VayThemeBridge.color(VayThemeTokens.NAV_SURFACE);
+            paint.setColor(navColor);
+            paint.setAlpha(Math.round(
+                    Color.alpha(navColor) * Math.max(0.20f, Math.min(1f, glassOpacity))
+            ));
             rect.set(left + AndroidUtilities.dp(8), navTop, right - AndroidUtilities.dp(8), bottom - AndroidUtilities.dp(8));
             canvas.drawRoundRect(
                     rect,
@@ -1140,6 +1145,7 @@ public final class VaySettingsActivity extends BaseFragment {
                     AndroidUtilities.dp(Math.min(28, navHeight / 2f)),
                     paint
             );
+            paint.setAlpha(255);
 
             final float navWidth = rect.width();
             final float iconY = navTop + AndroidUtilities.dp(navLabels ? 17 : Math.max(14, navHeight / 2f - 4));
