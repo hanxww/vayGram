@@ -9,6 +9,8 @@ import app.vaygram.core.settings.VaySettingsEngine;
 import app.vaygram.core.settings.VaySettingsPreset;
 import app.vaygram.core.settings.VaySettingsRegistry;
 import app.vaygram.core.settings.VayVisibilityLevel;
+import app.vaygram.core.theme.VayGradientSpec;
+import app.vaygram.core.theme.VayThemeGradients;
 import app.vaygram.core.theme.VayThemePalette;
 import app.vaygram.core.theme.VayThemeTokenRegistry;
 import app.vaygram.core.theme.VayThemeTokens;
@@ -34,6 +36,17 @@ public final class Demo {
         palette.reset(VayThemeTokens.CHAT_BUBBLE_OUT);
         if (palette.countOverrides() != 0) {
             throw new IllegalStateException("Theme palette reset smoke test failed");
+        }
+
+        VayGradientSpec gradient = VayThemeGradients.navigationDefaults(
+                0xff101014,
+                0xff7c5cff
+        );
+        if (gradient.isEnabled()
+                || gradient.withAngleDegrees(73).getAngleDegrees() != 90
+                || gradient.withStartColor(0xff111111).getEndColor() != 0xff7c5cff
+                || !VayThemeGradients.NAVIGATION_BOTTOM.equals(gradient.getTargetId())) {
+            throw new IllegalStateException("Theme gradient smoke test failed");
         }
 
         engine.seedIfAbsent(VayDefaults.CHAT_BUBBLE_RADIUS, VayScopeKey.GLOBAL, 17f);
