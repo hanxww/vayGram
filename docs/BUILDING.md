@@ -77,3 +77,37 @@ A vayGram-owned Firebase project will be added before a stable public release.
 The upstream Telegram API ID/hash are not used by vayGram. The build reads only `VAYGRAM_API_ID` and `VAYGRAM_API_HASH` from the environment or generated Telegram `local.properties`.
 
 Official-app-only SafetyNet, store billing identity and passkey support are disabled in the vayGram dev build.
+
+
+## Optional persistent CI signing
+
+For update-compatible CI APKs, add these repository secrets:
+
+- `VAYGRAM_SIGNING_KEYSTORE_BASE64`
+- `VAYGRAM_KEYSTORE_PASSWORD`
+- `VAYGRAM_KEY_ALIAS`
+- `VAYGRAM_KEY_PASSWORD`
+
+The keystore secret must contain the Base64-encoded bytes of a vayGram-owned development keystore. When these secrets are absent, the local script can still generate a disposable development key.
+
+## Optional Firebase wiring
+
+To enable FCM in CI builds, add:
+
+- `VAYGRAM_FIREBASE_JSON_BASE64`
+
+It must contain the Base64-encoded `google-services.json` for the vayGram Firebase project, including the dev application id used by the current build.
+
+If the secret is absent, the APK still builds without the Google Services Gradle plugin, but Firebase-dependent features can be unavailable.
+
+## Build artifacts
+
+A successful dev build now produces three files:
+
+```text
+vayGram-0.1-dev.apk
+vayGram-0.1-dev.sha256
+vayGram-0.1-dev-build-info.txt
+```
+
+The metadata records the vayGram commit, pinned Telegram commit, package id, UTC build time, size and SHA-256 checksum.
