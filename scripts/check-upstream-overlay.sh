@@ -35,12 +35,10 @@ must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/core/settings/V
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/VayAndroid.java" "Android settings bridge"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/settings/VayPresetRepository.java" "persistent preset repository"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/theme/VayThemeBridge.java" "Telegram theme token bridge"
-must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayPaletteActivity.java" "vayGram palette editor"
+must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayPaletteActivity.java" "palette editor UI"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/theme/VayThemePaletteRepository.java" "palette persistence repository"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/core/theme/VayThemeTokenRegistry.java" "semantic theme token registry"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/core/theme/VayThemePalette.java" "theme palette model"
-must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayPaletteActivity.java" "palette editor UI"
-must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/theme/VayThemePaletteRepository.java" "palette persistence repository"
 
 must_grep 'presentSettingFragment\(new app\.vaygram\.ui\.VaySettingsActivity\(\)\)' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/SettingsActivity.java" \
@@ -79,15 +77,6 @@ must_grep 'VayTelegram\.commitThemeColor' \
 must_grep 'ACTION_PALETTE_EDITOR' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
   "palette editor settings entry"
-must_grep 'applyColorOverride' \
-  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/ActionBar/Theme.java" \
-  "palette override hook in Telegram theme pipeline"
-must_grep 'ACTION_PALETTE_EDITOR' \
-  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
-  "palette editor settings entry"
-must_grep 'previewThemeColor' \
-  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayPaletteActivity.java" \
-  "live palette preview"
 must_grep 'VayTelegram\.presets\(\)\.save' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
   "persistent profile save UI"

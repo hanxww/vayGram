@@ -28,18 +28,11 @@ The first registry covers primary, secondary and elevated surfaces; primary and 
 
 Token IDs are stable strings such as `surface.primary`, `chat.bubble.out` and `navigation.icon.active`. UI code should prefer tokens over hard-coded Telegram theme keys when a semantic token exists.
 
-## Next steps
-
-The palette editor will store optional color overrides by token ID. The bridge will then resolve an override first and fall back to the mapped Telegram color when no vayGram override exists. Later additions can expose Material You, gradients, opacity and other visual tokens without coupling feature code to Telegram internals.
-
-
 ## Palette overrides
 
-The first editor is now implemented.
+The first editor is implemented.
 
-Each semantic color token can optionally have a vayGram override. Overrides are stored by token ID, persisted in a dedicated Android store, and cached as Telegram theme-key overrides for fast rendering.
-
-The resolution path is:
+Each semantic color token can optionally have a vayGram override. Overrides are stored by token ID, persisted locally, and cached as Telegram theme-key overrides for fast rendering.
 
 ```text
 vayGram token override
@@ -51,4 +44,8 @@ mapped Telegram theme key
 Telegram theme fallback
 ```
 
-The palette editor supports search, per-token reset, full-palette reset, and live preview while dragging ARGB controls. Cancelling restores the previous override without persisting the preview.
+The palette editor supports search, per-token reset, full-palette reset, and live ARGB preview. Cancelling restores the previous override without persisting the preview.
+
+## Next steps
+
+Material You can provide suggested token values without replacing the token model. Later additions can expose gradients, opacity, blur and other visual tokens without coupling feature code to Telegram internals.
