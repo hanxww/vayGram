@@ -60,4 +60,6 @@
 - [ ] own Firebase configuration
 - [x] own Telegram API credential injection (secrets not committed)
 - [x] isolated development signing configuration
+- [x] reproducible dev APK pipeline + checksum/build metadata
+- [x] optional persistent CI signing/Firebase secret wiring
 - [ ] first installable 0.1-dev APK

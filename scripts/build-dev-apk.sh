@@ -6,34 +6,57 @@ WORKDIR="${VAYGRAM_WORKDIR:-$ROOT/.work/telegram-build}"
 OUTDIR="${VAYGRAM_OUTDIR:-$ROOT/.work/artifacts}"
 APK_NAME="vayGram-0.1-dev.apk"
 
-: "${VAYGRAM_API_ID:?Set VAYGRAM_API_ID to your Telegram API ID}"
-: "${VAYGRAM_API_HASH:?Set VAYGRAM_API_HASH to your Telegram API hash}"
-
-if [[ ! "$VAYGRAM_API_ID" =~ ^[0-9]+$ ]] || [[ "$VAYGRAM_API_ID" == "0" ]]; then
-  echo "VAYGRAM_API_ID must be a non-zero integer" >&2
-  exit 2
-fi
-
-if [[ ! "$VAYGRAM_API_HASH" =~ ^[0-9a-fA-F]{32}$ ]]; then
-  echo "VAYGRAM_API_HASH must be a 32-character hexadecimal Telegram API hash" >&2
-  exit 2
-fi
+bash "$ROOT/scripts/preflight-build.sh"
 
 export VAYGRAM_WITH_SUBMODULES=1
 bash "$ROOT/scripts/bootstrap-telegram.sh" "$WORKDIR"
 
 DEV_KEYSTORE="${VAYGRAM_DEV_KEYSTORE:-$ROOT/.work/keys/vaygram-dev.keystore}"
 KEYSTORE="$WORKDIR/TMessagesProj/config/release.keystore"
+KEYSTORE_PASSWORD="${VAYGRAM_KEYSTORE_PASSWORD:-android}"
+KEY_ALIAS="${VAYGRAM_KEY_ALIAS:-androidkey}"
+KEY_PASSWORD="${VAYGRAM_KEY_PASSWORD:-$KEYSTORE_PASSWORD}"
 
 if [[ ! -f "$DEV_KEYSTORE" ]]; then
   echo "[vayGram] generating a project-local development signing key..."
   mkdir -p "$(dirname "$DEV_KEYSTORE")"
-  keytool -genkeypair -v   -keystore "$DEV_KEYSTORE"   -storepass android   -alias androidkey   -keypass android   -keyalg RSA   -keysize 2048   -validity 10000   -dname "CN=vayGram Dev, OU=Development, O=vayGram, C=XX" >/dev/null
+  keytool -genkeypair -v     -keystore "$DEV_KEYSTORE"     -storepass "$KEYSTORE_PASSWORD"     -alias "$KEY_ALIAS"     -keypass "$KEY_PASSWORD"     -keyalg RSA     -keysize 2048     -validity 10000     -dname "CN=vayGram Dev, OU=Development, O=vayGram, C=XX" >/dev/null
 else
-  echo "[vayGram] reusing local development signing key."
+  echo "[vayGram] reusing development signing key."
 fi
 
 cp "$DEV_KEYSTORE" "$KEYSTORE"
+
+if [[ -n "${VAYGRAM_FIREBASE_JSON_BASE64:-}" ]]; then
+  echo "[vayGram] installing Firebase configuration from environment..."
+  printf '%s' "$VAYGRAM_FIREBASE_JSON_BASE64"     | base64 --decode     > "$WORKDIR/TMessagesProj/google-services.json"
+fi
+
+python3 - "$WORKDIR/gradle.properties" "$KEYSTORE_PASSWORD" "$KEY_ALIAS" "$KEY_PASSWORD" <<'PY'
+from pathlib import Path
+import re
+import sys
+
+path = Path(sys.argv[1])
+store_password = sys.argv[2]
+key_alias = sys.argv[3]
+key_password = sys.argv[4]
+
+text = path.read_text(encoding="utf-8")
+values = {
+    "RELEASE_STORE_PASSWORD": store_password,
+    "RELEASE_KEY_ALIAS": key_alias,
+    "RELEASE_KEY_PASSWORD": key_password,
+}
+for key, value in values.items():
+    pattern = rf"(?m)^{re.escape(key)}=.*$"
+    replacement = f"{key}={value}"
+    if re.search(pattern, text):
+        text = re.sub(pattern, replacement, text)
+    else:
+        text += "\n" + replacement
+path.write_text(text, encoding="utf-8")
+PY
 
 echo "[vayGram] building afatDebug..."
 (
@@ -50,6 +73,7 @@ fi
 
 mkdir -p "$OUTDIR"
 cp "$APK" "$OUTDIR/$APK_NAME"
+bash "$ROOT/scripts/write-build-info.sh" "$OUTDIR/$APK_NAME" "$OUTDIR"
 
 echo
 echo "[vayGram] APK ready:"

@@ -1,0 +1,20 @@
+name: scripts-check
+
+on:
+  push:
+    branches: ["main", "dev/**"]
+  pull_request:
+
+jobs:
+  shell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Syntax-check build scripts
+        run: |
+          bash -n scripts/bootstrap-telegram.sh
+          bash -n scripts/apply-vaygram-branding.sh
+          bash -n scripts/check-upstream-overlay.sh
+          bash -n scripts/preflight-build.sh
+          bash -n scripts/build-dev-apk.sh
+          bash -n scripts/write-build-info.sh
