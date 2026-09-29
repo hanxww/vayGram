@@ -111,3 +111,17 @@ contacts_controller.write_text(text, encoding="utf-8")
 
 print(f"[vayGram] branded checkout as {app_name} ({package_id}, {version_name})")
 PY
+
+GOOGLE_SERVICES_TARGET="$WORKDIR/TMessagesProj/google-services.json"
+rm -f "$GOOGLE_SERVICES_TARGET"
+
+if [[ -n "${VAYGRAM_GOOGLE_SERVICES_JSON:-}" ]]; then
+  if [[ ! -f "$VAYGRAM_GOOGLE_SERVICES_JSON" ]]; then
+    echo "VAYGRAM_GOOGLE_SERVICES_JSON does not exist: $VAYGRAM_GOOGLE_SERVICES_JSON" >&2
+    exit 2
+  fi
+  cp "$VAYGRAM_GOOGLE_SERVICES_JSON" "$GOOGLE_SERVICES_TARGET"
+  echo "[vayGram] using vayGram Firebase configuration."
+else
+  echo "[vayGram] removed upstream Telegram Firebase configuration; Firebase disabled."
+fi
