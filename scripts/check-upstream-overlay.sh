@@ -40,6 +40,10 @@ must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/theme/V
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/theme/VayMaterialYouPalette.java" "Android Material You palette resolver"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/core/theme/VayThemeTokenRegistry.java" "semantic theme token registry"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/core/theme/VayThemePalette.java" "theme palette model"
+must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/core/theme/VayGradientSpec.java" "gradient specification model"
+must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/theme/VayGradientRepository.java" "persistent gradient repository"
+must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/theme/VayGradientBridge.java" "Android gradient renderer bridge"
+must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayGradientActivity.java" "gradient editor UI"
 
 must_grep 'presentSettingFragment\(new app\.vaygram\.ui\.VaySettingsActivity\(\)\)' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/SettingsActivity.java" \
@@ -78,6 +82,18 @@ must_grep 'VayTelegram\.commitThemeColor' \
 must_grep 'ACTION_PALETTE_EDITOR' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
   "palette editor settings entry"
+must_grep 'ACTION_GRADIENT_EDITOR' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
+  "gradient editor settings entry"
+must_grep 'previewNavigationGradient' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayGradientActivity.java" \
+  "live gradient editor preview"
+must_grep 'VayGradientBridge\.apply' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java" \
+  "bottom navigation gradient renderer"
+must_grep 'vayNavigationGradientDrawable' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java" \
+  "bottom navigation gradient drawable"
 must_grep 'THEME_MATERIAL_YOU' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/core/settings/VayDefaults.java" \
   "Material You settings registration"
