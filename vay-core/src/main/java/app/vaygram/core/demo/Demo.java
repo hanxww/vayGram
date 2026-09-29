@@ -11,6 +11,7 @@ import app.vaygram.core.settings.VaySettingsRegistry;
 import app.vaygram.core.settings.VayVisibilityLevel;
 import app.vaygram.core.theme.VayThemePalette;
 import app.vaygram.core.theme.VayThemePalette;
+import app.vaygram.core.theme.VayThemePalette;
 import app.vaygram.core.theme.VayThemeTokenRegistry;
 import app.vaygram.core.theme.VayThemeTokens;
 
@@ -23,6 +24,18 @@ public final class Demo {
                 || themeTokens.find("chat.bubble.out") != VayThemeTokens.CHAT_BUBBLE_OUT
                 || themeTokens.search("navigation").size() < 3) {
             throw new IllegalStateException("Theme token registry smoke test failed");
+        }
+
+        VayThemePalette palette = new VayThemePalette(themeTokens);
+        palette.setColor(VayThemeTokens.CHAT_BUBBLE_OUT, 0xff7c5cff);
+        if (!palette.hasColorOverride(VayThemeTokens.CHAT_BUBBLE_OUT)
+                || palette.getColorOverride(VayThemeTokens.CHAT_BUBBLE_OUT) != 0xff7c5cff
+                || palette.countOverrides() != 1) {
+            throw new IllegalStateException("Theme palette override smoke test failed");
+        }
+        palette.reset(VayThemeTokens.CHAT_BUBBLE_OUT);
+        if (palette.countOverrides() != 0) {
+            throw new IllegalStateException("Theme palette reset smoke test failed");
         }
 
         VayThemePalette palette = new VayThemePalette(themeTokens);
