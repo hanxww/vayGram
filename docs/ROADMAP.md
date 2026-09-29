@@ -48,7 +48,7 @@
 ## M4 — Theme Engine
 - [x] token registry — semantic tokens + Telegram mapping bridge
 - [x] palette editor — searchable live token color overrides
-- [ ] Material You bridge
+- [x] Material You bridge — Android 12+ dynamic colors with manual override precedence
 - [ ] gradients
 - [ ] blur/transparency controls
 
