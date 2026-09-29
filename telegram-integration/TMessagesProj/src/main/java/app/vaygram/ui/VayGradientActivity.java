@@ -132,6 +132,7 @@ public final class VayGradientActivity extends BaseFragment {
         }
 
         final VayGradientSpec original = VayTelegram.navigationGradient();
+        final VayGradientSpec originalStored = VayTelegram.storedNavigationGradient();
         final int initialColor = start ? original.getStartColor() : original.getEndColor();
         final boolean[] settled = {false};
 
@@ -152,7 +153,7 @@ public final class VayGradientActivity extends BaseFragment {
         builder.setView(editor);
         builder.setNegativeButton("Cancel", (dialog, which) -> {
             settled[0] = true;
-            VayTelegram.restoreNavigationGradientPreview(original);
+            VayTelegram.restoreNavigationGradientPreview(originalStored);
             rebuildRows();
         });
         builder.setPositiveButton("Apply", (dialog, which) -> {
@@ -165,7 +166,7 @@ public final class VayGradientActivity extends BaseFragment {
         });
         builder.setOnDismissListener(dialog -> {
             if (!settled[0]) {
-                VayTelegram.restoreNavigationGradientPreview(original);
+                VayTelegram.restoreNavigationGradientPreview(originalStored);
                 rebuildRows();
             }
         });
@@ -341,18 +342,11 @@ public final class VayGradientActivity extends BaseFragment {
 
         private void refresh() {
             VayGradientSpec spec = VayTelegram.navigationGradient();
-            int start = spec.isEnabled()
-                    ? spec.getStartColor()
-                    : VayTelegram.navigationGradient().getStartColor();
-            int end = spec.isEnabled()
-                    ? spec.getEndColor()
-                    : start;
-
             VayGradientSpec preview = new VayGradientSpec(
                     spec.getTargetId(),
                     true,
-                    start,
-                    end,
+                    spec.getStartColor(),
+                    spec.getEndColor(),
                     spec.getAngleDegrees()
             );
             VayGradientBridge.apply(
