@@ -218,7 +218,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java b
  
          tabsView = new MainTabsLayout(context, resourceProvider);
          tabsView.setClipChildren(false);
-@@ -391,12 +395,51 @@
+@@ -391,12 +395,64 @@
              updateLayout.updateAppUpdateViews(currentAccount, false);
          }
  
@@ -237,6 +237,9 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java b
 +    private void applyVayNavigationAppearance() {
 +        final boolean labelsVisible = VayAppearance.showBottomNavigationLabels(currentAccount);
 +        final float motionScale = VayAppearance.animationScale();
++        final boolean glassBlurEnabled = VayAppearance.glassBlurEnabled(currentAccount);
++        final int glassBlurRadius = VayAppearance.glassBlurRadiusDp(currentAccount);
++        final float glassOpacity = VayAppearance.glassOpacity(currentAccount);
 +        animatorTabsVisible.setDuration(VayAppearance.animationDurationMs(380));
 +
 +        if (tabs != null) {
@@ -250,6 +253,13 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java b
 +
 +        DialogsActivity.vaySetMainTabsHeight(VayAppearance.bottomNavigationHeightDp(currentAccount));
 +
++        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && iBlur3SourceTabGlass != null) {
++            iBlur3SourceTabGlass.setBlur(
++                    glassBlurEnabled ? dp(Math.max(0, glassBlurRadius)) : 0f
++            );
++            iBlur3SourceTabGlass.invalidateDisplayListForDrawables();
++        }
++
 +        if (tabsView != null) {
 +            final ViewGroup.LayoutParams params = tabsView.getLayoutParams();
 +            final int height = dp(DialogsActivity.MAIN_TABS_HEIGHT_WITH_MARGINS);
@@ -262,6 +272,9 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java b
 +
 +        if (tabsViewBackground != null) {
 +            tabsViewBackground.setRadius(dp(DialogsActivity.MAIN_TABS_HEIGHT / 2f));
++            tabsViewBackground.setAlpha(Math.round(
++                    255f * Math.max(0.20f, Math.min(1f, glassOpacity))
++            ));
 +        }
 +
 +        if (tabsViewWrapper != null) {
@@ -276,7 +289,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java b
          if (tabsView == null) {
              return;
          }
-@@ -957,9 +1000,12 @@
+@@ -957,9 +1013,12 @@
  
      @Override
      public void didReceivedNotification(int id, int account, Object... args) {

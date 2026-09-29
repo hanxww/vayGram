@@ -99,7 +99,10 @@ public final class VayTelegram {
                         true
                 );
             } else if (VayDefaults.NAV_SHOW_LABELS.getId().equals(settingId)
-                    || VayDefaults.MOTION_SCALE.getId().equals(settingId)) {
+                    || VayDefaults.MOTION_SCALE.getId().equals(settingId)
+                    || VayDefaults.GLASS_BLUR.getId().equals(settingId)
+                    || VayDefaults.GLASS_BLUR_RADIUS.getId().equals(settingId)
+                    || VayDefaults.GLASS_OPACITY.getId().equals(settingId)) {
                 notifyMainTabsAppearanceChanged();
             } else if (VayDefaults.THEME_AMOLED.getId().equals(settingId)) {
                 VayScopeKey currentAccountScope = accountScope(UserConfig.selectedAccount);

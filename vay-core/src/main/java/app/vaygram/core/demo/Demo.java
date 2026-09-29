@@ -53,6 +53,14 @@ public final class Demo {
         if (registry.find("theme.material_you") != VayDefaults.THEME_MATERIAL_YOU) {
             throw new IllegalStateException("Material You setting is missing from the registry");
         }
+        if (engine.get(VayDefaults.GLASS_OPACITY) != 1f) {
+            throw new IllegalStateException("Glass opacity must default to fully opaque");
+        }
+        engine.set(VayDefaults.GLASS_OPACITY, 0.1f);
+        if (engine.get(VayDefaults.GLASS_OPACITY) != 0.20f) {
+            throw new IllegalStateException("Glass opacity range normalization failed");
+        }
+        engine.reset(VayDefaults.GLASS_OPACITY, VayScopeKey.GLOBAL);
 
         engine.set(VayDefaults.CHAT_BUBBLE_RADIUS, 12f);
         System.out.println("new bubble radius: " + engine.get(VayDefaults.CHAT_BUBBLE_RADIUS));
