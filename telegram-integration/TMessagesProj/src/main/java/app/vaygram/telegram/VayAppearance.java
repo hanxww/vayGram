@@ -136,6 +136,18 @@ public final class VayAppearance {
                 && resolvedForAccount(VayDefaults.NAV_SHOW_LABELS, account);
     }
 
+    public static boolean glassBlurEnabled(int account) {
+        return resolvedForAccount(VayDefaults.GLASS_BLUR, account);
+    }
+
+    public static int glassBlurRadiusDp(int account) {
+        return resolvedForAccount(VayDefaults.GLASS_BLUR_RADIUS, account);
+    }
+
+    public static float glassOpacity(int account) {
+        return resolvedForAccount(VayDefaults.GLASS_OPACITY, account);
+    }
+
     public static float animationScale() {
         return VayTelegram.settings().get(VayDefaults.MOTION_SCALE);
     }
