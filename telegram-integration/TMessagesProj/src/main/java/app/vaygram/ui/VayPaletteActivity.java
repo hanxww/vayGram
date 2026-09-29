@@ -44,6 +44,7 @@ public final class VayPaletteActivity extends BaseFragment {
     private static final int TYPE_ACTION = 2;
 
     private static final int ACTION_RESET_ALL = 1;
+    private static final int ACTION_REFRESH_MATERIAL_YOU = 2;
 
     private final ArrayList<Row> rows = new ArrayList<>();
     private RecyclerListView listView;
@@ -93,6 +94,23 @@ public final class VayPaletteActivity extends BaseFragment {
     private void rebuildRows() {
         rows.clear();
 
+        if (TextUtils.isEmpty(query)) {
+            rows.add(Row.header("Sources"));
+            String materialValue;
+            if (!VayTelegram.isMaterialYouSupported()) {
+                materialValue = "Requires Android 12+";
+            } else if (VayTelegram.isMaterialYouEnabled()) {
+                materialValue = "Enabled · tap to refresh";
+            } else {
+                materialValue = "Disabled in vayGram Settings";
+            }
+            rows.add(Row.action(
+                    ACTION_REFRESH_MATERIAL_YOU,
+                    "Material You base",
+                    materialValue
+            ));
+        }
+
         if (TextUtils.isEmpty(query) && VayTelegram.themePalette().countOverrides() > 0) {
             rows.add(Row.header("Palette"));
             rows.add(Row.action(
@@ -136,6 +154,28 @@ public final class VayPaletteActivity extends BaseFragment {
         Row row = rows.get(position);
         if (row.action == ACTION_RESET_ALL) {
             showResetAllDialog();
+        } else if (row.action == ACTION_REFRESH_MATERIAL_YOU) {
+            if (!VayTelegram.isMaterialYouSupported()) {
+                Toast.makeText(
+                        getParentActivity(),
+                        "Material You requires Android 12 or newer",
+                        Toast.LENGTH_SHORT
+                ).show();
+            } else if (!VayTelegram.isMaterialYouEnabled()) {
+                Toast.makeText(
+                        getParentActivity(),
+                        "Enable Material You palette in vayGram Settings",
+                        Toast.LENGTH_SHORT
+                ).show();
+            } else {
+                VayTelegram.refreshMaterialYou();
+                Toast.makeText(
+                        getParentActivity(),
+                        "Material You colors refreshed",
+                        Toast.LENGTH_SHORT
+                ).show();
+                rebuildRows();
+            }
         } else if (row.token != null) {
             showColorEditor(row.token);
         }
@@ -207,6 +247,8 @@ public final class VayPaletteActivity extends BaseFragment {
         String value = String.format(Locale.US, "#%08X", color);
         if (VayTelegram.themePalette().hasColorOverride(token)) {
             value += "  ·  override";
+        } else if (VayTelegram.isMaterialYouEnabled()) {
+            value += "  ·  Material You";
         }
         return value;
     }
