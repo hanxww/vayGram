@@ -46,6 +46,28 @@ Telegram theme fallback
 
 The palette editor supports search, per-token reset, full-palette reset, and live ARGB preview. Cancelling restores the previous override without persisting the preview.
 
+## Material You
+
+Material You is implemented as a generated base palette on Android 12+.
+
+The resolver reads Android dynamic system colors and maps them into the same semantic vayGram tokens used by the manual palette editor. Both light and dark token maps are cached, so switching Telegram between light and dark themes does not require rebuilding the palette.
+
+Resolution order is:
+
+```text
+manual vayGram token override
+        |
+        v
+Material You dynamic token color
+        |
+        v
+Telegram theme color
+```
+
+Material You remains opt-in. Manual token overrides always win, which lets a user follow the system palette while still replacing selected colors. AMOLED surface enforcement runs after token resolution for supported dark surfaces.
+
+The palette editor shows when an effective color comes from Material You and can re-read the current Android dynamic colors without restarting the client.
+
 ## Next steps
 
-Material You can provide suggested token values without replacing the token model. Later additions can expose gradients, opacity, blur and other visual tokens without coupling feature code to Telegram internals.
+Gradients, transparency and blur can now build on the same semantic theme model without coupling feature code to Telegram internals.
