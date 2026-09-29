@@ -118,6 +118,18 @@ must_grep 'setVayMainTabMotionScale' \
 must_grep 'applyVayNavigationAppearance\(\)' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java" \
   "live bottom navigation refresh"
+must_grep 'GLASS_OPACITY' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/core/settings/VayDefaults.java" \
+  "glass opacity setting"
+must_grep 'glassBlurEnabled\(currentAccount\)' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java" \
+  "bottom navigation glass blur toggle"
+must_grep 'iBlur3SourceTabGlass\.setBlur' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java" \
+  "bottom navigation blur radius hook"
+must_grep 'tabsViewBackground\.setAlpha' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java" \
+  "bottom navigation glass opacity hook"
 
 must_grep 'vayApplyAmoledSurface' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/ActionBar/Theme.java" \
