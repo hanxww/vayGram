@@ -53,6 +53,15 @@ must_grep 'VaySettingsListener previewListener' \
 must_grep 'VayThemeBridge\.color' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
   "semantic token preview consumer"
+must_grep 'class VayPaletteActivity' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayPaletteActivity.java" \
+  "palette editor activity"
+must_grep 'previewThemeColor' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayPaletteActivity.java" \
+  "live palette preview"
+must_grep 'applyColorOverride' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/theme/VayThemeBridge.java" \
+  "palette override color bridge"
 must_grep 'VayThemeTokens\.CHAT_BUBBLE_OUT' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/theme/VayThemeBridge.java" \
   "chat token Telegram mapping"
