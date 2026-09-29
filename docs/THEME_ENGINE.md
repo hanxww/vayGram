@@ -68,6 +68,17 @@ Material You remains opt-in. Manual token overrides always win, which lets a use
 
 The palette editor shows when an effective color comes from Material You and can re-read the current Android dynamic colors without restarting the client.
 
+## Glass effects
+
+The first live glass controls are wired to Telegram's main bottom navigation surface.
+
+- **Glass blur** enables a vayGram-controlled RenderNode blur on Android 12+.
+- **Glass blur radius** controls the live blur radius.
+- **Glass opacity** controls the background drawable alpha and works independently from the tab icons/text.
+- settings are account-aware and update without restarting the client.
+
+The default values preserve Telegram's existing appearance. vayGram only adds the extra blur when the user enables it.
+
 ## Next steps
 
-Gradients, transparency and blur can now build on the same semantic theme model without coupling feature code to Telegram internals.
+Gradients are the remaining M4 Theme Engine item. Additional surfaces can opt into the same blur/transparency controls as their rendering hooks are isolated.
