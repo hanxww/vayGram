@@ -149,6 +149,18 @@ public final class VayDefaults {
             .validator(v -> clamp(v, 0, 64))
             .build();
 
+    public static final VaySetting<Float> GLASS_OPACITY = VaySetting
+            .builder("effects.glass.opacity", VaySettingType.FLOAT, 1f)
+            .title("Glass opacity")
+            .description("Opacity of supported vayGram glass surfaces")
+            .category("Appearance / Effects")
+            .visibility(VayVisibilityLevel.ADVANCED)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("glass", "opacity", "transparency", "alpha", "прозрачность")
+            .range(0.20, 1.0, 0.05)
+            .validator(v -> clamp(v, 0.20f, 1f))
+            .build();
+
     public static final VaySetting<Boolean> PROFILE_AUTHOR_STYLE = VaySetting
             .builder("profile.remote.author_style", VaySettingType.BOOLEAN, true)
             .title("Show author profile style")
@@ -174,6 +186,7 @@ public final class VayDefaults {
         registry.register(THEME_MATERIAL_YOU);
         registry.register(GLASS_BLUR);
         registry.register(GLASS_BLUR_RADIUS);
+        registry.register(GLASS_OPACITY);
         registry.register(PROFILE_AUTHOR_STYLE);
         return registry;
     }
