@@ -29,6 +29,9 @@ public final class VayThemeBridge {
     };
 
     private static volatile SparseIntArray colorOverrides = new SparseIntArray();
+    private static volatile SparseIntArray materialLightColors = new SparseIntArray();
+    private static volatile SparseIntArray materialDarkColors = new SparseIntArray();
+    private static volatile boolean materialYouEnabled;
 
     private VayThemeBridge() {}
 
@@ -54,10 +57,55 @@ public final class VayThemeBridge {
         colorOverrides = next;
     }
 
+    public static void refreshMaterialYou(
+            Map<String, Integer> lightColors,
+            Map<String, Integer> darkColors,
+            boolean enabled
+    ) {
+        materialLightColors = mapTokenColors(lightColors);
+        materialDarkColors = mapTokenColors(darkColors);
+        materialYouEnabled = enabled
+                && materialLightColors.size() > 0
+                && materialDarkColors.size() > 0;
+    }
+
+    public static boolean isMaterialYouEnabled() {
+        return materialYouEnabled;
+    }
+
     public static int applyColorOverride(int telegramColorKey, int fallbackColor) {
-        SparseIntArray current = colorOverrides;
-        int index = current.indexOfKey(telegramColorKey);
-        return index >= 0 ? current.valueAt(index) : fallbackColor;
+        SparseIntArray manual = colorOverrides;
+        int manualIndex = manual.indexOfKey(telegramColorKey);
+        if (manualIndex >= 0) {
+            return manual.valueAt(manualIndex);
+        }
+
+        if (materialYouEnabled) {
+            SparseIntArray material = Theme.isCurrentThemeDark()
+                    ? materialDarkColors
+                    : materialLightColors;
+            int materialIndex = material.indexOfKey(telegramColorKey);
+            if (materialIndex >= 0) {
+                return material.valueAt(materialIndex);
+            }
+        }
+
+        return fallbackColor;
+    }
+
+    private static SparseIntArray mapTokenColors(Map<String, Integer> colors) {
+        SparseIntArray result = new SparseIntArray();
+        if (colors == null || colors.isEmpty()) {
+            return result;
+        }
+
+        for (VayThemeToken token : MAPPED_TOKENS) {
+            Integer color = colors.get(token.getId());
+            if (color != null) {
+                result.put(telegramColorKey(token), color);
+            }
+        }
+        return result;
     }
 
     public static int telegramColorKey(VayThemeToken token) {
