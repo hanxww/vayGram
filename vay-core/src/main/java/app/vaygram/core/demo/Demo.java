@@ -10,8 +10,6 @@ import app.vaygram.core.settings.VaySettingsPreset;
 import app.vaygram.core.settings.VaySettingsRegistry;
 import app.vaygram.core.settings.VayVisibilityLevel;
 import app.vaygram.core.theme.VayThemePalette;
-import app.vaygram.core.theme.VayThemePalette;
-import app.vaygram.core.theme.VayThemePalette;
 import app.vaygram.core.theme.VayThemeTokenRegistry;
 import app.vaygram.core.theme.VayThemeTokens;
 
@@ -34,28 +32,6 @@ public final class Demo {
             throw new IllegalStateException("Theme palette override smoke test failed");
         }
         palette.reset(VayThemeTokens.CHAT_BUBBLE_OUT);
-        if (palette.countOverrides() != 0) {
-            throw new IllegalStateException("Theme palette reset smoke test failed");
-        }
-
-        VayThemePalette palette = new VayThemePalette(themeTokens);
-        palette.setColor(VayThemeTokens.ACCENT_PRIMARY, 0xff7c5cfc);
-        if (palette.countOverrides() != 1
-                || palette.getColorOverride(VayThemeTokens.ACCENT_PRIMARY) != 0xff7c5cfc) {
-            throw new IllegalStateException("Theme palette override smoke test failed");
-        }
-        palette.reset(VayThemeTokens.ACCENT_PRIMARY);
-        if (palette.countOverrides() != 0) {
-            throw new IllegalStateException("Theme palette reset smoke test failed");
-        }
-
-        VayThemePalette palette = new VayThemePalette(themeTokens);
-        palette.setColor(VayThemeTokens.ACCENT_PRIMARY, 0xff7c5cfc);
-        if (palette.countOverrides() != 1
-                || palette.getColorOverride(VayThemeTokens.ACCENT_PRIMARY) != 0xff7c5cfc) {
-            throw new IllegalStateException("Theme palette override smoke test failed");
-        }
-        palette.reset(VayThemeTokens.ACCENT_PRIMARY);
         if (palette.countOverrides() != 0) {
             throw new IllegalStateException("Theme palette reset smoke test failed");
         }
