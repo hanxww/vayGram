@@ -10,6 +10,7 @@ import org.telegram.ui.DialogsActivity;
 
 import app.vaygram.android.VayAndroid;
 import app.vaygram.android.settings.VayPresetRepository;
+import app.vaygram.android.theme.VayMaterialYouPalette;
 import app.vaygram.core.settings.VayDefaults;
 import app.vaygram.core.settings.VayScopeKey;
 import app.vaygram.core.settings.VaySettingsEngine;
@@ -21,6 +22,7 @@ import app.vaygram.theme.VayThemeBridge;
 
 public final class VayTelegram {
     private static volatile boolean initialized;
+    private static volatile boolean materialYouSupported;
 
     private VayTelegram() {}
 
@@ -41,6 +43,7 @@ public final class VayTelegram {
     private static void installTelegramBridges() {
         VaySettingsEngine engine = VayAndroid.settings();
         VayThemeBridge.refreshPalette(VayAndroid.themePalette());
+        syncMaterialYou(engine);
 
         // Preserve an existing Telegram appearance choice on the first vayGram run.
         engine.seedIfAbsent(
@@ -106,6 +109,9 @@ public final class VayTelegram {
                         VayScopeKey.GLOBAL
                 ));
                 Theme.refreshThemeColors();
+            } else if (VayDefaults.THEME_MATERIAL_YOU.getId().equals(settingId)) {
+                syncMaterialYou(engine);
+                Theme.refreshThemeColors(false, true);
             } else if (VayDefaults.CHAT_MESSAGE_SPACING.getId().equals(settingId)) {
                 notifyMainTabsAppearanceChanged();
             }
@@ -119,6 +125,26 @@ public final class VayTelegram {
                 );
             }
         });
+    }
+
+    private static void syncMaterialYou(VaySettingsEngine engine) {
+        VayMaterialYouPalette.Snapshot snapshot = VayMaterialYouPalette.resolve(
+                ApplicationLoader.applicationContext
+        );
+        materialYouSupported = snapshot.isSupported();
+
+        VayScopeKey currentAccountScope = accountScope(UserConfig.selectedAccount);
+        boolean enabled = materialYouSupported && engine.getResolved(
+                VayDefaults.THEME_MATERIAL_YOU,
+                currentAccountScope,
+                VayScopeKey.GLOBAL
+        );
+
+        VayThemeBridge.refreshMaterialYou(
+                snapshot.getLightColors(),
+                snapshot.getDarkColors(),
+                enabled
+        );
     }
 
     private static void syncMainTabsHeight(int value) {
@@ -187,6 +213,23 @@ public final class VayTelegram {
         return VayAndroid.themePalette();
     }
 
+    public static boolean isMaterialYouSupported() {
+        ensureInitialized();
+        return materialYouSupported;
+    }
+
+    public static boolean isMaterialYouEnabled() {
+        ensureInitialized();
+        return VayThemeBridge.isMaterialYouEnabled();
+    }
+
+    public static void refreshMaterialYou() {
+        ensureInitialized();
+        syncMaterialYou(VayAndroid.settings());
+        Theme.refreshThemeColors(false, true);
+    }
+
+
     public static void previewThemeColor(VayThemeToken token, int color) {
         themePalette().setColor(token, color);
         applyThemePalette();
@@ -221,6 +264,7 @@ public final class VayTelegram {
 
     private static void applyThemePalette() {
         VayThemeBridge.refreshPalette(VayAndroid.themePalette());
+        syncMaterialYou(VayAndroid.settings());
         Theme.refreshThemeColors(false, true);
     }
 }
