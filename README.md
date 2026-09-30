@@ -20,6 +20,8 @@ The first milestone is the vayGram customization foundation:
 
 Development channel: https://t.me/vayGram_app
 
+For continuing development from a fresh ChatGPT chat, read `docs/CHAT_HANDOFF.md` first.
+
 ## Architecture rule
 
 vayGram-specific code should stay isolated from Telegram upstream code whenever possible. Telegram classes should receive small bridge hooks while features live inside VayCore/VayUI modules. This is intended to make upstream Telegram updates much easier to merge.
