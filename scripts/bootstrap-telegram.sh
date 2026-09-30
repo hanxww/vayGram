@@ -37,6 +37,12 @@ cp -R "$ROOT/vay-core/src/main/java/app/vaygram/core" "$TARGET/"
 cp -R "$ROOT/vay-android/src/main/java/app/vaygram/android" "$TARGET/"
 cp -R "$ROOT/telegram-integration/TMessagesProj/src/main/java/app/vaygram/"* "$TARGET/"
 
+RESOURCE_OVERLAY="$ROOT/telegram-integration/TMessagesProj/src/main/res"
+if [[ -d "$RESOURCE_OVERLAY" ]]; then
+  echo "[vayGram] overlaying vayGram-owned Android resources..."
+  cp -R "$RESOURCE_OVERLAY/." "$WORKDIR/TMessagesProj/src/main/res/"
+fi
+
 for patch in "$ROOT"/telegram-integration/patches/*.patch; do
   echo "[vayGram] applying $(basename "$patch")"
   git -C "$WORKDIR" apply --check "$patch"
