@@ -18,3 +18,4 @@ jobs:
           bash -n scripts/preflight-build.sh
           bash -n scripts/build-dev-apk.sh
           bash -n scripts/write-build-info.sh
+          bash -n scripts/check-apk-install-smoke.sh

@@ -1,0 +1,90 @@
+name: apk-install-smoke
+
+on:
+  workflow_dispatch:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  smoke:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'issue_comment' &&
+       github.event.issue.number == 27 &&
+       github.event.comment.user.login == github.repository_owner &&
+       github.event.comment.body == '/smoke-dev-apk')
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      VAYGRAM_API_ID: "123456"
+      VAYGRAM_API_HASH: "00000000000000000000000000000000"
+      VAYGRAM_OUTDIR: ${{ github.workspace }}/.work/smoke-artifacts
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'issue_comment' && 'main' || github.ref }}
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Preflight dummy build identity
+        run: bash scripts/preflight-build.sh
+
+      - name: Install Android build components
+        run: |
+          echo "$ANDROID_HOME/cmdline-tools/latest/bin" >> "$GITHUB_PATH"
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" \
+            "platforms;android-36" \
+            "build-tools;36.0.0" \
+            "ndk;27.2.12479018" \
+            "cmake;3.22.1"
+
+      - name: Build non-distributable smoke APK
+        run: |
+          echo "::warning::This APK uses dummy Telegram API credentials and is not distributable."
+          bash scripts/build-dev-apk.sh
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
+            | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Clean-install and launch smoke APK
+        uses: ReactiveCircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
+        with:
+          api-level: 35
+          arch: x86_64
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          script: bash scripts/check-apk-install-smoke.sh .work/smoke-artifacts/vayGram-0.1-dev.apk
+
+      - name: Report owner-triggered smoke result
+        if: always() && github.event_name == 'issue_comment'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          SMOKE_STATUS: ${{ job.status }}
+        run: |
+          BUILD_SHA="$(git rev-parse HEAD 2>/dev/null || printf '%s' "$GITHUB_SHA")"
+          if [[ "$SMOKE_STATUS" == "success" ]]; then
+            MARK="✅"
+          else
+            MARK="❌"
+          fi
+          BODY="$(printf '%s apk-install-smoke %s for %s: %s/%s/actions/runs/%s' \
+            "$MARK" "$SMOKE_STATUS" "$BUILD_SHA" "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID")"
+          gh issue comment "$ISSUE_NUMBER" \
+            --repo "$GITHUB_REPOSITORY" \
+            --body "$BODY"
