@@ -19,7 +19,7 @@
     <string name="vay_profile_show_bio">Show bio</string>
     <string name="vay_profile_author_style">Show author profile style</string>
     <string name="vay_profile_reset">Reset Profile Studio</string>
-    <string name="vay_profile_reset_message">Remove this account&apos;s Profile Studio overrides and inherit the global defaults?</string>
+    <string name="vay_profile_reset_message">Remove this account\'s Profile Studio overrides and inherit the global defaults?</string>
     <string name="vay_profile_reset_done">Profile Studio reset</string>
     <string name="vay_profile_inherited">Inherited</string>
     <string name="vay_profile_override">Override</string>
