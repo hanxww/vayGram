@@ -44,10 +44,20 @@ must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/core/theme/VayG
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/theme/VayGradientRepository.java" "persistent gradient repository"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/theme/VayGradientBridge.java" "Android gradient renderer bridge"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayGradientActivity.java" "gradient editor UI"
+must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayProfileStudioActivity.java" "Vay Profile Studio UI"
 
 must_grep 'presentSettingFragment\(new app\.vaygram\.ui\.VaySettingsActivity\(\)\)' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/SettingsActivity.java" \
   "Settings entry hook"
+must_grep 'vay_profile_studio' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java" \
+  "Profile Studio profile hook"
+must_grep 'VayProfileStudioActivity' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java" \
+  "Profile Studio navigation"
+must_grep 'PROFILE_LAYOUT_MODE' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/core/settings/VayDefaults.java" \
+  "Profile Studio setting registry"
 
 must_grep 'ACTION_SAVE_PROFILE' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
