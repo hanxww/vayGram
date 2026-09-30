@@ -30,7 +30,7 @@ cp "$DEV_KEYSTORE" "$KEYSTORE"
 FIREBASE_STATUS="not_configured"
 if [[ -n "${VAYGRAM_FIREBASE_JSON_BASE64:-}" ]]; then
   echo "[vayGram] checking Firebase configuration from environment..."
-  FIREBASE_TMP="$WORKDIR/TMessagesProj/google-services.json.vaygram-tmp"
+  FIREBASE_TMP="$WORKDIR/google-services.json.vaygram-tmp"
   printf '%s' "$VAYGRAM_FIREBASE_JSON_BASE64" \
     | tr -d '[:space:]' \
     | base64 --decode \
@@ -56,7 +56,6 @@ packages = {
 raise SystemExit(0 if target in packages else 1)
 PY
   then
-    cp "$FIREBASE_TMP" "$WORKDIR/TMessagesProj/google-services.json"
     cp "$FIREBASE_TMP" "$WORKDIR/TMessagesProj_App/google-services.json"
     rm -f "$FIREBASE_TMP"
     FIREBASE_STATUS="configured"
@@ -64,7 +63,6 @@ PY
   else
     rm -f \
       "$FIREBASE_TMP" \
-      "$WORKDIR/TMessagesProj/google-services.json" \
       "$WORKDIR/TMessagesProj_App/google-services.json"
     FIREBASE_STATUS="skipped_package_mismatch"
     echo "::warning::Firebase configuration does not contain app.vaygram.messenger.beta; building without Firebase/FCM."
