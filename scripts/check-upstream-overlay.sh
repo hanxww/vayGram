@@ -204,10 +204,17 @@ if grep -q 'public static int APP_ID = 4;' \
   exit 1
 fi
 
-if [[ -f "$TMP/telegram/TMessagesProj/google-services.json" ]]; then
-  echo "[vayGram] upstream Telegram Firebase configuration leaked into vayGram build" >&2
-  exit 1
-fi
+for firebase_file in \
+  "$TMP/telegram/TMessagesProj/google-services.json" \
+  "$TMP/telegram/TMessagesProj_App/google-services.json" \
+  "$TMP/telegram/TMessagesProj_AppHuawei/google-services.json" \
+  "$TMP/telegram/TMessagesProj_AppHockeyApp/google-services.json" \
+  "$TMP/telegram/TMessagesProj_AppStandalone/google-services.json"; do
+  if [[ -f "$firebase_file" ]]; then
+    echo "[vayGram] upstream Telegram Firebase configuration leaked into vayGram build: $firebase_file" >&2
+    exit 1
+  fi
+done
 
 must_file "$TMP/telegram/TMessagesProj/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" "vayGram adaptive launcher icon"
 must_file "$TMP/telegram/TMessagesProj/src/main/res/drawable/vaygram_icon_foreground.xml" "vayGram launcher foreground"
