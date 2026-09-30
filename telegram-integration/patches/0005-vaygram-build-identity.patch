@@ -35,7 +35,7 @@ diff --git a/TMessagesProj/build.gradle b/TMessagesProj/build.gradle
  
          multiDexEnabled true
  
-@@ -250,7 +256,9 @@
+@@ -250,7 +256,7 @@
          return "";
      }
  }
