@@ -55,7 +55,14 @@ jobs:
         if: env.VAYGRAM_SIGNING_KEYSTORE_BASE64 != ''
         run: |
           mkdir -p .work/keys
-          printf '%s' "$VAYGRAM_SIGNING_KEYSTORE_BASE64"             | base64 --decode             > .work/keys/vaygram-dev.keystore
+          printf '%s' "$VAYGRAM_SIGNING_KEYSTORE_BASE64" \
+            | tr -d '[:space:]' \
+            | base64 --decode \
+            > .work/keys/vaygram-dev.keystore
+          keytool -list \
+            -keystore .work/keys/vaygram-dev.keystore \
+            -storepass "$VAYGRAM_KEYSTORE_PASSWORD" \
+            -alias "$VAYGRAM_KEY_ALIAS" >/dev/null
           echo "VAYGRAM_DEV_KEYSTORE=$GITHUB_WORKSPACE/.work/keys/vaygram-dev.keystore" >> "$GITHUB_ENV"
 
       - name: Build vayGram 0.1-dev APK

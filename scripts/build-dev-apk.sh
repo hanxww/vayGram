@@ -29,7 +29,10 @@ cp "$DEV_KEYSTORE" "$KEYSTORE"
 
 if [[ -n "${VAYGRAM_FIREBASE_JSON_BASE64:-}" ]]; then
   echo "[vayGram] installing Firebase configuration from environment..."
-  printf '%s' "$VAYGRAM_FIREBASE_JSON_BASE64"     | base64 --decode     > "$WORKDIR/TMessagesProj/google-services.json"
+  printf '%s' "$VAYGRAM_FIREBASE_JSON_BASE64" \
+    | tr -d '[:space:]' \
+    | base64 --decode \
+    > "$WORKDIR/TMessagesProj/google-services.json"
 fi
 
 python3 - "$WORKDIR/gradle.properties" "$KEYSTORE_PASSWORD" "$KEY_ALIAS" "$KEY_PASSWORD" <<'PY'
