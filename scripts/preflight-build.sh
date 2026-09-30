@@ -24,6 +24,10 @@ need_command sha256sum
 
 if [[ -n "${VAYGRAM_FIREBASE_JSON_BASE64:-}" ]]; then
   need_command base64
+  printf '%s' "$VAYGRAM_FIREBASE_JSON_BASE64" \
+    | tr -d '[:space:]' \
+    | base64 --decode >/dev/null 2>&1 \
+    || fail "VAYGRAM_FIREBASE_JSON_BASE64 is not valid Base64"
 fi
 
 if [[ -n "${VAYGRAM_SIGNING_KEYSTORE_BASE64:-}" ]]; then
@@ -31,6 +35,10 @@ if [[ -n "${VAYGRAM_SIGNING_KEYSTORE_BASE64:-}" ]]; then
   : "${VAYGRAM_KEYSTORE_PASSWORD:?Set VAYGRAM_KEYSTORE_PASSWORD with persistent signing}"
   : "${VAYGRAM_KEY_ALIAS:?Set VAYGRAM_KEY_ALIAS with persistent signing}"
   : "${VAYGRAM_KEY_PASSWORD:?Set VAYGRAM_KEY_PASSWORD with persistent signing}"
+  printf '%s' "$VAYGRAM_SIGNING_KEYSTORE_BASE64" \
+    | tr -d '[:space:]' \
+    | base64 --decode >/dev/null 2>&1 \
+    || fail "VAYGRAM_SIGNING_KEYSTORE_BASE64 is not valid Base64"
 fi
 
 echo "[vayGram preflight] ok"
