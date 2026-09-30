@@ -209,4 +209,17 @@ if [[ -f "$TMP/telegram/TMessagesProj/google-services.json" ]]; then
   exit 1
 fi
 
+must_file "$TMP/telegram/TMessagesProj/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" "vayGram adaptive launcher icon"
+must_file "$TMP/telegram/TMessagesProj/src/main/res/drawable/vaygram_icon_foreground.xml" "vayGram launcher foreground"
+must_file "$TMP/telegram/TMessagesProj/src/main/res/drawable/vaygram_icon_monochrome.xml" "vayGram monochrome launcher icon"
+must_grep 'vaygram_icon_foreground' \
+  "$TMP/telegram/TMessagesProj/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" \
+  "vayGram adaptive icon foreground"
+must_grep 'vaygram_icon_monochrome' \
+  "$TMP/telegram/TMessagesProj/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" \
+  "vayGram themed monochrome icon"
+must_grep '#7C5CFC' \
+  "$TMP/telegram/TMessagesProj/src/main/res/drawable/vaygram_icon_foreground.xml" \
+  "vayGram icon accent"
+
 echo "[vayGram] upstream overlay smoke check passed"

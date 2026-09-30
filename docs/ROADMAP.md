@@ -53,7 +53,7 @@
 - [x] blur/transparency controls — live bottom-navigation blur radius and opacity
 
 ## M5 — Branding and builds
-- [ ] final vayGram icon assets
+- [x] final vayGram icon assets
 - [x] distinct application id and account type
 - [x] vayGram application labels
 - [x] dev version suffix
