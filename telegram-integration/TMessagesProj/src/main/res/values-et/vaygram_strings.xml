@@ -27,4 +27,37 @@
     <string name="vay_cancel">Tühista</string>
     <string name="vay_apply">Rakenda</string>
     <string name="vay_inherit">Päri</string>
+
+    <string name="vay_onboarding_title">Tere tulemast vayGrami</string>
+    <string name="vay_onboarding_body">Telegram jääb tuttavaks. vayGram lisab kohandamiskihi, mida saad avastada omas tempos.</string>
+    <string name="vay_onboarding_choose_level">Vali kohandamise tase</string>
+    <string name="vay_onboarding_choose_level_body">Seda saab alati muuta. Basic hoiab vaate lihtsana, Advanced näitab rohkem seadeid ja Insane avab kõige sügavama kohandamise.</string>
+    <string name="vay_onboarding_scopes_title">Muuda ainult seda, mida päriselt vajad</string>
+    <string name="vay_onboarding_scopes_body">Global määrab aluse. Account saab seda muuta. Chat saab mõlemad üle kirjutada. Päritud väärtused jäävad alati nähtavaks.</string>
+    <string name="vay_onboarding_preview_title">Vaata tulemust enne kinnitamist</string>
+    <string name="vay_onboarding_preview_body">Live preview, Undo/Redo ja presetid on ühes kohas.</string>
+    <string name="vay_onboarding_basic">Basic</string>
+    <string name="vay_onboarding_advanced">Advanced</string>
+    <string name="vay_onboarding_insane">Insane</string>
+    <string name="vay_onboarding_continue">Edasi</string>
+    <string name="vay_onboarding_back">Tagasi</string>
+    <string name="vay_onboarding_skip">Jäta vahele</string>
+    <string name="vay_onboarding_start_tour">Alusta juhendit</string>
+    <string name="vay_onboarding_step">%1$d / %2$d</string>
+    <string name="vay_onboarding_replay">Korda vayGrami juhendit</string>
+    <string name="vay_onboarding_replay_hint">Näita Vay Settings juhendit uuesti</string>
+    <string name="vay_coach_preview_title">Live preview</string>
+    <string name="vay_coach_preview_body">Muudatused ilmuvad siia kohe, et saaksid liidest enne seadete sulgemist hinnata.</string>
+    <string name="vay_coach_level_title">Basic, Advanced, Insane</string>
+    <string name="vay_coach_level_body">Puuduta seda rida, et näha rohkem või vähem seadeid. Alusta lihtsalt ja ava sügavamad valikud vajadusel.</string>
+    <string name="vay_coach_scope_title">Ulatused ja pärimine</string>
+    <string name="vay_coach_scope_body">Global on alus. Account ja Chat võivad seda muuta ilma päritud väärtust kaotamata.</string>
+    <string name="vay_coach_theme_title">Theme Engine</string>
+    <string name="vay_coach_theme_body">Siin asuvad paleti- ja gradiendiredaktorid. Käsitsi määratud värvid on genereeritud värvidest tähtsamad.</string>
+    <string name="vay_coach_profiles_title">Profiilid ja presetid</string>
+    <string name="vay_coach_profiles_body">Salvesta seadistus, ekspordi see, impordi kellegi teise oma või vaheta hiljem profiile.</string>
+    <string name="vay_coach_next">Edasi</string>
+    <string name="vay_coach_done">Valmis</string>
+    <string name="vay_coach_finished">Valmis. Nüüd saad vayGrami rahulikult omas tempos avastada.</string>
+
 </resources>
