@@ -66,6 +66,9 @@ public final class Demo {
         if (registry.find("theme.material_you") != VayDefaults.THEME_MATERIAL_YOU) {
             throw new IllegalStateException("Material You setting is missing from the registry");
         }
+        if (registry.find("profile.layout.mode") != VayDefaults.PROFILE_LAYOUT_MODE) {
+            throw new IllegalStateException("Profile Studio settings are missing from the registry");
+        }
         if (engine.get(VayDefaults.GLASS_OPACITY) != 1f) {
             throw new IllegalStateException("Glass opacity must default to fully opaque");
         }
@@ -80,6 +83,13 @@ public final class Demo {
 
         VayScopeKey account = new VayScopeKey(VaySettingScope.ACCOUNT, "account-1");
         VayScopeKey chat = new VayScopeKey(VaySettingScope.CHAT, "account-1:123456");
+
+        engine.set(VayDefaults.PROFILE_LAYOUT_MODE, account, "free");
+        engine.set(VayDefaults.PROFILE_AVATAR_SIZE, account, 999);
+        if (!"free".equals(engine.getResolved(VayDefaults.PROFILE_LAYOUT_MODE, account, VayScopeKey.GLOBAL))
+                || engine.getResolved(VayDefaults.PROFILE_AVATAR_SIZE, account, VayScopeKey.GLOBAL) != 196) {
+            throw new IllegalStateException("Profile Studio account settings failed");
+        }
 
         engine.set(VayDefaults.CHAT_BUBBLE_RADIUS, account, 7f);
         if (engine.getResolved(VayDefaults.CHAT_BUBBLE_RADIUS, chat, account) != 7f) {
