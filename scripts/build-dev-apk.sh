@@ -56,11 +56,16 @@ packages = {
 raise SystemExit(0 if target in packages else 1)
 PY
   then
-    mv "$FIREBASE_TMP" "$WORKDIR/TMessagesProj/google-services.json"
+    cp "$FIREBASE_TMP" "$WORKDIR/TMessagesProj/google-services.json"
+    cp "$FIREBASE_TMP" "$WORKDIR/TMessagesProj_App/google-services.json"
+    rm -f "$FIREBASE_TMP"
     FIREBASE_STATUS="configured"
-    echo "[vayGram] Firebase configuration matches app.vaygram.messenger.beta."
+    echo "[vayGram] Firebase configuration matches app.vaygram.messenger.beta and is installed for the app module."
   else
-    rm -f "$FIREBASE_TMP" "$WORKDIR/TMessagesProj/google-services.json"
+    rm -f \
+      "$FIREBASE_TMP" \
+      "$WORKDIR/TMessagesProj/google-services.json" \
+      "$WORKDIR/TMessagesProj_App/google-services.json"
     FIREBASE_STATUS="skipped_package_mismatch"
     echo "::warning::Firebase configuration does not contain app.vaygram.messenger.beta; building without Firebase/FCM."
   fi
