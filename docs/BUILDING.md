@@ -127,3 +127,25 @@ vayGram-0.1-dev-build-info.txt
 ```
 
 The metadata records the vayGram commit, pinned Telegram commit, package id, UTC build time, size and SHA-256 checksum.
+
+
+## Non-distributable APK install smoke
+
+The release APK still requires vayGram-owned Telegram API credentials. Independently of those secrets, CI can validate the complete Android packaging/install/launch path with dummy BuildConfig credentials.
+
+Repository owner command in issue #27:
+
+```text
+/smoke-dev-apk
+```
+
+This smoke workflow:
+
+1. builds the full `afatDebug` APK from the pinned Telegram source;
+2. uses dummy Telegram API values, so the resulting APK is **not distributable**;
+3. does not upload the smoke APK as an artifact;
+4. clean-installs it into an Android emulator;
+5. verifies package id and `0.1-dev` version;
+6. launches the app through its launcher intent and verifies the process remains alive without a crash-buffer entry.
+
+A passing smoke check validates build packaging, clean installation and first launch only. It does not validate login, Telegram network functionality, Firebase notifications, upgrade compatibility, or the public release checklist.
