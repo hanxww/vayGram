@@ -76,9 +76,12 @@ public final class VayProfileStudioActivity extends BaseFragment {
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
         actionBar.setTitle(LocaleController.getString(R.string.vay_profile_studio));
-        actionBar.setActionBarMenuOnItemClick(id -> {
-            if (id == -1) {
-                finishFragment();
+        actionBar.setActionBarMenuOnItemClick(new org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick() {
+            @Override
+            public void onItemClick(int id) {
+                if (id == -1) {
+                    finishFragment();
+                }
             }
         });
 
