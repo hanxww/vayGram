@@ -204,4 +204,9 @@ if grep -q 'public static int APP_ID = 4;' \
   exit 1
 fi
 
+if [[ -f "$TMP/telegram/TMessagesProj/google-services.json" ]]; then
+  echo "[vayGram] upstream Telegram Firebase configuration leaked into vayGram build" >&2
+  exit 1
+fi
+
 echo "[vayGram] upstream overlay smoke check passed"
