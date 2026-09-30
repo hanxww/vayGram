@@ -59,10 +59,13 @@ jobs:
             | tr -d '[:space:]' \
             | base64 --decode \
             > .work/keys/vaygram-dev.keystore
+          KEYSTORE_BYTES="$(wc -c < .work/keys/vaygram-dev.keystore | tr -d '[:space:]')"
+          KEYSTORE_SHA256="$(sha256sum .work/keys/vaygram-dev.keystore | awk '{print $1}')"
+          echo "[vayGram signing] restored keystore: ${KEYSTORE_BYTES} bytes, sha256=${KEYSTORE_SHA256}"
           if ! keytool -list \
             -keystore .work/keys/vaygram-dev.keystore \
             -storepass "$VAYGRAM_KEYSTORE_PASSWORD" >/dev/null 2>&1; then
-            echo "::error::Signing keystore could not be opened. Check VAYGRAM_SIGNING_KEYSTORE_BASE64 and VAYGRAM_KEYSTORE_PASSWORD."
+            echo "::error::Signing keystore could not be opened. Compare the reported size/SHA-256 with your local vaygram-dev.keystore, then check VAYGRAM_KEYSTORE_PASSWORD."
             exit 1
           fi
           if ! keytool -list \
