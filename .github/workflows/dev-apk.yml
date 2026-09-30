@@ -2,9 +2,21 @@ name: dev-apk
 
 on:
   workflow_dispatch:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  issues: write
 
 jobs:
   build:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'issue_comment' &&
+       github.event.issue.number == 27 &&
+       github.event.comment.user.login == github.repository_owner &&
+       github.event.comment.body == '/build-dev-apk')
     runs-on: ubuntu-latest
     timeout-minutes: 120
     env:
@@ -18,6 +30,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'issue_comment' && 'main' || github.ref }}
 
       - uses: actions/setup-java@v4
         with:
@@ -58,3 +72,20 @@ jobs:
             .work/artifacts/vayGram-0.1-dev.sha256
             .work/artifacts/vayGram-0.1-dev-build-info.txt
           if-no-files-found: error
+
+      - name: Report owner-triggered build result
+        if: always() && github.event_name == 'issue_comment'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          BUILD_STATUS: ${{ job.status }}
+        run: |
+          BUILD_SHA="$(git rev-parse HEAD 2>/dev/null || printf '%s' "$GITHUB_SHA")"
+          if [[ "$BUILD_STATUS" == "success" ]]; then
+            MARK="✅"
+          else
+            MARK="❌"
+          fi
+          gh issue comment "$ISSUE_NUMBER" \
+            --repo "$GITHUB_REPOSITORY" \
+            --body "$MARK dev-apk $BUILD_STATUS for `$BUILD_SHA`: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"

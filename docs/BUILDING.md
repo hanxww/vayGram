@@ -64,6 +64,14 @@ Before running it, add repository secrets:
 
 Then open **Actions → dev-apk → Run workflow**. The resulting APK is uploaded as a workflow artifact.
 
+For automation that cannot call GitHub's workflow-dispatch API, the repository owner can also trigger the same workflow from issue #27 by commenting exactly:
+
+```text
+/build-dev-apk
+```
+
+The comment-triggered path always checks out the current `main`, is restricted to the repository owner, and reports the run result back to the control issue.
+
 The CI development key is ephemeral unless a persistent signing setup is added later, so APKs from separate CI runs are not guaranteed to install over each other.
 
 ## Firebase
