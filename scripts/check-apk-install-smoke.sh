@@ -27,11 +27,11 @@ if [[ "$PACKAGE_PATH" != package:* ]]; then
   exit 3
 fi
 
+PACKAGE_DUMP="$(adb shell dumpsys package "$PACKAGE_ID" | tr -d '\r')"
 INSTALLED_VERSION="$(
-  adb shell dumpsys package "$PACKAGE_ID" \
+  printf '%s\n' "$PACKAGE_DUMP" \
     | sed -n 's/^[[:space:]]*versionName=//p' \
-    | head -n 1 \
-    | tr -d '\r'
+    | head -n 1
 )"
 if [[ "$INSTALLED_VERSION" != "$VERSION_NAME" ]]; then
   echo "[vayGram smoke] unexpected versionName: $INSTALLED_VERSION" >&2
@@ -46,7 +46,7 @@ adb shell monkey -p "$PACKAGE_ID" -c android.intent.category.LAUNCHER 1
 
 sleep 5
 
-PID="$(adb shell pidof "$PACKAGE_ID" | tr -d '\r' | xargs)"
+PID="$(adb shell pidof "$PACKAGE_ID" 2>/dev/null | tr -d '\r' | xargs || true)"
 if [[ -z "$PID" ]]; then
   echo "[vayGram smoke] app process is not running after launch" >&2
   adb logcat -d -t 300 >&2 || true
