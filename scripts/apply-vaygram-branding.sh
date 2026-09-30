@@ -126,9 +126,8 @@ if [[ -n "${VAYGRAM_GOOGLE_SERVICES_JSON:-}" ]]; then
     echo "VAYGRAM_GOOGLE_SERVICES_JSON does not exist: $VAYGRAM_GOOGLE_SERVICES_JSON" >&2
     exit 2
   fi
-  cp "$VAYGRAM_GOOGLE_SERVICES_JSON" "$WORKDIR/TMessagesProj/google-services.json"
   cp "$VAYGRAM_GOOGLE_SERVICES_JSON" "$WORKDIR/TMessagesProj_App/google-services.json"
-  echo "[vayGram] using vayGram Firebase configuration for core and app modules."
+  echo "[vayGram] using vayGram Firebase configuration for the app module."
 else
   echo "[vayGram] removed upstream Telegram Firebase configurations; Firebase disabled."
 fi
