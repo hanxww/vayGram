@@ -1,0 +1,30 @@
+diff --git a/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java b/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java
+--- a/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java
++++ b/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java
+@@ -599,7 +599,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter
+     private final static int delete_group = 45;
+     private final static int enable_no_forwards = 46;
+     private final static int disable_no_forwards = 47;
++    private final static int vay_profile_studio = 48;
+ 
+     private Rect rect = new Rect();
+ 
+@@ -2661,6 +2662,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter
+                     }
+                 } else if (id == edit_profile) {
+                     presentFragment(new UserInfoActivity());
++                } else if (id == vay_profile_studio) {
++                    presentFragment(new app.vaygram.ui.VayProfileStudioActivity());
+                 } else if (id == invite_to_group) {
+                     final TLRPC.User user = getMessagesController().getUser(userId);
+                     if (user == null) {
+@@ -4033,8 +4036,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter
+         }
+         if (myProfile) {
+             editItem = menu.addItem(edit_profile, R.drawable.group_edit_profile);
+             editItem.setContentDescription(LocaleController.getString(R.string.Edit));
++            ActionBarMenuItem vayProfileItem = menu.addItem(vay_profile_studio, R.drawable.menu_profile_colors);
++            vayProfileItem.setContentDescription(LocaleController.getString(R.string.vay_profile_studio));
+         } else {
+             editItem = menu.addItem(edit_channel, R.drawable.group_edit_profile);
+             editItem.setContentDescription(LocaleController.getString(R.string.Edit));
