@@ -68,9 +68,17 @@ The CI development key is ephemeral unless a persistent signing setup is added l
 
 ## Firebase
 
-Firebase is optional for this early dev build. If `TMessagesProj/google-services.json` is absent, the Google Services Gradle plugin is not applied. This means Firebase-dependent functionality such as FCM push delivery may be unavailable in that build.
+The upstream Telegram `google-services.json` is always removed from a vayGram worktree. It must never be reused because its Firebase clients belong to Telegram's package identity.
 
-A vayGram-owned Firebase project will be added before a stable public release.
+Firebase is optional for the early dev build. Without a vayGram-owned configuration, the Google Services Gradle plugin is not applied and Firebase-dependent functionality such as FCM push delivery may be unavailable.
+
+To test a vayGram-owned Firebase project locally, point the build at its configuration:
+
+```bash
+export VAYGRAM_GOOGLE_SERVICES_JSON=/absolute/path/to/google-services.json
+```
+
+The branding step copies that file into the generated Telegram worktree after removing the upstream configuration. A vayGram-owned Firebase project is still required before a stable public release.
 
 ## Telegram API identity
 
