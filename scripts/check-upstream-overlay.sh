@@ -45,6 +45,9 @@ must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/theme/V
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/theme/VayGradientBridge.java" "Android gradient renderer bridge"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayGradientActivity.java" "gradient editor UI"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayProfileStudioActivity.java" "Vay Profile Studio UI"
+must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayOnboardingActivity.java" "first-run vayGram onboarding UI"
+must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayCoachOverlay.java" "guided spotlight overlay"
+must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayOnboardingState.java" "onboarding persistence state"
 
 must_grep 'presentSettingFragment\(new app\.vaygram\.ui\.VaySettingsActivity\(\)\)' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/SettingsActivity.java" \
@@ -55,6 +58,15 @@ must_grep 'vay_profile_studio' \
 must_grep 'VayProfileStudioActivity' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java" \
   "Profile Studio navigation"
+must_grep 'VayOnboardingActivity\.maybePresent' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/DialogsActivity.java" \
+  "first-run onboarding hook"
+must_grep 'ACTION_REPLAY_ONBOARDING' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
+  "replay onboarding action"
+must_grep 'VayCoachOverlay\.show' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
+  "guided spotlight tour"
 must_grep 'PROFILE_LAYOUT_MODE' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/core/settings/VayDefaults.java" \
   "Profile Studio setting registry"
