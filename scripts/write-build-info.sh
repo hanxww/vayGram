@@ -31,6 +31,7 @@ built_at_utc=$BUILT_AT
 vaygram_commit=${GITHUB_SHA:-local}
 telegram_repo=$repo
 telegram_commit=$commit
+firebase_status=${VAYGRAM_FIREBASE_STATUS:-unknown}
 EOF
 
 printf '%s  %s\n' "$SHA256" "$(basename "$APK")" > "$OUTDIR/vayGram-0.1-dev.sha256"

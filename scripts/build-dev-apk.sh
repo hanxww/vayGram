@@ -27,13 +27,45 @@ fi
 
 cp "$DEV_KEYSTORE" "$KEYSTORE"
 
+FIREBASE_STATUS="not_configured"
 if [[ -n "${VAYGRAM_FIREBASE_JSON_BASE64:-}" ]]; then
-  echo "[vayGram] installing Firebase configuration from environment..."
+  echo "[vayGram] checking Firebase configuration from environment..."
+  FIREBASE_TMP="$WORKDIR/TMessagesProj/google-services.json.vaygram-tmp"
   printf '%s' "$VAYGRAM_FIREBASE_JSON_BASE64" \
     | tr -d '[:space:]' \
     | base64 --decode \
-    > "$WORKDIR/TMessagesProj/google-services.json"
+    > "$FIREBASE_TMP"
+
+  if python3 - "$FIREBASE_TMP" <<'PY'
+import json
+from pathlib import Path
+import sys
+
+target = "app.vaygram.messenger.beta"
+try:
+    data = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+except Exception:
+    raise SystemExit(1)
+
+packages = {
+    client.get("client_info", {})
+          .get("android_client_info", {})
+          .get("package_name")
+    for client in data.get("client", [])
+}
+raise SystemExit(0 if target in packages else 1)
+PY
+  then
+    mv "$FIREBASE_TMP" "$WORKDIR/TMessagesProj/google-services.json"
+    FIREBASE_STATUS="configured"
+    echo "[vayGram] Firebase configuration matches app.vaygram.messenger.beta."
+  else
+    rm -f "$FIREBASE_TMP" "$WORKDIR/TMessagesProj/google-services.json"
+    FIREBASE_STATUS="skipped_package_mismatch"
+    echo "::warning::Firebase configuration does not contain app.vaygram.messenger.beta; building without Firebase/FCM."
+  fi
 fi
+export VAYGRAM_FIREBASE_STATUS="$FIREBASE_STATUS"
 
 python3 - "$WORKDIR/gradle.properties" "$KEYSTORE_PASSWORD" "$KEY_ALIAS" "$KEY_PASSWORD" <<'PY'
 from pathlib import Path
