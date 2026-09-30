@@ -59,10 +59,19 @@ jobs:
             | tr -d '[:space:]' \
             | base64 --decode \
             > .work/keys/vaygram-dev.keystore
-          keytool -list \
+          if ! keytool -list \
+            -keystore .work/keys/vaygram-dev.keystore \
+            -storepass "$VAYGRAM_KEYSTORE_PASSWORD" >/dev/null 2>&1; then
+            echo "::error::Signing keystore could not be opened. Check VAYGRAM_SIGNING_KEYSTORE_BASE64 and VAYGRAM_KEYSTORE_PASSWORD."
+            exit 1
+          fi
+          if ! keytool -list \
             -keystore .work/keys/vaygram-dev.keystore \
             -storepass "$VAYGRAM_KEYSTORE_PASSWORD" \
-            -alias "$VAYGRAM_KEY_ALIAS" >/dev/null
+            -alias "$VAYGRAM_KEY_ALIAS" >/dev/null 2>&1; then
+            echo "::error::Signing key alias was not found. Check VAYGRAM_KEY_ALIAS."
+            exit 1
+          fi
           echo "VAYGRAM_DEV_KEYSTORE=$GITHUB_WORKSPACE/.work/keys/vaygram-dev.keystore" >> "$GITHUB_ENV"
 
       - name: Build vayGram 0.1-dev APK
