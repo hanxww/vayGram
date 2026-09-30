@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vay_profile_studio">Vay Profile Studio</string>
+    <string name="vay_profile_preview">Profiili eelvaade</string>
+    <string name="vay_profile_layout">Paigutus</string>
+    <string name="vay_profile_layout_mode">Paigutusrežiim</string>
+    <string name="vay_profile_grid_layout">Ruudustik</string>
+    <string name="vay_profile_free_layout">Vaba paigutus</string>
+    <string name="vay_profile_avatar">Avatar</string>
+    <string name="vay_profile_avatar_size">Avatari suurus</string>
+    <string name="vay_profile_avatar_roundness">Avatari ümardus</string>
+    <string name="vay_profile_avatar_glow">Avatari helendus</string>
+    <string name="vay_profile_status_ring">Olekurõngas</string>
+    <string name="vay_profile_effects">Efektid</string>
+    <string name="vay_profile_background_blur">Tausta hägusus</string>
+    <string name="vay_profile_parallax">Parallaks</string>
+    <string name="vay_profile_blocks">Profiiliplokid</string>
+    <string name="vay_profile_show_username">Näita kasutajanime</string>
+    <string name="vay_profile_show_bio">Näita biograafiat</string>
+    <string name="vay_profile_author_style">Näita autori profiilistiili</string>
+    <string name="vay_profile_reset">Lähtesta Profile Studio</string>
+    <string name="vay_profile_reset_message">Kas eemaldada selle konto Profile Studio eriseaded ja pärida globaalsed väärtused?</string>
+    <string name="vay_profile_reset_done">Profile Studio lähtestatud</string>
+    <string name="vay_profile_inherited">Päritud</string>
+    <string name="vay_profile_override">Muudetud</string>
+    <string name="vay_reset">Lähtesta</string>
+    <string name="vay_cancel">Tühista</string>
+    <string name="vay_apply">Rakenda</string>
+    <string name="vay_inherit">Päri</string>
+</resources>

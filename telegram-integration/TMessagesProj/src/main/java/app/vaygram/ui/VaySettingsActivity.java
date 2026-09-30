@@ -200,6 +200,11 @@ public final class VaySettingsActivity extends BaseFragment {
             if (!setting.getScopes().contains(scopeKey.getScope())) {
                 continue;
             }
+            // Profile customization lives in Profile Studio, opened from the user's profile.
+            // Keeping it out of the general settings screen avoids duplicating controls.
+            if (setting.getId().startsWith("profile.")) {
+                continue;
+            }
             List<VaySetting<?>> category = grouped.get(setting.getCategory());
             if (category == null) {
                 category = new ArrayList<>();

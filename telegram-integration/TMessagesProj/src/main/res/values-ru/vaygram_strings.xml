@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vay_profile_studio">Vay Profile Studio</string>
+    <string name="vay_profile_preview">Предпросмотр профиля</string>
+    <string name="vay_profile_layout">Макет</string>
+    <string name="vay_profile_layout_mode">Режим макета</string>
+    <string name="vay_profile_grid_layout">Сетка</string>
+    <string name="vay_profile_free_layout">Свободный макет</string>
+    <string name="vay_profile_avatar">Аватар</string>
+    <string name="vay_profile_avatar_size">Размер аватара</string>
+    <string name="vay_profile_avatar_roundness">Скругление аватара</string>
+    <string name="vay_profile_avatar_glow">Свечение аватара</string>
+    <string name="vay_profile_status_ring">Кольцо статуса</string>
+    <string name="vay_profile_effects">Эффекты</string>
+    <string name="vay_profile_background_blur">Размытие фона</string>
+    <string name="vay_profile_parallax">Параллакс</string>
+    <string name="vay_profile_blocks">Блоки профиля</string>
+    <string name="vay_profile_show_username">Показывать username</string>
+    <string name="vay_profile_show_bio">Показывать bio</string>
+    <string name="vay_profile_author_style">Показывать стиль автора профиля</string>
+    <string name="vay_profile_reset">Сбросить Profile Studio</string>
+    <string name="vay_profile_reset_message">Удалить настройки Profile Studio для этого аккаунта и наследовать глобальные значения?</string>
+    <string name="vay_profile_reset_done">Profile Studio сброшен</string>
+    <string name="vay_profile_inherited">Наследуется</string>
+    <string name="vay_profile_override">Переопределено</string>
+    <string name="vay_reset">Сбросить</string>
+    <string name="vay_cancel">Отмена</string>
+    <string name="vay_apply">Применить</string>
+    <string name="vay_inherit">Наследовать</string>
+</resources>
