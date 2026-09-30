@@ -112,16 +112,23 @@ contacts_controller.write_text(text, encoding="utf-8")
 print(f"[vayGram] branded checkout as {app_name} ({package_id}, {version_name})")
 PY
 
-GOOGLE_SERVICES_TARGET="$WORKDIR/TMessagesProj/google-services.json"
-rm -f "$GOOGLE_SERVICES_TARGET"
+GOOGLE_SERVICES_TARGETS=(
+  "$WORKDIR/TMessagesProj/google-services.json"
+  "$WORKDIR/TMessagesProj_App/google-services.json"
+  "$WORKDIR/TMessagesProj_AppHuawei/google-services.json"
+  "$WORKDIR/TMessagesProj_AppHockeyApp/google-services.json"
+  "$WORKDIR/TMessagesProj_AppStandalone/google-services.json"
+)
+rm -f "${GOOGLE_SERVICES_TARGETS[@]}"
 
 if [[ -n "${VAYGRAM_GOOGLE_SERVICES_JSON:-}" ]]; then
   if [[ ! -f "$VAYGRAM_GOOGLE_SERVICES_JSON" ]]; then
     echo "VAYGRAM_GOOGLE_SERVICES_JSON does not exist: $VAYGRAM_GOOGLE_SERVICES_JSON" >&2
     exit 2
   fi
-  cp "$VAYGRAM_GOOGLE_SERVICES_JSON" "$GOOGLE_SERVICES_TARGET"
-  echo "[vayGram] using vayGram Firebase configuration."
+  cp "$VAYGRAM_GOOGLE_SERVICES_JSON" "$WORKDIR/TMessagesProj/google-services.json"
+  cp "$VAYGRAM_GOOGLE_SERVICES_JSON" "$WORKDIR/TMessagesProj_App/google-services.json"
+  echo "[vayGram] using vayGram Firebase configuration for core and app modules."
 else
-  echo "[vayGram] removed upstream Telegram Firebase configuration; Firebase disabled."
+  echo "[vayGram] removed upstream Telegram Firebase configurations; Firebase disabled."
 fi
