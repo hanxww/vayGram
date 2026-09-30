@@ -40,9 +40,7 @@ diff --git a/TMessagesProj/build.gradle b/TMessagesProj/build.gradle
      }
  }
 -apply plugin: 'com.google.gms.google-services'
-+if (file('google-services.json').exists()) {
-+    apply plugin: 'com.google.gms.google-services'
-+}
++// vayGram configures Firebase only in the application module.
  
  task checkVisibility {
      doFirst {
@@ -54,7 +52,7 @@ diff --git a/TMessagesProj_App/build.gradle b/TMessagesProj_App/build.gradle
  }
  
 -apply plugin: 'com.google.gms.google-services'
-+if (rootProject.file('TMessagesProj/google-services.json').exists()) {
++if (file('google-services.json').exists()) {
 +    apply plugin: 'com.google.gms.google-services'
 +}
 diff --git a/TMessagesProj/src/main/java/org/telegram/messenger/BuildVars.java b/TMessagesProj/src/main/java/org/telegram/messenger/BuildVars.java
