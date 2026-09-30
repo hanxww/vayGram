@@ -171,6 +171,103 @@ public final class VayDefaults {
             .tags("profile", "vay profile", "author style", "профиль")
             .build();
 
+    public static final VaySetting<String> PROFILE_LAYOUT_MODE = VaySetting
+            .builder("profile.layout.mode", VaySettingType.ENUM, "grid")
+            .title("Profile layout mode")
+            .description("Choose grid or free-form Vay Profile layout")
+            .category("Profile Studio")
+            .visibility(VayVisibilityLevel.BASIC)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "layout", "grid", "free", "профиль", "макет")
+            .validator(v -> "free".equalsIgnoreCase(v) ? "free" : "grid")
+            .build();
+
+    public static final VaySetting<Integer> PROFILE_AVATAR_SIZE = VaySetting
+            .builder("profile.avatar.size", VaySettingType.INTEGER, 112)
+            .title("Profile avatar size")
+            .description("Avatar size in the Vay Profile header")
+            .category("Profile Studio / Avatar")
+            .visibility(VayVisibilityLevel.BASIC)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "avatar", "size", "аватар", "размер")
+            .range(64, 196, 2)
+            .validator(v -> clamp(v, 64, 196))
+            .build();
+
+    public static final VaySetting<Float> PROFILE_AVATAR_RADIUS = VaySetting
+            .builder("profile.avatar.radius", VaySettingType.FLOAT, 50f)
+            .title("Profile avatar roundness")
+            .description("Avatar corner radius as a percentage")
+            .category("Profile Studio / Avatar")
+            .visibility(VayVisibilityLevel.ADVANCED)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "avatar", "shape", "round", "форма")
+            .range(0, 50, 1)
+            .validator(v -> clamp(v, 0f, 50f))
+            .build();
+
+    public static final VaySetting<Boolean> PROFILE_AVATAR_GLOW = VaySetting
+            .builder("profile.avatar.glow", VaySettingType.BOOLEAN, false)
+            .title("Avatar glow")
+            .description("Draw a soft accent glow around the profile avatar")
+            .category("Profile Studio / Avatar")
+            .visibility(VayVisibilityLevel.ADVANCED)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "avatar", "glow", "свечение")
+            .build();
+
+    public static final VaySetting<Boolean> PROFILE_STATUS_RING = VaySetting
+            .builder("profile.avatar.status_ring", VaySettingType.BOOLEAN, true)
+            .title("Status ring")
+            .description("Show a Vay status ring around the profile avatar")
+            .category("Profile Studio / Avatar")
+            .visibility(VayVisibilityLevel.BASIC)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "avatar", "status", "ring", "кольцо")
+            .build();
+
+    public static final VaySetting<Integer> PROFILE_BACKGROUND_BLUR = VaySetting
+            .builder("profile.background.blur", VaySettingType.INTEGER, 0)
+            .title("Profile background blur")
+            .description("Blur strength for Vay Profile background layers")
+            .category("Profile Studio / Effects")
+            .visibility(VayVisibilityLevel.ADVANCED)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "background", "blur", "фон", "блюр")
+            .range(0, 64, 1)
+            .validator(v -> clamp(v, 0, 64))
+            .build();
+
+    public static final VaySetting<Boolean> PROFILE_PARALLAX = VaySetting
+            .builder("profile.background.parallax", VaySettingType.BOOLEAN, false)
+            .title("Profile parallax")
+            .description("Enable subtle motion depth for Vay Profile backgrounds")
+            .category("Profile Studio / Effects")
+            .visibility(VayVisibilityLevel.INSANE)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "parallax", "motion", "параллакс")
+            .build();
+
+    public static final VaySetting<Boolean> PROFILE_SHOW_USERNAME = VaySetting
+            .builder("profile.block.username", VaySettingType.BOOLEAN, true)
+            .title("Show username")
+            .description("Show the username block in Vay Profile")
+            .category("Profile Studio / Blocks")
+            .visibility(VayVisibilityLevel.BASIC)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "username", "block", "имя")
+            .build();
+
+    public static final VaySetting<Boolean> PROFILE_SHOW_BIO = VaySetting
+            .builder("profile.block.bio", VaySettingType.BOOLEAN, true)
+            .title("Show bio")
+            .description("Show the bio block in Vay Profile")
+            .category("Profile Studio / Blocks")
+            .visibility(VayVisibilityLevel.BASIC)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "bio", "block", "описание")
+            .build();
+
     public static VaySettingsRegistry createRegistry() {
         VaySettingsRegistry registry = new VaySettingsRegistry();
         registry.register(CHAT_BUBBLE_RADIUS);
@@ -188,6 +285,15 @@ public final class VayDefaults {
         registry.register(GLASS_BLUR_RADIUS);
         registry.register(GLASS_OPACITY);
         registry.register(PROFILE_AUTHOR_STYLE);
+        registry.register(PROFILE_LAYOUT_MODE);
+        registry.register(PROFILE_AVATAR_SIZE);
+        registry.register(PROFILE_AVATAR_RADIUS);
+        registry.register(PROFILE_AVATAR_GLOW);
+        registry.register(PROFILE_STATUS_RING);
+        registry.register(PROFILE_BACKGROUND_BLUR);
+        registry.register(PROFILE_PARALLAX);
+        registry.register(PROFILE_SHOW_USERNAME);
+        registry.register(PROFILE_SHOW_BIO);
         return registry;
     }
 
