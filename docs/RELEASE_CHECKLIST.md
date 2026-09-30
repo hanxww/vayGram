@@ -4,7 +4,7 @@ This checklist is for the first installable public development APK.
 
 ## Required before publishing
 
-- [ ] Final vayGram launcher/adaptive/monochrome icon assets
+- [x] Final vayGram launcher/adaptive/monochrome icon assets
 - [ ] vayGram-owned Telegram API ID and API hash configured in CI
 - [ ] vayGram-owned persistent development signing key configured in CI
 - [ ] vayGram Firebase project and `google-services.json` configured
