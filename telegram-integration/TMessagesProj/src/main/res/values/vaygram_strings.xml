@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vay_profile_studio">Vay Profile Studio</string>
+    <string name="vay_profile_preview">Live profile preview</string>
+    <string name="vay_profile_layout">Layout</string>
+    <string name="vay_profile_layout_mode">Layout mode</string>
+    <string name="vay_profile_grid_layout">Grid layout</string>
+    <string name="vay_profile_free_layout">Free layout</string>
+    <string name="vay_profile_avatar">Avatar</string>
+    <string name="vay_profile_avatar_size">Avatar size</string>
+    <string name="vay_profile_avatar_roundness">Avatar roundness</string>
+    <string name="vay_profile_avatar_glow">Avatar glow</string>
+    <string name="vay_profile_status_ring">Status ring</string>
+    <string name="vay_profile_effects">Effects</string>
+    <string name="vay_profile_background_blur">Background blur</string>
+    <string name="vay_profile_parallax">Parallax</string>
+    <string name="vay_profile_blocks">Profile blocks</string>
+    <string name="vay_profile_show_username">Show username</string>
+    <string name="vay_profile_show_bio">Show bio</string>
+    <string name="vay_profile_author_style">Show author profile style</string>
+    <string name="vay_profile_reset">Reset Profile Studio</string>
+    <string name="vay_profile_reset_message">Remove this account&apos;s Profile Studio overrides and inherit the global defaults?</string>
+    <string name="vay_profile_reset_done">Profile Studio reset</string>
+    <string name="vay_profile_inherited">Inherited</string>
+    <string name="vay_profile_override">Override</string>
+    <string name="vay_reset">Reset</string>
+    <string name="vay_cancel">Cancel</string>
+    <string name="vay_apply">Apply</string>
+    <string name="vay_inherit">Inherit</string>
+</resources>
