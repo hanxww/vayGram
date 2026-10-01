@@ -159,3 +159,14 @@
 - [x] restore saved customization immediately when Safe Mode is disabled
 - [x] expose Safe Mode state in sanitized diagnostics
 - [ ] automatic crash-loop suggestion after crash-session diagnostics exists
+
+
+## M12 — Main-tab inset stabilization
+
+- [x] re-dispatch window insets when vayGram bottom-navigation height changes live
+- [x] resize the bottom fade region with the configured navigation height
+- [x] refresh Profile media/gifts/button offsets after navigation-height changes
+- [x] refresh Settings bottom padding after navigation-height changes
+- [x] refresh Contacts list/floating-button offsets after navigation-height changes
+- [x] refresh Calls list/floating-button offsets after navigation-height changes
+- [ ] real-device regression pass across profile gifts/media/settings/contacts/calls
