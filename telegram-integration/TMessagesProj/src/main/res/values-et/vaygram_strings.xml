@@ -228,6 +228,52 @@
     <string name="vay_use_theme_colors">Kasuta teemavärve</string>
 
 
+
+    <string name="vay_backup_entry">Varundamine ja taastamine</string>
+    <string name="vay_backup_entry_hint">Teisaldatavad vayGrami seaded ilma Telegrami andmeteta</string>
+    <string name="vay_backup_title">vayGrami varukoopia</string>
+    <string name="vay_backup_contents">Kaasatud</string>
+    <string name="vay_backup_global_settings">Globaalsed erandid</string>
+    <string name="vay_backup_account_settings">Praeguse konto erandid</string>
+    <string name="vay_backup_saved_profiles">Salvestatud profiilid</string>
+    <string name="vay_backup_palette">Paleti erandid</string>
+    <string name="vay_backup_gradient">Navigeerimise gradient</string>
+    <string name="vay_backup_actions">Varundustoimingud</string>
+    <string name="vay_backup_copy">Kopeeri teisaldatav varukoopia</string>
+    <string name="vay_backup_copy_hint">Kopeeri JSON lõikelauale</string>
+    <string name="vay_backup_share">Jaga teisaldatavat varukoopiat</string>
+    <string name="vay_backup_share_hint">Saada JSON teise rakenduse kaudu</string>
+    <string name="vay_backup_restore">Taasta varukoopia</string>
+    <string name="vay_backup_restore_hint">Kleebi vayGrami teisaldatav varukoopia</string>
+    <string name="vay_backup_privacy">Privaatsuspiir</string>
+    <string name="vay_backup_excludes">Ei lisata kunagi</string>
+    <string name="vay_backup_excludes_value">Telegrami seansid, vestlused, sõnumid, telefoninumbrid, konto ID-d ja vestluse eriseaded</string>
+    <string name="vay_backup_copied">vayGrami varukoopia kopeeritud</string>
+    <string name="vay_backup_share_failed">Varukoopia jagamiseks ei leitud rakendust</string>
+    <string name="vay_backup_paste_hint">Kleebi vayGrami varukoopia JSON</string>
+    <string name="vay_backup_restore_title">Taasta vayGrami varukoopia</string>
+    <string name="vay_backup_restore_body">Varukoopia seotakse selle seadmega: globaalsed seaded taastatakse globaalselt ja konto seaded praegusele kontole.</string>
+    <string name="vay_backup_confirm_title">Asendada vayGrami seaded?</string>
+    <string name="vay_backup_confirm_body">Praegused globaalsed ja praeguse konto vayGrami erandid, salvestatud profiilid, palett ning navigeerimise gradient asendatakse. Telegrami konto- ja seansiandmeid ei muudeta.</string>
+    <string name="vay_backup_invalid">Vigane või toetamata vayGrami varukoopia</string>
+    <string name="vay_backup_restored">Taastatud %1$d seadet, %2$d profiili ja %3$d paletierandit</string>
+
+    <string name="vay_about_entry">vayGramist</string>
+    <string name="vay_about_entry_hint">Versioon, Telegrami alus, lähtekood ja projekti lingid</string>
+    <string name="vay_about_title">vayGramist</string>
+    <string name="vay_about_client">Klient</string>
+    <string name="vay_about_base">Telegrami alus</string>
+    <string name="vay_about_base_commit">Aluscommit</string>
+    <string name="vay_about_project">Projekt</string>
+    <string name="vay_about_source">Lähtekood</string>
+    <string name="vay_about_channel">Arenduskanal</string>
+    <string name="vay_about_copy_build">Kopeeri ehituse info</string>
+    <string name="vay_about_copy_build_hint">Kasulik probleemi raporteerimisel</string>
+    <string name="vay_about_principle">Tootepõhimõte</string>
+    <string name="vay_about_slogan">Kohanda kõike. Ära tee midagi keeruliseks.</string>
+    <string name="vay_about_open_failed">Linki ei saanud avada</string>
+    <string name="vay_about_build_copied">Ehituse info kopeeritud</string>
+
     <string name="vay_diagnostics_entry">Diagnostika ja taastamine</string>
     <string name="vay_diagnostics_entry_hint">Koosteinfo, turvaline aruanne ja taastamistööriistad</string>
     <string name="vay_diagnostics_title">Diagnostika ja taastamine</string>
