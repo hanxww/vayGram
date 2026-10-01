@@ -120,6 +120,22 @@
     <string name="vay_category_appearance_effects">Välimus / Efektid</string>
 
 
+
+    <string name="vay_desc_bubble_radius">Sõnumimullide nurkade ümardus</string>
+    <string name="vay_desc_message_spacing">Täiendav vertikaalne vahe sõnumite vahel</string>
+    <string name="vay_desc_chat_row_height">Iga vestlusrea kõrgus</string>
+    <string name="vay_desc_avatar_size">Avatari vaikesuurus</string>
+    <string name="vay_desc_avatar_roundness">Avatari nurga ümardus protsendina</string>
+    <string name="vay_desc_navigation_labels">Näita alumise navigeerimise ikoonide all silte</string>
+    <string name="vay_desc_bottom_bar_height">Alumise navigeerimisriba kõrgus</string>
+    <string name="vay_desc_compact_mode">Tihendab toetatud paigutusi kohandatud väärtusi üle kirjutamata</string>
+    <string name="vay_desc_animation_scale">vayGrami juhitud animatsioonide kestuse kordaja</string>
+    <string name="vay_desc_amoled">Kasuta toetatud tumedatel pindadel puhast musta</string>
+    <string name="vay_desc_material_you">Kasuta Androidi dünaamilisi süsteemivärve vayGrami paleti alusena</string>
+    <string name="vay_desc_glass_blur">Luba toetatud kohtades vayGrami klaasstiilis hägusus</string>
+    <string name="vay_desc_glass_blur_radius">vayGrami klaaspindade hägususe raadius</string>
+    <string name="vay_desc_glass_opacity">Toetatud vayGrami klaaspindade läbipaistmatus</string>
+
     <string name="vay_this_chat">See vestlus</string>
     <string name="vay_level_basic">Põhitase</string>
     <string name="vay_level_advanced">Edasijõudnud</string>
