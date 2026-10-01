@@ -53,6 +53,10 @@
     <string name="vay_apply">Rakenda</string>
     <string name="vay_inherit">Päri</string>
 
+    <string name="vay_first_launch_menu_title">Peamenüü</string>
+    <string name="vay_first_launch_menu_body">See nupp avab Telegrami tegevused ja seaded. vayGram lisab oma kohandused ilma tuttavat Telegrami navigeerimist rikkumata.</string>
+    <string name="vay_first_launch_compose_title">Uus sõnum</string>
+    <string name="vay_first_launch_compose_body">See on tuttav Telegrami uue sõnumi nupp. Telegram jääb tuttavaks ja vayGram lisab kohandamise selle peale.</string>
     <string name="vay_onboarding_title">Tere tulemast vayGrami</string>
     <string name="vay_onboarding_body">Telegram jääb tuttavaks. vayGram lisab kohandamiskihi, mida saad avastada omas tempos.</string>
     <string name="vay_onboarding_choose_level">Vali kohandamise tase</string>
