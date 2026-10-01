@@ -253,7 +253,20 @@ public final class VaySettingsActivity extends BaseFragment {
         if ("This account".equals(scopeTitle)) {
             return LocaleController.getString(R.string.vay_this_account);
         }
+        if ("This chat".equals(scopeTitle)) {
+            return LocaleController.getString(R.string.vay_this_chat);
+        }
         return scopeTitle;
+    }
+
+    private String localizedVisibilityLevel(VayVisibilityLevel level) {
+        if (level == VayVisibilityLevel.ADVANCED) {
+            return LocaleController.getString(R.string.vay_level_advanced);
+        }
+        if (level == VayVisibilityLevel.INSANE) {
+            return LocaleController.getString(R.string.vay_level_insane);
+        }
+        return LocaleController.getString(R.string.vay_level_basic);
     }
 
     private void addControlRows() {
@@ -640,7 +653,7 @@ public final class VaySettingsActivity extends BaseFragment {
             presentFragment(new VaySettingsActivity(
                     parentScopeKey,
                     VayScopeKey.GLOBAL,
-                    "This account"
+                    LocaleController.getString(R.string.vay_this_account)
             ));
         }
     }
@@ -653,19 +666,19 @@ public final class VaySettingsActivity extends BaseFragment {
 
         EditText input = new EditText(context);
         input.setSingleLine(true);
-        input.setHint("Profile name");
+        input.setHint(LocaleController.getString(R.string.vay_profile_name_hint));
         int padding = AndroidUtilities.dp(20);
         input.setPadding(padding, padding, padding, padding);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Save vayGram profile");
-        builder.setMessage("Profiles store the current values in this scope. Saving the same name again replaces it.");
+        builder.setTitle(LocaleController.getString(R.string.vay_save_profile_title));
+        builder.setMessage(LocaleController.getString(R.string.vay_save_profile_body));
         builder.setView(input);
-        builder.setNegativeButton("Cancel", null);
-        builder.setPositiveButton("Save", (dialog, which) -> {
+        builder.setNegativeButton(LocaleController.getString(R.string.vay_cancel), null);
+        builder.setPositiveButton(LocaleController.getString(R.string.vay_save), (dialog, which) -> {
             String name = input.getText().toString().trim();
             if (TextUtils.isEmpty(name)) {
-                Toast.makeText(context, "Profile name is required", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, LocaleController.getString(R.string.vay_profile_name_required), Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -675,7 +688,7 @@ public final class VaySettingsActivity extends BaseFragment {
                     false
             );
             VayTelegram.presets().save(preset);
-            Toast.makeText(context, "Profile saved", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, LocaleController.getString(R.string.vay_profile_saved), Toast.LENGTH_SHORT).show();
             rebuildRows();
         });
         showDialog(builder.create());
@@ -689,20 +702,23 @@ public final class VaySettingsActivity extends BaseFragment {
 
         List<VaySettingsPreset> presets = VayTelegram.presets().list();
         if (presets.isEmpty()) {
-            Toast.makeText(context, "No saved vayGram profiles yet", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, LocaleController.getString(R.string.vay_no_saved_profiles), Toast.LENGTH_SHORT).show();
             return;
         }
 
         CharSequence[] names = new CharSequence[presets.size()];
         for (int i = 0; i < presets.size(); i++) {
             VaySettingsPreset preset = presets.get(i);
-            names[i] = preset.getName() + "  ·  " + preset.size() + " values";
+            names[i] = preset.getName() + "  ·  " + LocaleController.formatString(
+                    preset.size() == 1 ? R.string.vay_value_count_one : R.string.vay_value_count_many,
+                    preset.size()
+            );
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Saved vayGram profiles");
+        builder.setTitle(LocaleController.getString(R.string.vay_saved_profiles_title));
         builder.setItems(names, (dialog, which) -> showProfileActions(presets.get(which)));
-        builder.setNegativeButton("Close", null);
+        builder.setNegativeButton(LocaleController.getString(R.string.vay_close), null);
         showDialog(builder.create());
     }
 
@@ -715,16 +731,23 @@ public final class VaySettingsActivity extends BaseFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(preset.getName());
         builder.setMessage(
-                preset.size() + (preset.size() == 1 ? " saved value" : " saved values")
-                        + "\n\nOnly settings compatible with the current scope are applied."
+                LocaleController.formatString(
+                        preset.size() == 1
+                                ? R.string.vay_saved_value_count_one
+                                : R.string.vay_saved_value_count_many,
+                        preset.size()
+                ) + "\n\n" + LocaleController.getString(R.string.vay_scope_apply_note)
         );
-        builder.setNegativeButton("Cancel", null);
-        builder.setNeutralButton("Delete", (dialog, which) -> showDeleteProfileDialog(preset));
-        builder.setPositiveButton("Apply", (dialog, which) -> {
+        builder.setNegativeButton(LocaleController.getString(R.string.vay_cancel), null);
+        builder.setNeutralButton(LocaleController.getString(R.string.vay_delete), (dialog, which) -> showDeleteProfileDialog(preset));
+        builder.setPositiveButton(LocaleController.getString(R.string.vay_apply), (dialog, which) -> {
             int changed = VayTelegram.settings().applyPreset(preset, scopeKey);
             Toast.makeText(
                     context,
-                    changed + (changed == 1 ? " setting applied" : " settings applied"),
+                    LocaleController.formatString(
+                            changed == 1 ? R.string.vay_applied_count_one : R.string.vay_applied_count_many,
+                            changed
+                    ),
                     Toast.LENGTH_SHORT
             ).show();
             rebuildRows();
@@ -739,12 +762,12 @@ public final class VaySettingsActivity extends BaseFragment {
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Delete profile?");
+        builder.setTitle(LocaleController.getString(R.string.vay_delete_profile_title));
         builder.setMessage(preset.getName());
-        builder.setNegativeButton("Cancel", null);
-        builder.setPositiveButton("Delete", (dialog, which) -> {
+        builder.setNegativeButton(LocaleController.getString(R.string.vay_cancel), null);
+        builder.setPositiveButton(LocaleController.getString(R.string.vay_delete), (dialog, which) -> {
             VayTelegram.presets().delete(preset.getName());
-            Toast.makeText(context, "Profile deleted", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, LocaleController.getString(R.string.vay_profile_deleted), Toast.LENGTH_SHORT).show();
             rebuildRows();
         });
         showDialog(builder.create());
@@ -757,15 +780,15 @@ public final class VaySettingsActivity extends BaseFragment {
         }
         boolean modifiedOnly = VayTelegram.settings().countCustomized(scopeKey) > 0;
         VaySettingsPreset preset = VayTelegram.settings().capturePreset(
-                "vayGram preset",
+                LocaleController.getString(R.string.vay_preset_label),
                 scopeKey,
                 modifiedOnly
         );
         String json = VayPresetJson.encode(preset);
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         if (clipboard != null) {
-            clipboard.setPrimaryClip(ClipData.newPlainText("vayGram preset", json));
-            Toast.makeText(context, "vayGram preset copied", Toast.LENGTH_SHORT).show();
+            clipboard.setPrimaryClip(ClipData.newPlainText(LocaleController.getString(R.string.vay_preset_label), json));
+            Toast.makeText(context, LocaleController.getString(R.string.vay_preset_copied), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -792,22 +815,25 @@ public final class VaySettingsActivity extends BaseFragment {
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Import vayGram preset");
-        builder.setMessage("Only known settings compatible with this scope will be applied.");
+        builder.setTitle(LocaleController.getString(R.string.vay_import_profile_title));
+        builder.setMessage(LocaleController.getString(R.string.vay_import_profile_body));
         builder.setView(input);
-        builder.setNegativeButton("Cancel", null);
-        builder.setPositiveButton("Import", (dialog, which) -> {
+        builder.setNegativeButton(LocaleController.getString(R.string.vay_cancel), null);
+        builder.setPositiveButton(LocaleController.getString(R.string.vay_import), (dialog, which) -> {
             try {
                 VaySettingsPreset preset = VayPresetJson.decode(input.getText().toString());
                 int changed = VayTelegram.settings().applyPreset(preset, scopeKey);
                 Toast.makeText(
                         context,
-                        changed + (changed == 1 ? " setting applied" : " settings applied"),
+                        LocaleController.formatString(
+                                changed == 1 ? R.string.vay_applied_count_one : R.string.vay_applied_count_many,
+                                changed
+                        ),
                         Toast.LENGTH_SHORT
                 ).show();
                 rebuildRows();
             } catch (RuntimeException e) {
-                Toast.makeText(context, "Invalid vayGram preset", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, LocaleController.getString(R.string.vay_invalid_preset), Toast.LENGTH_SHORT).show();
             }
         });
         showDialog(builder.create());
@@ -820,10 +846,14 @@ public final class VaySettingsActivity extends BaseFragment {
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Reset setting?");
-        builder.setMessage(setting.getTitle() + "\n\nDefault: " + formatDefaultValue(setting));
-        builder.setNegativeButton("Cancel", null);
-        builder.setPositiveButton("Reset", (dialog, which) -> {
+        builder.setTitle(LocaleController.getString(R.string.vay_reset_setting_title));
+        builder.setMessage(
+                VaySettingsStrings.title(setting)
+                        + "\n\n"
+                        + LocaleController.formatString(R.string.vay_default_value, formatDefaultValue(setting))
+        );
+        builder.setNegativeButton(LocaleController.getString(R.string.vay_cancel), null);
+        builder.setPositiveButton(LocaleController.getString(R.string.vay_reset), (dialog, which) -> {
             resetSetting(setting);
             rebuildRows();
         });
@@ -838,10 +868,13 @@ public final class VaySettingsActivity extends BaseFragment {
 
         int modified = VayTelegram.settings().countCustomized(scopeKey);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Reset vayGram settings?");
-        builder.setMessage("Reset " + modified + (modified == 1 ? " customized setting" : " customized settings") + " in this scope.");
-        builder.setNegativeButton("Cancel", null);
-        builder.setPositiveButton("Reset", (dialog, which) -> {
+        builder.setTitle(LocaleController.getString(R.string.vay_reset_settings_title));
+        builder.setMessage(LocaleController.formatString(
+                modified == 1 ? R.string.vay_reset_scope_body_one : R.string.vay_reset_scope_body_many,
+                modified
+        ));
+        builder.setNegativeButton(LocaleController.getString(R.string.vay_cancel), null);
+        builder.setPositiveButton(LocaleController.getString(R.string.vay_reset), (dialog, which) -> {
             VayTelegram.settings().resetAll(scopeKey);
             rebuildRows();
         });
@@ -996,12 +1029,13 @@ public final class VaySettingsActivity extends BaseFragment {
         });
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(setting.getTitle());
-        if (!TextUtils.isEmpty(setting.getDescription())) {
-            builder.setMessage(setting.getDescription());
+        builder.setTitle(VaySettingsStrings.title(setting));
+        String localizedDescription = VaySettingsStrings.description(setting);
+        if (!TextUtils.isEmpty(localizedDescription)) {
+            builder.setMessage(localizedDescription);
         }
         builder.setView(container);
-        builder.setNegativeButton("Cancel", (dialog, which) -> {
+        builder.setNegativeButton(LocaleController.getString(R.string.vay_cancel), (dialog, which) -> {
             settled[0] = true;
             if (hadStoredValue || VayScopeKey.GLOBAL.equals(scopeKey)) {
                 cancelPreviewValue(setting, originalValue);
@@ -1011,7 +1045,9 @@ public final class VaySettingsActivity extends BaseFragment {
             rebuildRows();
         });
         builder.setNeutralButton(
-                VayScopeKey.GLOBAL.equals(scopeKey) ? "Default" : "Inherit",
+                VayScopeKey.GLOBAL.equals(scopeKey)
+                        ? LocaleController.getString(R.string.vay_default)
+                        : LocaleController.getString(R.string.vay_inherit),
                 (dialog, which) -> {
                     settled[0] = true;
                     if (VayScopeKey.GLOBAL.equals(scopeKey)) {
@@ -1022,7 +1058,7 @@ public final class VaySettingsActivity extends BaseFragment {
                     rebuildRows();
                 }
         );
-        builder.setPositiveButton("Apply", (dialog, which) -> {
+        builder.setPositiveButton(LocaleController.getString(R.string.vay_apply), (dialog, which) -> {
             settled[0] = true;
             double raw = min + seekBar.getProgress() * step;
             commitPreviewValue(setting, originalValue, numericValue(setting, raw));
@@ -1167,7 +1203,11 @@ public final class VaySettingsActivity extends BaseFragment {
 
             if (row.mode) {
                 TextSettingsCell cell = (TextSettingsCell) holder.itemView;
-                cell.setTextAndValue(LocaleController.getString(R.string.vay_customization_level), visibilityLevel.name(), false);
+                cell.setTextAndValue(
+                        LocaleController.getString(R.string.vay_customization_level),
+                        localizedVisibilityLevel(visibilityLevel),
+                        false
+                );
                 return;
             }
 
@@ -1186,10 +1226,10 @@ public final class VaySettingsActivity extends BaseFragment {
                 String value = formatValue(row.setting);
                 if (isModified(row.setting)) {
                     value += VayScopeKey.GLOBAL.equals(scopeKey)
-                            ? "  ·  modified"
-                            : "  ·  override";
+                            ? "  ·  " + LocaleController.getString(R.string.vay_modified_short)
+                            : "  ·  " + LocaleController.getString(R.string.vay_override_short);
                 } else if (isInherited(row.setting)) {
-                    value += "  ·  inherited";
+                    value += "  ·  " + LocaleController.getString(R.string.vay_inherited_short);
                 }
                 cell.setTextAndValue(
                         displayTitle(row.setting, row.recent),
@@ -1406,7 +1446,7 @@ public final class VaySettingsActivity extends BaseFragment {
                     paint.setTextAlign(Paint.Align.CENTER);
                     paint.setTextSize(AndroidUtilities.dp(8));
                     canvas.drawText(
-                            i == 0 ? "Chats" : "Tab",
+                            LocaleController.getString(i == 0 ? R.string.vay_preview_chats : R.string.vay_preview_tab),
                             cx,
                             iconY + AndroidUtilities.dp(16),
                             paint
