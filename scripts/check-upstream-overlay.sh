@@ -44,6 +44,7 @@ must_not_grep() {
 }
 
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" "Vay Settings UI"
+must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayDiagnosticsActivity.java" "vayGram diagnostics and recovery UI"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/core/settings/VaySettingsEngine.java" "VayCore settings engine"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/VayAndroid.java" "Android settings bridge"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/settings/VayPresetRepository.java" "persistent preset repository"
@@ -98,6 +99,24 @@ must_grep 'dispatchTouchEvent' \
 must_grep 'ACTION_REPLAY_ONBOARDING' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
   "replay onboarding action"
+must_grep 'ACTION_DIAGNOSTICS' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
+  "diagnostics and recovery settings entry"
+must_grep 'No account ids, phone numbers, chats, messages, tokens, or credentials' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayDiagnosticsActivity.java" \
+  "sanitized diagnostics report boundary"
+must_grep 'resetThemePalette' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayDiagnosticsActivity.java" \
+  "theme recovery action"
+must_grep 'TELEGRAM_BASE_VERSION = "12\.10\.5"' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/telegram/VayBuild.java" \
+  "pinned Telegram diagnostic version"
+must_grep 'TELEGRAM_BASE_VERSION_CODE = 7105' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/telegram/VayBuild.java" \
+  "pinned Telegram diagnostic version code"
+must_grep 'TELEGRAM_BASE_COMMIT = "dc780e81ed1261c369c27870e8e0999a1eb0b600"' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/telegram/VayBuild.java" \
+  "pinned Telegram diagnostic commit"
 must_grep 'VayCoachOverlay\.show' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
   "guided spotlight tour"
@@ -128,6 +147,9 @@ must_grep 'vay_profile_show_mutual_chats' \
 must_grep 'vay_settings_title' \
   "$TMP/telegram/TMessagesProj/src/main/res/values-ru/strings.xml" \
   "vayGram settings localization merged into Telegram strings"
+must_grep 'vay_diagnostics_title' \
+  "$TMP/telegram/TMessagesProj/src/main/res/values-ru/strings.xml" \
+  "diagnostics localization merged into Telegram strings"
 
 must_grep 'ACTION_SAVE_PROFILE' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \

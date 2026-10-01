@@ -78,6 +78,7 @@ public final class VaySettingsActivity extends BaseFragment {
     private static final int ACTION_PALETTE_EDITOR = 11;
     private static final int ACTION_GRADIENT_EDITOR = 12;
     private static final int ACTION_REPLAY_ONBOARDING = 13;
+    private static final int ACTION_DIAGNOSTICS = 14;
 
     private static final int RECENT_LIMIT = 5;
     private static final int COACH_STEPS = 5;
@@ -371,6 +372,11 @@ public final class VaySettingsActivity extends BaseFragment {
                         )
         ));
         rows.add(Row.action(
+                ACTION_DIAGNOSTICS,
+                LocaleController.getString(R.string.vay_diagnostics_entry),
+                LocaleController.getString(R.string.vay_diagnostics_entry_hint)
+        ));
+        rows.add(Row.action(
                 ACTION_REPLAY_ONBOARDING,
                 LocaleController.getString(R.string.vay_onboarding_replay),
                 LocaleController.getString(R.string.vay_onboarding_replay_hint)
@@ -504,6 +510,12 @@ public final class VaySettingsActivity extends BaseFragment {
             presentFragment(new VayPaletteActivity());
         } else if (action == ACTION_GRADIENT_EDITOR) {
             presentFragment(new VayGradientActivity());
+        } else if (action == ACTION_DIAGNOSTICS) {
+            presentFragment(new VayDiagnosticsActivity(
+                    scopeKey,
+                    localizedScopeTitle(),
+                    localizedVisibilityLevel(visibilityLevel)
+            ));
         } else if (action == ACTION_REPLAY_ONBOARDING) {
             onboardingCoachRequested = true;
             VayOnboardingState.resetForReplay();

@@ -14,6 +14,9 @@ public final class VayBuild {
 
     public static final String DEVELOPMENT_CHANNEL = "https://t.me/vayGram_app";
     public static final String CLIENT_VERSION = "0.1-dev";
+    public static final String TELEGRAM_BASE_VERSION = "12.10.5";
+    public static final int TELEGRAM_BASE_VERSION_CODE = 7105;
+    public static final String TELEGRAM_BASE_COMMIT = "dc780e81ed1261c369c27870e8e0999a1eb0b600";
 
     private VayBuild() {}
 }
