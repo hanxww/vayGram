@@ -290,6 +290,18 @@
     <string name="vay_diagnostics_gradient">Navigeerimise gradient</string>
     <string name="vay_diagnostics_disabled">Keelatud</string>
     <string name="vay_diagnostics_unsupported">Pole toetatud</string>
+
+    <string name="vay_safe_mode">Turvarežiim</string>
+    <string name="vay_safe_mode_enabled">Lubatud · vayGrami kujundus on ajutiselt möödaviidud</string>
+    <string name="vay_safe_mode_disabled">Keelatud · kohandused on aktiivsed</string>
+    <string name="vay_safe_mode_enable_title">Lubada vayGrami turvarežiim?</string>
+    <string name="vay_safe_mode_enable_body">Turvarežiim jätab vayGrami välimuse, teema ja Profile Studio renderduskonksud ajutiselt vahele ilma seadeid kustutamata. Kasuta seda katkise kohanduse või visuaalse vea taastamiseks.</string>
+    <string name="vay_safe_mode_disable_title">Keelata vayGrami turvarežiim?</string>
+    <string name="vay_safe_mode_disable_body">Salvestatud vayGrami kohandused muutuvad kohe jälle aktiivseks.</string>
+    <string name="vay_safe_mode_enable">Luba turvarežiim</string>
+    <string name="vay_safe_mode_disable">Keela turvarežiim</string>
+    <string name="vay_safe_mode_changed">Turvarežiim uuendatud</string>
+
     <string name="vay_diagnostics_recovery">Taastamine</string>
     <string name="vay_diagnostics_copy">Kopeeri turvaline diagnostika</string>
     <string name="vay_diagnostics_copy_hint">Ilma vestluste, telefonide, konto ID-de ja saladusteta</string>
