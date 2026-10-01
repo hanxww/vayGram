@@ -16,6 +16,8 @@ public final class VaySettingsStrings {
             case "chat.bubble.radius": return s(R.string.vay_setting_bubble_radius);
             case "chat.message.spacing": return s(R.string.vay_setting_message_spacing);
             case "dialogs.row.height": return s(R.string.vay_setting_chat_row_height);
+            case "dialogs.name.text_size": return s(R.string.vay_setting_chat_title_text_size);
+            case "dialogs.message.text_size": return s(R.string.vay_setting_chat_preview_text_size);
             case "avatar.size": return s(R.string.vay_setting_avatar_size);
             case "avatar.radius": return s(R.string.vay_setting_avatar_roundness);
             case "navigation.bottom.labels": return s(R.string.vay_setting_navigation_labels);
@@ -39,6 +41,8 @@ public final class VaySettingsStrings {
             case "chat.bubble.radius": return s(R.string.vay_desc_bubble_radius);
             case "chat.message.spacing": return s(R.string.vay_desc_message_spacing);
             case "dialogs.row.height": return s(R.string.vay_desc_chat_row_height);
+            case "dialogs.name.text_size": return s(R.string.vay_desc_chat_title_text_size);
+            case "dialogs.message.text_size": return s(R.string.vay_desc_chat_preview_text_size);
             case "avatar.size": return s(R.string.vay_desc_avatar_size);
             case "avatar.radius": return s(R.string.vay_desc_avatar_roundness);
             case "navigation.bottom.labels": return s(R.string.vay_desc_navigation_labels);
