@@ -15,6 +15,11 @@
     <string name="vay_profile_background_blur">Background blur</string>
     <string name="vay_profile_parallax">Parallax</string>
     <string name="vay_profile_blocks">Profile blocks</string>
+    <string name="vay_profile_core_blocks">Core blocks</string>
+    <string name="vay_profile_personal_blocks">Personal blocks</string>
+    <string name="vay_profile_social_blocks">Social blocks</string>
+    <string name="vay_profile_content_blocks">Content blocks</string>
+    <string name="vay_profile_custom_blocks">Custom blocks</string>
     <string name="vay_profile_show_username">Show username</string>
     <string name="vay_profile_show_bio">Show bio</string>
     <string name="vay_profile_show_avatar">Show avatar</string>
