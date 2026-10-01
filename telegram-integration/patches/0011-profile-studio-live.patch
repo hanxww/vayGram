@@ -30,7 +30,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java b/
              TLRPC.Chat chatLocal = getMessagesController().getChat(chatId);
              if (ChatObject.isForum(chatLocal)) {
                  return dp(needInsetForStories() ? 24 : 38);
-@@ -9047,11 +9050,18 @@
+@@ -9047,11 +9050,19 @@
          } else if (id == NotificationCenter.updateInterfaces) {
              int mask = (Integer) args[0];
              boolean infoChanged = (mask & MessagesController.UPDATE_MASK_AVATAR) != 0 || (mask & MessagesController.UPDATE_MASK_NAME) != 0 || (mask & MessagesController.UPDATE_MASK_STATUS) != 0 || (mask & MessagesController.UPDATE_MASK_EMOJI_STATUS) != 0;
@@ -50,7 +50,93 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java b/
 +                    }
 +                    avatarImage.invalidate();
 +                }
++                vayRefreshMainTabsInsets();
 +                if ((mask & MessagesController.UPDATE_MASK_PHONE) != 0) {
                      if (listView != null) {
                          RecyclerListView.Holder holder = (RecyclerListView.Holder) listView.findViewHolderForPosition(phoneRow);
                          if (holder != null) {
+@@ -16866,37 +16877,53 @@
+         return false;
+     }
+ 
+-    private int additionNavigationBarHeight;
+-    private int additionFloatingButtonOffset;
+-    private int navigationBarHeight;
+-
+-    @NonNull
+-    private WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+-        navigationBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom;
+-
+-        ViewGroup.MarginLayoutParams lp;
+-
+-        if (bottomButtonsContainer != null) {
+-            lp = (ViewGroup.MarginLayoutParams) bottomButtonsContainer.getLayoutParams();
+-
+-            final int bottomMargin = navigationBarHeight + additionFloatingButtonOffset;
+-            if (lp != null && lp.bottomMargin != bottomMargin) {
+-                lp.bottomMargin = bottomMargin;
+-                bottomButtonsContainer.setLayoutParams(lp);
+-            }
+-        }
+-
+-        if (sharedMediaLayout != null) {
+-            sharedMediaLayout.setPagesPaddingBottom(navigationBarHeight + additionNavigationBarHeight);
+-
+-            if (sharedMediaLayout.giftsContainer != null) {
+-                sharedMediaLayout.giftsContainer.setButtonOffset(navigationBarHeight + additionFloatingButtonOffset);
+-            }
+-        }
+-
+-        // listView.setPadding(0, 0, 0, navigationBarHeight + additionNavigationBarHeight);
+-        return WindowInsetsCompat.CONSUMED;
+-    }
++    private int additionNavigationBarHeight;
++    private int additionFloatingButtonOffset;
++    private int navigationBarHeight;
++
++    private void vayRefreshMainTabsInsets() {
++        final int nextNavigationHeight = hasMainTabs
++                ? dp(DialogsActivity.MAIN_TABS_HEIGHT_WITH_MARGINS)
++                : 0;
++        final int nextFloatingOffset = hasMainTabs
++                ? dp(DialogsActivity.MAIN_TABS_HEIGHT + DialogsActivity.MAIN_TABS_MARGIN)
++                : 0;
++
++        additionNavigationBarHeight = nextNavigationHeight;
++        additionFloatingButtonOffset = nextFloatingOffset;
++
++        if (bottomButtonsContainer != null) {
++            ViewGroup.MarginLayoutParams lp =
++                    (ViewGroup.MarginLayoutParams) bottomButtonsContainer.getLayoutParams();
++            final int bottomMargin = navigationBarHeight + additionFloatingButtonOffset;
++            if (lp != null && lp.bottomMargin != bottomMargin) {
++                lp.bottomMargin = bottomMargin;
++                bottomButtonsContainer.setLayoutParams(lp);
++            }
++        }
++
++        if (sharedMediaLayout != null) {
++            sharedMediaLayout.setPagesPaddingBottom(
++                    navigationBarHeight + additionNavigationBarHeight
++            );
++            if (sharedMediaLayout.giftsContainer != null) {
++                sharedMediaLayout.giftsContainer.setButtonOffset(
++                        navigationBarHeight + additionFloatingButtonOffset
++                );
++            }
++        }
++
++        if (listView != null) {
++            listView.requestLayout();
++        }
++    }
++
++    @NonNull
++    private WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
++        navigationBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom;
++        vayRefreshMainTabsInsets();
++        return WindowInsetsCompat.CONSUMED;
++    }
+ 
+     /* * */
+ 

@@ -159,7 +159,19 @@ On the account owner's own profile:
 - change a disposable vayGram setting in the current scope, use Reset current scope, and confirm Telegram account/session data remains intact;
 - create a disposable palette override/gradient, use Reset theme layer, and confirm only vayGram theme-layer customizations are cleared.
 
-## 10. Safe Mode recovery
+## 10. Main-tab inset regression
+
+With bottom navigation visible:
+
+- set bottom-navigation height to the minimum, default and maximum values without leaving the current screen;
+- on the own-profile tab, open Gifts and Media and verify the grid, action button and bottom content are not trapped behind the navigation pill;
+- on Settings, verify the last row can scroll fully above the navigation pill after each height change;
+- on Contacts, verify the list, empty state and floating action button keep the correct bottom clearance;
+- on Calls, verify the list, empty state and floating action button keep the correct bottom clearance;
+- switch between gesture navigation and three-button navigation when available, then repeat the profile/settings checks;
+- enable/disable Safe Mode and confirm bottom-navigation insets immediately return to default/custom values without reopening the tab.
+
+## 11. Safe Mode recovery
 
 - create several visible vayGram customizations: palette override, gradient, non-default bottom-bar height, chat/list sizing and Profile Studio avatar effect;
 - open **Diagnostics and recovery** and enable **Safe Mode**;
@@ -169,7 +181,7 @@ On the account owner's own profile:
 - disable Safe Mode and confirm the previously saved vayGram customizations become active again;
 - copy diagnostics and confirm it reports the Safe Mode state without exposing Telegram account/chat data.
 
-## 11. Backup / restore and About
+## 12. Backup / restore and About
 
 - open **Backup & restore** from Vay Settings;
 - copy a portable backup and verify it contains vayGram settings/theme data but no Telegram session, chat, phone-number or account-id data;
@@ -184,7 +196,7 @@ On the account owner's own profile:
 - confirm source-repository and development-channel links open;
 - confirm build information copies successfully.
 
-## 12. Upgrade compatibility
+## 13. Upgrade compatibility
 
 After the clean-install pass, keep the tested build installed.
 
@@ -197,7 +209,7 @@ For the next CI build signed by the persistent vayGram dev key:
 5. confirm onboarding completion state remains intact;
 6. repeat a short chat/send/receive/Vay Settings smoke.
 
-## 13. Crash capture
+## 14. Crash capture
 
 If anything crashes, record:
 
