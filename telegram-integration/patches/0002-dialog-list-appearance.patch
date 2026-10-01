@@ -46,6 +46,49 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java b
              return;
          }
          if (isDialogCell) {
+@@ -1246,22 +1252,26 @@
+-        if (useForceThreeLines || SharedConfig.useThreeLinesLayout || true) {
+-            Theme.dialogs_namePaint[0].setTextSize(dp(17));
+-            Theme.dialogs_nameEncryptedPaint[0].setTextSize(dp(17));
+-            Theme.dialogs_messagePaint[0].setTextSize(dp(16));
+-            Theme.dialogs_messagePrintingPaint[0].setTextSize(dp(16));
+-
+-            Theme.dialogs_namePaint[1].setTextSize(dp(16));
+-            Theme.dialogs_nameEncryptedPaint[1].setTextSize(dp(16));
+-            Theme.dialogs_messagePaint[1].setTextSize(dp(15));
+-            Theme.dialogs_messagePrintingPaint[1].setTextSize(dp(15));
++        final int vayNameTextSize = isDialogCell
++                ? app.vaygram.telegram.VayAppearance.dialogNameTextSizeDp(currentAccount)
++                : 17;
++        final int vayMessageTextSize = isDialogCell
++                ? app.vaygram.telegram.VayAppearance.dialogMessageTextSizeDp(currentAccount)
++                : 16;
++        if (useForceThreeLines || SharedConfig.useThreeLinesLayout || true) {
++            Theme.dialogs_namePaint[0].setTextSize(dp(vayNameTextSize));
++            Theme.dialogs_nameEncryptedPaint[0].setTextSize(dp(vayNameTextSize));
++            Theme.dialogs_messagePaint[0].setTextSize(dp(vayMessageTextSize));
++            Theme.dialogs_messagePrintingPaint[0].setTextSize(dp(vayMessageTextSize));
++
++            Theme.dialogs_namePaint[1].setTextSize(dp(Math.max(12, vayNameTextSize - 1)));
++            Theme.dialogs_nameEncryptedPaint[1].setTextSize(dp(Math.max(12, vayNameTextSize - 1)));
++            Theme.dialogs_messagePaint[1].setTextSize(dp(Math.max(11, vayMessageTextSize - 1)));
++            Theme.dialogs_messagePrintingPaint[1].setTextSize(dp(Math.max(11, vayMessageTextSize - 1)));
+ 
+             Theme.dialogs_messagePaint[1].setColor(Theme.dialogs_messagePaint[1].linkColor = Theme.getColor(Theme.key_chats_message_threeLines, resourcesProvider));
+             paintIndex = 1;
+             thumbSize = 18;
+         } else {
+-            Theme.dialogs_namePaint[0].setTextSize(dp(17));
+-            Theme.dialogs_nameEncryptedPaint[0].setTextSize(dp(17));
+-            Theme.dialogs_messagePaint[0].setTextSize(dp(16));
+-            Theme.dialogs_messagePrintingPaint[0].setTextSize(dp(16));
++            Theme.dialogs_namePaint[0].setTextSize(dp(vayNameTextSize));
++            Theme.dialogs_nameEncryptedPaint[0].setTextSize(dp(vayNameTextSize));
++            Theme.dialogs_messagePaint[0].setTextSize(dp(vayMessageTextSize));
++            Theme.dialogs_messagePrintingPaint[0].setTextSize(dp(vayMessageTextSize));
+ 
+             Theme.dialogs_messagePaint[0].setColor(Theme.dialogs_messagePaint[0].linkColor = Theme.getColor(Theme.key_chats_message, resourcesProvider));
+             paintIndex = 0;
 @@ -2418,57 +2424,66 @@
          animatedEmojiStackName = AnimatedEmojiSpan.update(AnimatedEmojiDrawable.CACHE_TYPE_MESSAGES, this, animatedEmojiStackName, nameLayout);
  
