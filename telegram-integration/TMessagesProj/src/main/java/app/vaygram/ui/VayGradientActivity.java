@@ -210,7 +210,7 @@ public final class VayGradientActivity extends BaseFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(LocaleController.getString(R.string.vay_reset_navigation_gradient_title));
         builder.setMessage(LocaleController.getString(R.string.vay_reset_navigation_gradient_body));
-        builder.setNegativeButton("Cancel", null);
+        builder.setNegativeButton(LocaleController.getString(R.string.vay_cancel), null);
         builder.setPositiveButton(LocaleController.getString(R.string.vay_reset), (dialog, which) -> {
             VayTelegram.resetNavigationGradient();
             Toast.makeText(context, LocaleController.getString(R.string.vay_gradient_reset_done), Toast.LENGTH_SHORT).show();
