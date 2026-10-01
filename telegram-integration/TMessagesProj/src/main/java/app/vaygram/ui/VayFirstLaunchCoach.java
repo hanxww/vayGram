@@ -88,7 +88,12 @@ public final class VayFirstLaunchCoach {
 
                     @Override
                     public void onSkip() {
-                        finishQuickTour(host);
+                        skipAllOnboarding();
+                    }
+
+                    @Override
+                    public void onTarget() {
+                        VayOnboardingState.markQuickTourCompleted();
                     }
                 }
         );
@@ -101,5 +106,9 @@ public final class VayFirstLaunchCoach {
                 VayOnboardingActivity.maybePresent(host);
             }
         }, 220);
+    }
+
+    private static void skipAllOnboarding() {
+        VayOnboardingState.markCompleted();
     }
 }
