@@ -227,6 +227,38 @@
     <string name="vay_reset_gradient">Сбросить градиент</string>
     <string name="vay_use_theme_colors">Использовать цвета темы</string>
 
+
+    <string name="vay_diagnostics_entry">Диагностика и восстановление</string>
+    <string name="vay_diagnostics_entry_hint">Сборка, безопасный отчёт и инструменты восстановления</string>
+    <string name="vay_diagnostics_title">Диагностика и восстановление</string>
+    <string name="vay_diagnostics_build">Сборка</string>
+    <string name="vay_diagnostics_client">Версия vayGram</string>
+    <string name="vay_diagnostics_telegram_base">База Telegram</string>
+    <string name="vay_diagnostics_package">Пакет</string>
+    <string name="vay_diagnostics_android">Android</string>
+    <string name="vay_diagnostics_state">Текущее состояние</string>
+    <string name="vay_diagnostics_customized">Изменённых настроек</string>
+    <string name="vay_diagnostics_palette_overrides">Переопределений палитры</string>
+    <string name="vay_diagnostics_saved_profiles">Сохранённых профилей</string>
+    <string name="vay_diagnostics_material_you">Material You</string>
+    <string name="vay_diagnostics_gradient">Градиент навигации</string>
+    <string name="vay_diagnostics_disabled">Отключено</string>
+    <string name="vay_diagnostics_unsupported">Не поддерживается</string>
+    <string name="vay_diagnostics_recovery">Восстановление</string>
+    <string name="vay_diagnostics_copy">Копировать безопасный отчёт</string>
+    <string name="vay_diagnostics_copy_hint">Без чатов, телефонов, ID аккаунтов и секретов</string>
+    <string name="vay_diagnostics_copied">Диагностика скопирована</string>
+    <string name="vay_diagnostics_reset_scope">Сбросить текущую область</string>
+    <string name="vay_diagnostics_reset_scope_hint">Удалить только настройки vayGram в этой области</string>
+    <string name="vay_diagnostics_reset_scope_title">Сбросить текущую область vayGram?</string>
+    <string name="vay_diagnostics_reset_scope_body">Будут удалены только настройки vayGram, сохранённые в текущей области. Аккаунт Telegram, чаты и сессии не затрагиваются.</string>
+    <string name="vay_diagnostics_reset_done">Сброшено настроек vayGram: %1$d</string>
+    <string name="vay_diagnostics_reset_theme">Сбросить слой темы</string>
+    <string name="vay_diagnostics_reset_theme_hint">Удалить свои цвета палитры и градиент навигации</string>
+    <string name="vay_diagnostics_reset_theme_title">Сбросить слой темы vayGram?</string>
+    <string name="vay_diagnostics_reset_theme_body">Пользовательские цвета токенов темы и градиент навигации будут удалены. Тема Telegram и данные аккаунта не затрагиваются.</string>
+    <string name="vay_diagnostics_theme_reset_done">Слой темы сброшен</string>
+
     <string name="vay_first_launch_menu_title">Главное меню</string>
     <string name="vay_first_launch_menu_body">Эта кнопка открывает действия Telegram и Настройки. vayGram добавляет свои возможности, не ломая привычную навигацию Telegram.</string>
     <string name="vay_first_launch_compose_title">Новое сообщение</string>
