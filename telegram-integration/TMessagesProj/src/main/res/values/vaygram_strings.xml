@@ -290,6 +290,18 @@
     <string name="vay_diagnostics_gradient">Navigation gradient</string>
     <string name="vay_diagnostics_disabled">Disabled</string>
     <string name="vay_diagnostics_unsupported">Unsupported</string>
+
+    <string name="vay_safe_mode">Safe mode</string>
+    <string name="vay_safe_mode_enabled">Enabled · vayGram rendering bypassed</string>
+    <string name="vay_safe_mode_disabled">Disabled · customizations active</string>
+    <string name="vay_safe_mode_enable_title">Enable vayGram Safe Mode?</string>
+    <string name="vay_safe_mode_enable_body">Safe Mode temporarily bypasses vayGram appearance, theme and Profile Studio rendering hooks without deleting your settings. Use it to recover from a broken customization or visual regression.</string>
+    <string name="vay_safe_mode_disable_title">Disable vayGram Safe Mode?</string>
+    <string name="vay_safe_mode_disable_body">Your saved vayGram customizations will become active again immediately.</string>
+    <string name="vay_safe_mode_enable">Enable Safe Mode</string>
+    <string name="vay_safe_mode_disable">Disable Safe Mode</string>
+    <string name="vay_safe_mode_changed">Safe Mode updated</string>
+
     <string name="vay_diagnostics_recovery">Recovery</string>
     <string name="vay_diagnostics_copy">Copy safe diagnostics</string>
     <string name="vay_diagnostics_copy_hint">No chats, phone numbers, account ids or secrets</string>

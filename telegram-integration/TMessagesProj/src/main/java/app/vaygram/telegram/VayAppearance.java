@@ -7,6 +7,7 @@ import app.vaygram.core.theme.VayGradientSpec;
 public final class VayAppearance {
     private static volatile boolean amoledSurfacesEnabled;
     private static volatile boolean compactModeEnabled;
+    private static volatile boolean safeModeEnabled;
 
     private VayAppearance() {}
 
@@ -18,12 +19,22 @@ public final class VayAppearance {
         compactModeEnabled = enabled;
     }
 
+    static void setSafeModeEnabled(boolean enabled) {
+        safeModeEnabled = enabled;
+    }
+
+    public static boolean isSafeModeEnabled() {
+        return safeModeEnabled;
+    }
+
     public static boolean isCompactModeEnabled() {
-        return compactModeEnabled;
+        return !safeModeEnabled && compactModeEnabled;
     }
 
     public static float chatBubbleRadiusDp() {
-        return VayTelegram.settings().get(VayDefaults.CHAT_BUBBLE_RADIUS);
+        return safeModeEnabled
+                ? VayDefaults.CHAT_BUBBLE_RADIUS.getDefaultValue()
+                : VayTelegram.settings().get(VayDefaults.CHAT_BUBBLE_RADIUS);
     }
 
     public static float chatBubbleRadiusDp(int account, long dialogId) {
@@ -31,37 +42,45 @@ public final class VayAppearance {
     }
 
     public static float chatMessageSpacingDp() {
-        float value = VayTelegram.settings().get(VayDefaults.CHAT_MESSAGE_SPACING);
-        return compactModeEnabled ? 0f : value;
+        float value = safeModeEnabled
+                ? VayDefaults.CHAT_MESSAGE_SPACING.getDefaultValue()
+                : VayTelegram.settings().get(VayDefaults.CHAT_MESSAGE_SPACING);
+        return !safeModeEnabled && compactModeEnabled ? 0f : value;
     }
 
     public static float chatMessageSpacingDp(int account, long dialogId) {
         float value = resolvedForChat(VayDefaults.CHAT_MESSAGE_SPACING, account, dialogId);
-        return compactModeEnabled ? 0f : value;
+        return !safeModeEnabled && compactModeEnabled ? 0f : value;
     }
 
     public static int dialogRowHeightDp() {
-        int value = VayTelegram.settings().get(VayDefaults.DIALOG_ROW_HEIGHT);
-        return compactModeEnabled ? Math.min(value, 60) : value;
+        int value = safeModeEnabled
+                ? VayDefaults.DIALOG_ROW_HEIGHT.getDefaultValue()
+                : VayTelegram.settings().get(VayDefaults.DIALOG_ROW_HEIGHT);
+        return !safeModeEnabled && compactModeEnabled ? Math.min(value, 60) : value;
     }
 
     public static int dialogRowHeightDp(int account, long dialogId) {
         int value = resolvedForChat(VayDefaults.DIALOG_ROW_HEIGHT, account, dialogId);
-        return compactModeEnabled ? Math.min(value, 60) : value;
+        return !safeModeEnabled && compactModeEnabled ? Math.min(value, 60) : value;
     }
 
     public static float avatarSizeDp() {
-        float value = VayTelegram.settings().get(VayDefaults.AVATAR_SIZE);
-        return compactModeEnabled ? Math.min(value, 46f) : value;
+        float value = safeModeEnabled
+                ? VayDefaults.AVATAR_SIZE.getDefaultValue()
+                : VayTelegram.settings().get(VayDefaults.AVATAR_SIZE);
+        return !safeModeEnabled && compactModeEnabled ? Math.min(value, 46f) : value;
     }
 
     public static float avatarSizeDp(int account, long dialogId) {
         float value = resolvedForChat(VayDefaults.AVATAR_SIZE, account, dialogId);
-        return compactModeEnabled ? Math.min(value, 46f) : value;
+        return !safeModeEnabled && compactModeEnabled ? Math.min(value, 46f) : value;
     }
 
     public static float avatarRoundnessPercent() {
-        return VayTelegram.settings().get(VayDefaults.AVATAR_RADIUS);
+        return safeModeEnabled
+                ? VayDefaults.AVATAR_RADIUS.getDefaultValue()
+                : VayTelegram.settings().get(VayDefaults.AVATAR_RADIUS);
     }
 
     public static float avatarRoundnessPercent(int account, long dialogId) {
@@ -116,6 +135,9 @@ public final class VayAppearance {
     }
 
     static int effectiveBottomNavigationHeightDp(int configuredHeightDp) {
+        if (safeModeEnabled) {
+            return VayDefaults.NAV_HEIGHT.getDefaultValue();
+        }
         return compactModeEnabled ? Math.min(configuredHeightDp, 52) : configuredHeightDp;
     }
 
@@ -128,17 +150,23 @@ public final class VayAppearance {
     }
 
     public static boolean showBottomNavigationLabels() {
+        if (safeModeEnabled) {
+            return VayDefaults.NAV_SHOW_LABELS.getDefaultValue();
+        }
         return !compactModeEnabled
                 && VayTelegram.settings().get(VayDefaults.NAV_SHOW_LABELS);
     }
 
     public static boolean showBottomNavigationLabels(int account) {
+        if (safeModeEnabled) {
+            return VayDefaults.NAV_SHOW_LABELS.getDefaultValue();
+        }
         return !compactModeEnabled
                 && resolvedForAccount(VayDefaults.NAV_SHOW_LABELS, account);
     }
 
     public static boolean glassBlurEnabled(int account) {
-        return resolvedForAccount(VayDefaults.GLASS_BLUR, account);
+        return !safeModeEnabled && resolvedForAccount(VayDefaults.GLASS_BLUR, account);
     }
 
     public static int glassBlurRadiusDp(int account) {
@@ -146,7 +174,9 @@ public final class VayAppearance {
     }
 
     public static float glassOpacity(int account) {
-        return resolvedForAccount(VayDefaults.GLASS_OPACITY, account);
+        return safeModeEnabled
+                ? VayDefaults.GLASS_OPACITY.getDefaultValue()
+                : resolvedForAccount(VayDefaults.GLASS_OPACITY, account);
     }
 
     public static VayGradientSpec navigationGradient() {
@@ -154,7 +184,9 @@ public final class VayAppearance {
     }
 
     public static float animationScale() {
-        return VayTelegram.settings().get(VayDefaults.MOTION_SCALE);
+        return safeModeEnabled
+                ? VayDefaults.MOTION_SCALE.getDefaultValue()
+                : VayTelegram.settings().get(VayDefaults.MOTION_SCALE);
     }
 
     public static long animationDurationMs(long baseDurationMs) {
@@ -165,10 +197,13 @@ public final class VayAppearance {
     }
 
     public static boolean useAmoledSurfaces() {
-        return amoledSurfacesEnabled;
+        return !safeModeEnabled && amoledSurfacesEnabled;
     }
 
     private static <T> T resolvedForAccount(VaySetting<T> setting, int account) {
+        if (safeModeEnabled) {
+            return setting.getDefaultValue();
+        }
         return VayTelegram.settings().getResolved(
                 setting,
                 VayTelegram.accountScope(account),
@@ -177,6 +212,9 @@ public final class VayAppearance {
     }
 
     private static <T> T resolvedForChat(VaySetting<T> setting, int account, long dialogId) {
+        if (safeModeEnabled) {
+            return setting.getDefaultValue();
+        }
         if (setting.getScopes().contains(app.vaygram.core.settings.VaySettingScope.CHAT)) {
             return VayTelegram.settings().getResolved(
                     setting,

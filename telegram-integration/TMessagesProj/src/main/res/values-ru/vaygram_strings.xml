@@ -290,6 +290,18 @@
     <string name="vay_diagnostics_gradient">Градиент навигации</string>
     <string name="vay_diagnostics_disabled">Отключено</string>
     <string name="vay_diagnostics_unsupported">Не поддерживается</string>
+
+    <string name="vay_safe_mode">Безопасный режим</string>
+    <string name="vay_safe_mode_enabled">Включён · оформление vayGram временно отключено</string>
+    <string name="vay_safe_mode_disabled">Выключен · кастомизация активна</string>
+    <string name="vay_safe_mode_enable_title">Включить безопасный режим vayGram?</string>
+    <string name="vay_safe_mode_enable_body">Безопасный режим временно отключает применение оформления, темы и live-эффектов Profile Studio, не удаляя ваши настройки. Используйте его для восстановления после неудачной настройки или визуального бага.</string>
+    <string name="vay_safe_mode_disable_title">Выключить безопасный режим vayGram?</string>
+    <string name="vay_safe_mode_disable_body">Сохранённые настройки vayGram снова начнут применяться сразу.</string>
+    <string name="vay_safe_mode_enable">Включить безопасный режим</string>
+    <string name="vay_safe_mode_disable">Выключить безопасный режим</string>
+    <string name="vay_safe_mode_changed">Безопасный режим обновлён</string>
+
     <string name="vay_diagnostics_recovery">Восстановление</string>
     <string name="vay_diagnostics_copy">Копировать безопасный отчёт</string>
     <string name="vay_diagnostics_copy_hint">Без чатов, телефонов, ID аккаунтов и секретов</string>
