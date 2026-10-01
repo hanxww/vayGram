@@ -287,6 +287,21 @@ must_grep 'iBlur3SourceTabGlass\.setBlur' \
 must_grep 'tabsViewBackground\.setAlpha' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java" \
   "bottom navigation glass opacity hook"
+must_grep 'contentView\.requestApplyInsets' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java" \
+  "dynamic bottom navigation inset redispatch"
+must_grep 'vayRefreshMainTabsInsets' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java" \
+  "profile main-tab inset refresh"
+must_grep 'MAIN_TABS_HEIGHT_WITH_MARGINS' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/SettingsActivity.java" \
+  "settings dynamic main-tab inset"
+must_grep 'MAIN_TABS_HEIGHT_WITH_MARGINS' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/ContactsActivity.java" \
+  "contacts dynamic main-tab inset"
+must_grep 'MAIN_TABS_HEIGHT_WITH_MARGINS' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/CallLogActivity.java" \
+  "calls dynamic main-tab inset"
 
 must_grep 'vayApplyAmoledSurface' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/ActionBar/Theme.java" \
