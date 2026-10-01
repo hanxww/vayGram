@@ -103,6 +103,12 @@
     <string name="vay_setting_bubble_radius">Bubble radius</string>
     <string name="vay_setting_message_spacing">Message spacing</string>
     <string name="vay_setting_chat_row_height">Chat row height</string>
+
+    <string name="vay_setting_chat_title_text_size">Chat title text size</string>
+    <string name="vay_setting_chat_preview_text_size">Chat preview text size</string>
+    <string name="vay_desc_chat_title_text_size">Text size for chat names in the chat list</string>
+    <string name="vay_desc_chat_preview_text_size">Text size for message previews in the chat list</string>
+
     <string name="vay_setting_avatar_size">Avatar size</string>
     <string name="vay_setting_avatar_roundness">Avatar roundness</string>
     <string name="vay_setting_navigation_labels">Navigation labels</string>
