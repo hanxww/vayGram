@@ -26,6 +26,9 @@ public final class VayProfileAppearance {
             int account,
             VaySetting<Boolean> setting
     ) {
+        if (VayTelegram.isSafeMode()) {
+            return true;
+        }
         return !hasExplicitValue(account, setting) || Boolean.TRUE.equals(get(account, setting));
     }
 
@@ -109,14 +112,19 @@ public final class VayProfileAppearance {
     }
 
     public static boolean avatarGlow(int account) {
-        return Boolean.TRUE.equals(get(account, VayDefaults.PROFILE_AVATAR_GLOW));
+        return !VayTelegram.isSafeMode()
+                && Boolean.TRUE.equals(get(account, VayDefaults.PROFILE_AVATAR_GLOW));
     }
 
     public static boolean statusRing(int account) {
-        return Boolean.TRUE.equals(get(account, VayDefaults.PROFILE_STATUS_RING));
+        return !VayTelegram.isSafeMode()
+                && Boolean.TRUE.equals(get(account, VayDefaults.PROFILE_STATUS_RING));
     }
 
     public static int avatarRadiusForSize(int account, int avatarSize) {
+        if (VayTelegram.isSafeMode()) {
+            return Math.round(avatarSize * 0.5f);
+        }
         Number percent = get(account, VayDefaults.PROFILE_AVATAR_RADIUS);
         float value = percent == null ? 50f : percent.floatValue();
         value = Math.max(0f, Math.min(50f, value));
