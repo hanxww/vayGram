@@ -20,6 +20,8 @@ public final class VayAndroid {
     private static final String PRESETS_PREFS_NAME = "vaygram_presets_v1";
     private static final String THEME_PREFS_NAME = "vaygram_theme_palette_v1";
     private static final String GRADIENT_PREFS_NAME = "vaygram_gradients_v1";
+    private static final String RUNTIME_PREFS_NAME = "vaygram_runtime_v1";
+    private static final String KEY_SAFE_MODE = "safe_mode";
 
     private static volatile VaySettingsRegistry registry;
     private static volatile VaySettingsEngine settings;
@@ -28,6 +30,7 @@ public final class VayAndroid {
     private static volatile VayThemePalette themePalette;
     private static volatile VayThemePaletteRepository themePaletteRepository;
     private static volatile VayGradientRepository gradients;
+    private static volatile SharedPreferences runtimePreferences;
 
     private VayAndroid() {}
 
@@ -56,6 +59,10 @@ public final class VayAndroid {
                     GRADIENT_PREFS_NAME,
                     Context.MODE_PRIVATE
             ));
+            runtimePreferences = appContext.getSharedPreferences(
+                    RUNTIME_PREFS_NAME,
+                    Context.MODE_PRIVATE
+            );
             settings = new VaySettingsEngine(
                     registry,
                     new SharedPreferencesVaySettingsStore(preferences)
@@ -140,5 +147,21 @@ public final class VayAndroid {
             throw new IllegalStateException("VayAndroid.initialize(context) must be called first");
         }
         repository.resetAll();
+    }
+
+    public static boolean isSafeMode() {
+        SharedPreferences preferences = runtimePreferences;
+        if (preferences == null) {
+            throw new IllegalStateException("VayAndroid.initialize(context) must be called first");
+        }
+        return preferences.getBoolean(KEY_SAFE_MODE, false);
+    }
+
+    public static void setSafeMode(boolean enabled) {
+        SharedPreferences preferences = runtimePreferences;
+        if (preferences == null) {
+            throw new IllegalStateException("VayAndroid.initialize(context) must be called first");
+        }
+        preferences.edit().putBoolean(KEY_SAFE_MODE, enabled).apply();
     }
 }
