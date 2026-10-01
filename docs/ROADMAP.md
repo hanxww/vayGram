@@ -106,3 +106,14 @@
 - [x] account/global persistence and inheritance for all blocks
 - [x] live Profile Studio preview for the block pack
 - [x] EN / RU / ET UI strings
+
+## M8 — Real-device stabilization
+
+- [x] preserve Telegram's native profile header geometry by default
+- [x] keep Vay Profile avatar ring opt-in instead of changing fresh installs
+- [x] restrict current live Profile Studio integration to layout-safe avatar effects
+- [x] add an in-app compatibility explanation for preview-only Profile Studio blocks
+- [x] add overlay regression checks preventing Vay block defaults from hiding native Telegram profile rows
+- [ ] verify the stabilized profile on a real Android device
+- [ ] verify bottom-navigation/content insets across profile, gifts, media and settings surfaces
+- [ ] complete regression pass for Telegram core flows after customization changes
