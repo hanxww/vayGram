@@ -287,6 +287,20 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java b
 +
 +        DialogsActivity.vaySetMainTabsHeight(VayAppearance.bottomNavigationHeightDp(currentAccount));
 +
++        if (fadeView != null) {
++            final ViewGroup.LayoutParams fadeParams = fadeView.getLayoutParams();
++            final int updateHeight = updateLayoutWrapper != null && updateLayoutWrapper.isUpdateLayoutVisible()
++                    ? dp(UpdateLayoutWrapper.HEIGHT)
++                    : 0;
++            final int fadeHeight = navigationBarHeight
++                    + updateHeight
++                    + dp(DialogsActivity.MAIN_TABS_HEIGHT_WITH_MARGINS);
++            if (fadeParams != null && fadeParams.height != fadeHeight) {
++                fadeParams.height = fadeHeight;
++                fadeView.setLayoutParams(fadeParams);
++            }
++        }
++
 +        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && iBlur3SourceTabGlass != null) {
 +            iBlur3SourceTabGlass.setBlur(
 +                    !navigationGradient.isEnabled() && glassBlurEnabled
@@ -333,6 +347,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java b
 +        }
 +        if (contentView != null) {
 +            contentView.requestLayout();
++            contentView.requestApplyInsets();
 +        }
 +    }
 +
