@@ -228,6 +228,52 @@
     <string name="vay_use_theme_colors">Use theme colors</string>
 
 
+
+    <string name="vay_backup_entry">Backup &amp; restore</string>
+    <string name="vay_backup_entry_hint">Portable vayGram settings without Telegram data</string>
+    <string name="vay_backup_title">vayGram Backup</string>
+    <string name="vay_backup_contents">Included</string>
+    <string name="vay_backup_global_settings">Global overrides</string>
+    <string name="vay_backup_account_settings">Current account overrides</string>
+    <string name="vay_backup_saved_profiles">Saved profiles</string>
+    <string name="vay_backup_palette">Palette overrides</string>
+    <string name="vay_backup_gradient">Navigation gradient</string>
+    <string name="vay_backup_actions">Backup actions</string>
+    <string name="vay_backup_copy">Copy portable backup</string>
+    <string name="vay_backup_copy_hint">Copy JSON to the clipboard</string>
+    <string name="vay_backup_share">Share portable backup</string>
+    <string name="vay_backup_share_hint">Send the JSON through another app</string>
+    <string name="vay_backup_restore">Restore backup</string>
+    <string name="vay_backup_restore_hint">Paste a vayGram portable backup</string>
+    <string name="vay_backup_privacy">Privacy boundary</string>
+    <string name="vay_backup_excludes">Never included</string>
+    <string name="vay_backup_excludes_value">Telegram sessions, chats, messages, phone numbers, account IDs and chat overrides</string>
+    <string name="vay_backup_copied">vayGram backup copied</string>
+    <string name="vay_backup_share_failed">No app could share this backup</string>
+    <string name="vay_backup_paste_hint">Paste vayGram backup JSON</string>
+    <string name="vay_backup_restore_title">Restore vayGram backup</string>
+    <string name="vay_backup_restore_body">The backup is mapped to this device: global settings are restored globally and account settings are restored to the current account.</string>
+    <string name="vay_backup_confirm_title">Replace vayGram settings?</string>
+    <string name="vay_backup_confirm_body">Current global and current-account vayGram overrides, saved profiles, palette overrides and the navigation gradient will be replaced. Telegram account/session data is not touched.</string>
+    <string name="vay_backup_invalid">Invalid or unsupported vayGram backup</string>
+    <string name="vay_backup_restored">Restored %1$d settings, %2$d profiles and %3$d palette overrides</string>
+
+    <string name="vay_about_entry">About vayGram</string>
+    <string name="vay_about_entry_hint">Version, Telegram base, source and project links</string>
+    <string name="vay_about_title">About vayGram</string>
+    <string name="vay_about_client">Client</string>
+    <string name="vay_about_base">Telegram base</string>
+    <string name="vay_about_base_commit">Base commit</string>
+    <string name="vay_about_project">Project</string>
+    <string name="vay_about_source">Source code</string>
+    <string name="vay_about_channel">Development channel</string>
+    <string name="vay_about_copy_build">Copy build information</string>
+    <string name="vay_about_copy_build_hint">Useful when reporting a problem</string>
+    <string name="vay_about_principle">Product principle</string>
+    <string name="vay_about_slogan">Customize everything. Complicate nothing.</string>
+    <string name="vay_about_open_failed">Could not open this link</string>
+    <string name="vay_about_build_copied">Build information copied</string>
+
     <string name="vay_diagnostics_entry">Diagnostics and recovery</string>
     <string name="vay_diagnostics_entry_hint">Build info, safe report and recovery tools</string>
     <string name="vay_diagnostics_title">Diagnostics and recovery</string>
