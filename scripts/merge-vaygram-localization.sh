@@ -16,8 +16,12 @@ merge_one() {
 
   [[ -f "$overlay" ]] || return 0
   if [[ ! -f "$target" ]]; then
-    echo "[vayGram] missing Telegram localization target: $target" >&2
-    exit 1
+    # Telegram does not ship every vayGram locale. In that case the vayGram
+    # localization becomes the locale's strings.xml so Telegram's localization
+    # generator can still discover and compile it.
+    mv "$overlay" "$target"
+    echo "[vayGram] created localization: $dir"
+    return 0
   fi
 
   local tmp
