@@ -268,6 +268,206 @@ public final class VayDefaults {
             .tags("profile", "bio", "block", "описание")
             .build();
 
+    public static final VaySetting<Boolean> PROFILE_SHOW_AVATAR = VaySetting
+            .builder("profile.block.avatar", VaySettingType.BOOLEAN, true)
+            .title("Show avatar")
+            .description("Show the avatar block in Vay Profile")
+            .category("Profile Studio / Core blocks")
+            .visibility(VayVisibilityLevel.BASIC)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "avatar", "block", "аватар")
+            .build();
+
+    public static final VaySetting<Boolean> PROFILE_SHOW_NAME = VaySetting
+            .builder("profile.block.name", VaySettingType.BOOLEAN, true)
+            .title("Show name")
+            .description("Show the display name block in Vay Profile")
+            .category("Profile Studio / Core blocks")
+            .visibility(VayVisibilityLevel.BASIC)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "name", "block", "имя")
+            .build();
+
+    public static final VaySetting<Boolean> PROFILE_SHOW_STATUS = VaySetting
+            .builder("profile.block.status", VaySettingType.BOOLEAN, true)
+            .title("Show status")
+            .description("Show the presence or last-seen status block when Telegram exposes it")
+            .category("Profile Studio / Core blocks")
+            .visibility(VayVisibilityLevel.BASIC)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "status", "last seen", "online", "статус")
+            .build();
+
+    public static final VaySetting<Boolean> PROFILE_SHOW_PHONE = VaySetting
+            .builder("profile.block.phone", VaySettingType.BOOLEAN, false)
+            .title("Show phone")
+            .description("Show the phone block only when Telegram already exposes it to the viewer")
+            .category("Profile Studio / Personal blocks")
+            .visibility(VayVisibilityLevel.ADVANCED)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "phone", "privacy", "телефон")
+            .build();
+
+    public static final VaySetting<Boolean> PROFILE_SHOW_BIRTHDAY = VaySetting
+            .builder("profile.block.birthday", VaySettingType.BOOLEAN, false)
+            .title("Show birthday")
+            .description("Show the birthday block when available")
+            .category("Profile Studio / Personal blocks")
+            .visibility(VayVisibilityLevel.ADVANCED)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "birthday", "date", "день рождения")
+            .build();
+
+    public static final VaySetting<Boolean> PROFILE_SHOW_EMOJI_STATUS = VaySetting
+            .builder("profile.block.emoji_status", VaySettingType.BOOLEAN, true)
+            .title("Show emoji status")
+            .description("Show the Telegram emoji status block when available")
+            .category("Profile Studio / Core blocks")
+            .visibility(VayVisibilityLevel.BASIC)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "emoji", "status", "эмодзи")
+            .build();
+
+    public static final VaySetting<Boolean> PROFILE_SHOW_PERSONAL_CHANNEL = VaySetting
+            .builder("profile.block.personal_channel", VaySettingType.BOOLEAN, false)
+            .title("Show personal channel")
+            .description("Show the personal channel block when one is linked")
+            .category("Profile Studio / Social blocks")
+            .visibility(VayVisibilityLevel.ADVANCED)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "channel", "personal", "канал")
+            .build();
+
+    public static final VaySetting<Boolean> PROFILE_SHOW_GROUPS = VaySetting
+            .builder("profile.block.groups", VaySettingType.BOOLEAN, false)
+            .title("Show groups")
+            .description("Show a groups block using Telegram-visible group information")
+            .category("Profile Studio / Social blocks")
+            .visibility(VayVisibilityLevel.ADVANCED)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "groups", "chats", "группы")
+            .build();
+
+    public static final VaySetting<Boolean> PROFILE_SHOW_LINKS = VaySetting
+            .builder("profile.block.links", VaySettingType.BOOLEAN, false)
+            .title("Show links")
+            .description("Show the profile links block")
+            .category("Profile Studio / Content blocks")
+            .visibility(VayVisibilityLevel.ADVANCED)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "links", "url", "ссылки")
+            .build();
+
+    public static final VaySetting<Boolean> PROFILE_SHOW_MUSIC = VaySetting
+            .builder("profile.block.music", VaySettingType.BOOLEAN, false)
+            .title("Show music")
+            .description("Show the Vay Profile music block")
+            .category("Profile Studio / Content blocks")
+            .visibility(VayVisibilityLevel.ADVANCED)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "music", "player", "музыка")
+            .build();
+
+    public static final VaySetting<Boolean> PROFILE_SHOW_QUOTE = VaySetting
+            .builder("profile.block.quote", VaySettingType.BOOLEAN, false)
+            .title("Show quote")
+            .description("Show a quote block in Vay Profile")
+            .category("Profile Studio / Content blocks")
+            .visibility(VayVisibilityLevel.ADVANCED)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "quote", "text", "цитата")
+            .build();
+
+    public static final VaySetting<Boolean> PROFILE_SHOW_BADGES = VaySetting
+            .builder("profile.block.badges", VaySettingType.BOOLEAN, true)
+            .title("Show badges")
+            .description("Show profile badges when available")
+            .category("Profile Studio / Content blocks")
+            .visibility(VayVisibilityLevel.BASIC)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "badges", "status", "значки")
+            .build();
+
+    public static final VaySetting<Boolean> PROFILE_SHOW_GIFTS = VaySetting
+            .builder("profile.block.gifts", VaySettingType.BOOLEAN, true)
+            .title("Show gifts")
+            .description("Show the Telegram gifts block when available")
+            .category("Profile Studio / Content blocks")
+            .visibility(VayVisibilityLevel.BASIC)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "gifts", "telegram", "подарки")
+            .build();
+
+    public static final VaySetting<Boolean> PROFILE_SHOW_MEDIA = VaySetting
+            .builder("profile.block.media", VaySettingType.BOOLEAN, true)
+            .title("Show media")
+            .description("Show the profile media block")
+            .category("Profile Studio / Content blocks")
+            .visibility(VayVisibilityLevel.BASIC)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "media", "photos", "вложения")
+            .build();
+
+    public static final VaySetting<Boolean> PROFILE_SHOW_MUTUAL_CHATS = VaySetting
+            .builder("profile.block.mutual_chats", VaySettingType.BOOLEAN, true)
+            .title("Show mutual chats")
+            .description("Show mutual chats when Telegram exposes them")
+            .category("Profile Studio / Social blocks")
+            .visibility(VayVisibilityLevel.BASIC)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "mutual", "chats", "общие чаты")
+            .build();
+
+    public static final VaySetting<Boolean> PROFILE_SHOW_CUSTOM_TEXT = VaySetting
+            .builder("profile.block.custom_text", VaySettingType.BOOLEAN, false)
+            .title("Show custom text")
+            .description("Enable a custom text block in Vay Profile")
+            .category("Profile Studio / Custom blocks")
+            .visibility(VayVisibilityLevel.INSANE)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "custom", "text", "текст")
+            .build();
+
+    public static final VaySetting<Boolean> PROFILE_SHOW_CUSTOM_IMAGE = VaySetting
+            .builder("profile.block.custom_image", VaySettingType.BOOLEAN, false)
+            .title("Show custom image")
+            .description("Enable a custom image block in Vay Profile")
+            .category("Profile Studio / Custom blocks")
+            .visibility(VayVisibilityLevel.INSANE)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "custom", "image", "картинка")
+            .build();
+
+    public static final VaySetting<Boolean> PROFILE_SHOW_SEPARATORS = VaySetting
+            .builder("profile.block.separators", VaySettingType.BOOLEAN, true)
+            .title("Show separators")
+            .description("Allow separator blocks in Vay Profile layouts")
+            .category("Profile Studio / Custom blocks")
+            .visibility(VayVisibilityLevel.INSANE)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "separator", "layout", "разделитель")
+            .build();
+
+    public static final VaySetting<Boolean> PROFILE_SHOW_SPACER = VaySetting
+            .builder("profile.block.spacer", VaySettingType.BOOLEAN, true)
+            .title("Show spacer")
+            .description("Allow spacer blocks in Vay Profile layouts")
+            .category("Profile Studio / Custom blocks")
+            .visibility(VayVisibilityLevel.INSANE)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "spacer", "layout", "отступ")
+            .build();
+
+    public static final VaySetting<Boolean> PROFILE_SHOW_BUTTONS = VaySetting
+            .builder("profile.block.buttons", VaySettingType.BOOLEAN, false)
+            .title("Show buttons")
+            .description("Enable custom action buttons in Vay Profile")
+            .category("Profile Studio / Custom blocks")
+            .visibility(VayVisibilityLevel.INSANE)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("profile", "buttons", "actions", "кнопки")
+            .build();
+
     public static VaySettingsRegistry createRegistry() {
         VaySettingsRegistry registry = new VaySettingsRegistry();
         registry.register(CHAT_BUBBLE_RADIUS);
@@ -294,6 +494,26 @@ public final class VayDefaults {
         registry.register(PROFILE_PARALLAX);
         registry.register(PROFILE_SHOW_USERNAME);
         registry.register(PROFILE_SHOW_BIO);
+        registry.register(PROFILE_SHOW_AVATAR);
+        registry.register(PROFILE_SHOW_NAME);
+        registry.register(PROFILE_SHOW_STATUS);
+        registry.register(PROFILE_SHOW_PHONE);
+        registry.register(PROFILE_SHOW_BIRTHDAY);
+        registry.register(PROFILE_SHOW_EMOJI_STATUS);
+        registry.register(PROFILE_SHOW_PERSONAL_CHANNEL);
+        registry.register(PROFILE_SHOW_GROUPS);
+        registry.register(PROFILE_SHOW_LINKS);
+        registry.register(PROFILE_SHOW_MUSIC);
+        registry.register(PROFILE_SHOW_QUOTE);
+        registry.register(PROFILE_SHOW_BADGES);
+        registry.register(PROFILE_SHOW_GIFTS);
+        registry.register(PROFILE_SHOW_MEDIA);
+        registry.register(PROFILE_SHOW_MUTUAL_CHATS);
+        registry.register(PROFILE_SHOW_CUSTOM_TEXT);
+        registry.register(PROFILE_SHOW_CUSTOM_IMAGE);
+        registry.register(PROFILE_SHOW_SEPARATORS);
+        registry.register(PROFILE_SHOW_SPACER);
+        registry.register(PROFILE_SHOW_BUTTONS);
         return registry;
     }
 
