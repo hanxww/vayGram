@@ -248,7 +248,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/MainTabsActivity.java b
  
          tabsView = new MainTabsLayout(context, resourceProvider);
          tabsView.setClipChildren(false);
-@@ -391,12 +399,85 @@
+@@ -391,12 +399,100 @@
              updateLayout.updateAppUpdateViews(currentAccount, false);
          }
  
