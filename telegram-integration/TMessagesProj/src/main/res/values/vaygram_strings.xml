@@ -227,6 +227,38 @@
     <string name="vay_reset_gradient">Reset gradient</string>
     <string name="vay_use_theme_colors">Use theme colors</string>
 
+
+    <string name="vay_diagnostics_entry">Diagnostics and recovery</string>
+    <string name="vay_diagnostics_entry_hint">Build info, safe report and recovery tools</string>
+    <string name="vay_diagnostics_title">Diagnostics and recovery</string>
+    <string name="vay_diagnostics_build">Build</string>
+    <string name="vay_diagnostics_client">vayGram version</string>
+    <string name="vay_diagnostics_telegram_base">Telegram base</string>
+    <string name="vay_diagnostics_package">Package</string>
+    <string name="vay_diagnostics_android">Android</string>
+    <string name="vay_diagnostics_state">Current state</string>
+    <string name="vay_diagnostics_customized">Customized settings</string>
+    <string name="vay_diagnostics_palette_overrides">Palette overrides</string>
+    <string name="vay_diagnostics_saved_profiles">Saved profiles</string>
+    <string name="vay_diagnostics_material_you">Material You</string>
+    <string name="vay_diagnostics_gradient">Navigation gradient</string>
+    <string name="vay_diagnostics_disabled">Disabled</string>
+    <string name="vay_diagnostics_unsupported">Unsupported</string>
+    <string name="vay_diagnostics_recovery">Recovery</string>
+    <string name="vay_diagnostics_copy">Copy safe diagnostics</string>
+    <string name="vay_diagnostics_copy_hint">No chats, phone numbers, account ids or secrets</string>
+    <string name="vay_diagnostics_copied">Diagnostics copied</string>
+    <string name="vay_diagnostics_reset_scope">Reset current scope</string>
+    <string name="vay_diagnostics_reset_scope_hint">Remove only vayGram overrides in this scope</string>
+    <string name="vay_diagnostics_reset_scope_title">Reset current vayGram scope?</string>
+    <string name="vay_diagnostics_reset_scope_body">This removes vayGram settings stored in the current scope. Telegram account data, chats and sessions are not touched.</string>
+    <string name="vay_diagnostics_reset_done">Reset %1$d vayGram settings</string>
+    <string name="vay_diagnostics_reset_theme">Reset theme layer</string>
+    <string name="vay_diagnostics_reset_theme_hint">Remove custom palette colors and navigation gradient</string>
+    <string name="vay_diagnostics_reset_theme_title">Reset vayGram theme layer?</string>
+    <string name="vay_diagnostics_reset_theme_body">Custom theme-token colors and the navigation gradient will be removed. Telegram theme data and account data are not touched.</string>
+    <string name="vay_diagnostics_theme_reset_done">Theme layer reset</string>
+
     <string name="vay_first_launch_menu_title">Main menu</string>
     <string name="vay_first_launch_menu_body">This button opens Telegram actions and Settings. vayGram keeps its customization tools close to the normal Telegram flow.</string>
     <string name="vay_first_launch_compose_title">New message</string>
