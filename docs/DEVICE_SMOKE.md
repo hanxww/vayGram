@@ -150,7 +150,16 @@ On the account owner's own profile:
 - restart the app and verify persisted state;
 - confirm ordinary Telegram profile actions still work.
 
-## 9. Upgrade compatibility
+## 9. Diagnostics and recovery
+
+- open Diagnostics and recovery from Vay Settings;
+- confirm vayGram version, Telegram base, package and Android SDK are shown;
+- confirm current scope, customization level and non-sensitive counts are correct;
+- copy the diagnostics report and confirm it contains no phone number, Telegram user/account id, chat/message content, token, API hash, signing data or credential;
+- change a disposable vayGram setting in the current scope, use Reset current scope, and confirm Telegram account/session data remains intact;
+- create a disposable palette override/gradient, use Reset theme layer, and confirm only vayGram theme-layer customizations are cleared.
+
+## 10. Upgrade compatibility
 
 After the clean-install pass, keep the tested build installed.
 
@@ -163,7 +172,7 @@ For the next CI build signed by the persistent vayGram dev key:
 5. confirm onboarding completion state remains intact;
 6. repeat a short chat/send/receive/Vay Settings smoke.
 
-## 10. Crash capture
+## 11. Crash capture
 
 If anything crashes, record:
 
