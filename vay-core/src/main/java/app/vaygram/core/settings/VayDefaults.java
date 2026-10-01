@@ -39,6 +39,30 @@ public final class VayDefaults {
             .validator(v -> clamp(v, 48, 112))
             .build();
 
+    public static final VaySetting<Integer> DIALOG_NAME_TEXT_SIZE = VaySetting
+            .builder("dialogs.name.text_size", VaySettingType.INTEGER, 17)
+            .title("Chat title text size")
+            .description("Text size for chat names in the chat list")
+            .category("Chat List")
+            .visibility(VayVisibilityLevel.ADVANCED)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("chat list", "title", "font", "text size", "список чатов", "шрифт", "название")
+            .range(13, 22, 1)
+            .validator(v -> clamp(v, 13, 22))
+            .build();
+
+    public static final VaySetting<Integer> DIALOG_MESSAGE_TEXT_SIZE = VaySetting
+            .builder("dialogs.message.text_size", VaySettingType.INTEGER, 16)
+            .title("Chat preview text size")
+            .description("Text size for message previews in the chat list")
+            .category("Chat List")
+            .visibility(VayVisibilityLevel.ADVANCED)
+            .scopes(VaySettingScope.GLOBAL, VaySettingScope.ACCOUNT)
+            .tags("chat list", "preview", "font", "text size", "список чатов", "шрифт", "сообщение")
+            .range(12, 20, 1)
+            .validator(v -> clamp(v, 12, 20))
+            .build();
+
     public static final VaySetting<Float> AVATAR_SIZE = VaySetting
             .builder("avatar.size", VaySettingType.FLOAT, 54f)
             .title("Avatar size")
@@ -473,6 +497,8 @@ public final class VayDefaults {
         registry.register(CHAT_BUBBLE_RADIUS);
         registry.register(CHAT_MESSAGE_SPACING);
         registry.register(DIALOG_ROW_HEIGHT);
+        registry.register(DIALOG_NAME_TEXT_SIZE);
+        registry.register(DIALOG_MESSAGE_TEXT_SIZE);
         registry.register(AVATAR_SIZE);
         registry.register(AVATAR_RADIUS);
         registry.register(NAV_SHOW_LABELS);
