@@ -117,3 +117,15 @@
 - [ ] verify the stabilized profile on a real Android device
 - [ ] verify bottom-navigation/content insets across profile, gifts, media and settings surfaces
 - [ ] complete regression pass for Telegram core flows after customization changes
+
+## M9 — Diagnostics and recovery
+
+- [x] in-app diagnostics screen
+- [x] sanitized copyable bug-report summary
+- [x] build/package/Android/base-Telegram metadata
+- [x] current-scope customization and theme state summary
+- [x] confirmed current-scope vayGram reset without touching Telegram data
+- [x] confirmed palette/gradient recovery action
+- [x] EN / RU / ET diagnostics UI
+- [ ] add crash-session diagnostics after a real crash sample is available
+- [ ] add per-surface visual regression coverage for bottom-navigation overlap
