@@ -60,6 +60,18 @@ public final class Demo {
         if (engine.get(VayDefaults.NAV_HEIGHT) != 56) {
             throw new IllegalStateException("Bottom navigation default must match Telegram's 56dp baseline");
         }
+        if (engine.get(VayDefaults.DIALOG_NAME_TEXT_SIZE) != 17
+                || engine.get(VayDefaults.DIALOG_MESSAGE_TEXT_SIZE) != 16) {
+            throw new IllegalStateException("Chat-list typography defaults must match Telegram");
+        }
+        engine.set(VayDefaults.DIALOG_NAME_TEXT_SIZE, 99);
+        engine.set(VayDefaults.DIALOG_MESSAGE_TEXT_SIZE, 1);
+        if (engine.get(VayDefaults.DIALOG_NAME_TEXT_SIZE) != 22
+                || engine.get(VayDefaults.DIALOG_MESSAGE_TEXT_SIZE) != 12) {
+            throw new IllegalStateException("Chat-list typography range normalization failed");
+        }
+        engine.reset(VayDefaults.DIALOG_NAME_TEXT_SIZE, VayScopeKey.GLOBAL);
+        engine.reset(VayDefaults.DIALOG_MESSAGE_TEXT_SIZE, VayScopeKey.GLOBAL);
         if (engine.get(VayDefaults.THEME_MATERIAL_YOU)) {
             throw new IllegalStateException("Material You must remain opt-in by default");
         }
