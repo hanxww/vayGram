@@ -146,3 +146,16 @@
 - [x] pinned Telegram-base/build metadata in About
 - [x] source repository and development-channel links
 - [ ] add file-based SAF import/export after real-device clipboard/share smoke
+
+
+## M11 — Safe Mode recovery
+
+- [x] persistent Safe Mode flag stored outside the normal settings engine
+- [x] one-tap Safe Mode toggle in Diagnostics and recovery
+- [x] bypass vayGram theme palette and Material You overrides without deleting them
+- [x] bypass gradients, glass effects, AMOLED enforcement and custom bottom-navigation metrics
+- [x] bypass chat/list/avatar appearance customizations while preserving stored values
+- [x] disable live Profile Studio avatar effects while Safe Mode is active
+- [x] restore saved customization immediately when Safe Mode is disabled
+- [x] expose Safe Mode state in sanitized diagnostics
+- [ ] automatic crash-loop suggestion after crash-session diagnostics exists
