@@ -45,6 +45,8 @@ must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/theme/V
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/theme/VayGradientBridge.java" "Android gradient renderer bridge"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayGradientActivity.java" "gradient editor UI"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayProfileStudioActivity.java" "Vay Profile Studio UI"
+must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayProfileAvatarFrame.java" "live Vay Profile avatar renderer"
+must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/telegram/VayProfileAppearance.java" "Profile Studio Telegram bridge"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayOnboardingActivity.java" "first-run vayGram onboarding UI"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayFirstLaunchCoach.java" "contextual first-launch coach"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayCoachOverlay.java" "guided spotlight overlay"
@@ -59,6 +61,12 @@ must_grep 'vay_profile_studio' \
 must_grep 'VayProfileStudioActivity' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java" \
   "Profile Studio navigation"
+must_grep 'VayProfileAppearance\.showPhone' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java" \
+  "Profile Studio live row visibility hook"
+must_grep 'VayProfileAvatarFrame' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java" \
+  "Profile Studio live avatar hook"
 must_grep 'VayFirstLaunchCoach\.maybePresent' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/DialogsActivity.java" \
   "first-launch contextual coach hook"
@@ -90,8 +98,11 @@ must_grep 'drawPreviewBlocks' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayProfileStudioActivity.java" \
   "Profile Studio multi-block live preview"
 must_grep 'vay_profile_show_mutual_chats' \
-  "$TMP/telegram/TMessagesProj/src/main/res/values-ru/vaygram_strings.xml" \
-  "Profile Studio block localization"
+  "$TMP/telegram/TMessagesProj/src/main/res/values-ru/strings.xml" \
+  "Profile Studio block localization merged into Telegram strings"
+must_grep 'vay_settings_title' \
+  "$TMP/telegram/TMessagesProj/src/main/res/values-ru/strings.xml" \
+  "vayGram settings localization merged into Telegram strings"
 
 must_grep 'ACTION_SAVE_PROFILE' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
