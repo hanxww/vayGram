@@ -227,6 +227,38 @@
     <string name="vay_reset_gradient">Lähtesta gradient</string>
     <string name="vay_use_theme_colors">Kasuta teemavärve</string>
 
+
+    <string name="vay_diagnostics_entry">Diagnostika ja taastamine</string>
+    <string name="vay_diagnostics_entry_hint">Koosteinfo, turvaline aruanne ja taastamistööriistad</string>
+    <string name="vay_diagnostics_title">Diagnostika ja taastamine</string>
+    <string name="vay_diagnostics_build">Kooste</string>
+    <string name="vay_diagnostics_client">vayGrami versioon</string>
+    <string name="vay_diagnostics_telegram_base">Telegrami baas</string>
+    <string name="vay_diagnostics_package">Pakett</string>
+    <string name="vay_diagnostics_android">Android</string>
+    <string name="vay_diagnostics_state">Praegune olek</string>
+    <string name="vay_diagnostics_customized">Muudetud seadeid</string>
+    <string name="vay_diagnostics_palette_overrides">Paleti erandeid</string>
+    <string name="vay_diagnostics_saved_profiles">Salvestatud profiile</string>
+    <string name="vay_diagnostics_material_you">Material You</string>
+    <string name="vay_diagnostics_gradient">Navigeerimise gradient</string>
+    <string name="vay_diagnostics_disabled">Keelatud</string>
+    <string name="vay_diagnostics_unsupported">Pole toetatud</string>
+    <string name="vay_diagnostics_recovery">Taastamine</string>
+    <string name="vay_diagnostics_copy">Kopeeri turvaline diagnostika</string>
+    <string name="vay_diagnostics_copy_hint">Ilma vestluste, telefonide, konto ID-de ja saladusteta</string>
+    <string name="vay_diagnostics_copied">Diagnostika kopeeritud</string>
+    <string name="vay_diagnostics_reset_scope">Lähtesta praegune ulatus</string>
+    <string name="vay_diagnostics_reset_scope_hint">Eemalda ainult selle ulatuse vayGrami seaded</string>
+    <string name="vay_diagnostics_reset_scope_title">Lähtestada praegune vayGrami ulatus?</string>
+    <string name="vay_diagnostics_reset_scope_body">Eemaldatakse ainult praeguses ulatuses salvestatud vayGrami seaded. Telegrami kontoandmeid, vestlusi ega seansse ei muudeta.</string>
+    <string name="vay_diagnostics_reset_done">Lähtestati %1$d vayGrami seadet</string>
+    <string name="vay_diagnostics_reset_theme">Lähtesta teemakiht</string>
+    <string name="vay_diagnostics_reset_theme_hint">Eemalda kohandatud paletivärvid ja navigeerimise gradient</string>
+    <string name="vay_diagnostics_reset_theme_title">Lähtestada vayGrami teemakiht?</string>
+    <string name="vay_diagnostics_reset_theme_body">Kohandatud teemavärvid ja navigeerimise gradient eemaldatakse. Telegrami teemat ja kontoandmeid ei muudeta.</string>
+    <string name="vay_diagnostics_theme_reset_done">Teemakiht lähtestatud</string>
+
     <string name="vay_first_launch_menu_title">Peamenüü</string>
     <string name="vay_first_launch_menu_body">See nupp avab Telegrami tegevused ja seaded. vayGram lisab oma kohandused ilma tuttavat Telegrami navigeerimist rikkumata.</string>
     <string name="vay_first_launch_compose_title">Uus sõnum</string>
