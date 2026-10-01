@@ -53,6 +53,10 @@
     <string name="vay_apply">Apply</string>
     <string name="vay_inherit">Inherit</string>
 
+    <string name="vay_first_launch_menu_title">Main menu</string>
+    <string name="vay_first_launch_menu_body">This button opens Telegram actions and Settings. vayGram keeps its customization tools close to the normal Telegram flow.</string>
+    <string name="vay_first_launch_compose_title">New message</string>
+    <string name="vay_first_launch_compose_body">This is the familiar Telegram compose button. The rest of Telegram stays familiar while vayGram adds customization on top.</string>
     <string name="vay_onboarding_title">Welcome to vayGram</string>
     <string name="vay_onboarding_body">Telegram stays familiar. vayGram adds a customization layer you can grow into at your own pace.</string>
     <string name="vay_onboarding_choose_level">Choose your customization level</string>
