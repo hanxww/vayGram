@@ -152,8 +152,8 @@ public final class VaySettingsActivity extends BaseFragment {
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
         actionBar.setTitle(VayScopeKey.GLOBAL.equals(scopeKey)
-                ? "vayGram Settings"
-                : "vayGram · " + scopeTitle);
+                ? LocaleController.getString(R.string.vay_settings_title)
+                : "vayGram · " + localizedScopeTitle());
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -209,7 +209,7 @@ public final class VaySettingsActivity extends BaseFragment {
         rows.clear();
 
         if (TextUtils.isEmpty(query)) {
-            rows.add(Row.header("Live Preview"));
+            rows.add(Row.header(LocaleController.getString(R.string.vay_live_preview)));
             rows.add(Row.preview());
             addControlRows();
             addRecentRows();
@@ -235,7 +235,7 @@ public final class VaySettingsActivity extends BaseFragment {
         }
 
         for (Map.Entry<String, List<VaySetting<?>>> entry : grouped.entrySet()) {
-            rows.add(Row.header(entry.getKey()));
+            rows.add(Row.header(VaySettingsStrings.category(entry.getKey())));
             for (VaySetting<?> setting : entry.getValue()) {
                 rows.add(Row.setting(setting, false));
             }
@@ -246,22 +246,38 @@ public final class VaySettingsActivity extends BaseFragment {
         }
     }
 
+    private String localizedScopeTitle() {
+        if (VayScopeKey.GLOBAL.equals(scopeKey)) {
+            return LocaleController.getString(R.string.vay_global);
+        }
+        if ("This account".equals(scopeTitle)) {
+            return LocaleController.getString(R.string.vay_this_account);
+        }
+        return scopeTitle;
+    }
+
     private void addControlRows() {
-        rows.add(Row.header("Controls"));
+        rows.add(Row.header(LocaleController.getString(R.string.vay_controls)));
         rows.add(Row.mode());
-        rows.add(Row.action(ACTION_SCOPE_INFO, "Scope", scopeTitle));
+        rows.add(Row.action(
+                ACTION_SCOPE_INFO,
+                LocaleController.getString(R.string.vay_scope),
+                localizedScopeTitle()
+        ));
 
         if (VayScopeKey.GLOBAL.equals(scopeKey)) {
             rows.add(Row.action(
                     ACTION_OPEN_ACCOUNT_SCOPE,
-                    "This account",
-                    "Account-specific overrides"
+                    LocaleController.getString(R.string.vay_this_account),
+                    LocaleController.getString(R.string.vay_account_overrides)
             ));
         } else if (parentScopeKey != null) {
             rows.add(Row.action(
                     ACTION_OPEN_PARENT_SCOPE,
-                    parentScopeKey.getScope() == VaySettingScope.GLOBAL ? "Global defaults" : "Account defaults",
-                    "View inherited settings"
+                    parentScopeKey.getScope() == VaySettingScope.GLOBAL
+                            ? LocaleController.getString(R.string.vay_global_defaults)
+                            : LocaleController.getString(R.string.vay_account_defaults),
+                    LocaleController.getString(R.string.vay_view_inherited)
             ));
         }
 
@@ -269,45 +285,77 @@ public final class VaySettingsActivity extends BaseFragment {
             VaySettingChange last = firstRecentChange();
             rows.add(Row.action(
                     ACTION_UNDO,
-                    "Undo",
-                    last == null ? "Last change" : titleForSettingId(last.getSettingId())
+                    LocaleController.getString(R.string.vay_undo),
+                    last == null ? LocaleController.getString(R.string.vay_last_change) : titleForSettingId(last.getSettingId())
             ));
         }
         if (VayTelegram.settings().canRedo()) {
-            rows.add(Row.action(ACTION_REDO, "Redo", "Restore undone change"));
+            rows.add(Row.action(
+                    ACTION_REDO,
+                    LocaleController.getString(R.string.vay_redo),
+                    LocaleController.getString(R.string.vay_restore_undone)
+            ));
         }
 
         int paletteOverrides = VayTelegram.themePalette().countOverrides();
         rows.add(Row.action(
                 ACTION_PALETTE_EDITOR,
-                "Palette editor",
+                LocaleController.getString(R.string.vay_palette_editor),
                 paletteOverrides == 0
-                        ? "Semantic theme colors"
-                        : paletteOverrides + (paletteOverrides == 1 ? " color override" : " color overrides")
+                        ? LocaleController.getString(R.string.vay_semantic_colors)
+                        : LocaleController.formatString(
+                                paletteOverrides == 1
+                                        ? R.string.vay_override_count_one
+                                        : R.string.vay_override_count_many,
+                                paletteOverrides
+                        )
         ));
 
         VayGradientSpec navigationGradient = VayTelegram.navigationGradient();
         rows.add(Row.action(
                 ACTION_GRADIENT_EDITOR,
-                "Gradient editor",
+                LocaleController.getString(R.string.vay_gradient_editor),
                 navigationGradient.isEnabled()
-                        ? "Bottom navigation · " + navigationGradient.getAngleDegrees() + "°"
-                        : "Bottom navigation · off"
+                        ? LocaleController.getString(R.string.vay_category_navigation)
+                                + " · " + navigationGradient.getAngleDegrees() + "°"
+                        : LocaleController.getString(R.string.vay_bottom_navigation_off)
         ));
 
         int modified = VayTelegram.settings().countCustomized(scopeKey);
         rows.add(Row.action(
                 ACTION_EXPORT_PRESET,
-                "Copy preset",
-                modified > 0 ? modified + (modified == 1 ? " customized setting" : " customized settings") : "Current values"
+                LocaleController.getString(R.string.vay_copy_preset),
+                modified > 0
+                        ? LocaleController.formatString(
+                                modified == 1
+                                        ? R.string.vay_customized_count_one
+                                        : R.string.vay_customized_count_many,
+                                modified
+                        )
+                        : LocaleController.getString(R.string.vay_current_values)
         ));
-        rows.add(Row.action(ACTION_IMPORT_PRESET, "Import preset", "Paste vayGram JSON"));
-        rows.add(Row.action(ACTION_SAVE_PROFILE, "Save profile", "Save all current values"));
+        rows.add(Row.action(
+                ACTION_IMPORT_PRESET,
+                LocaleController.getString(R.string.vay_import_preset),
+                LocaleController.getString(R.string.vay_paste_json)
+        ));
+        rows.add(Row.action(
+                ACTION_SAVE_PROFILE,
+                LocaleController.getString(R.string.vay_save_profile),
+                LocaleController.getString(R.string.vay_save_all_values)
+        ));
         int savedProfiles = VayTelegram.presets().count();
         rows.add(Row.action(
                 ACTION_SAVED_PROFILES,
-                "Saved profiles",
-                savedProfiles == 0 ? "None yet" : savedProfiles + (savedProfiles == 1 ? " profile" : " profiles")
+                LocaleController.getString(R.string.vay_saved_profiles),
+                savedProfiles == 0
+                        ? LocaleController.getString(R.string.vay_none_yet)
+                        : LocaleController.formatString(
+                                savedProfiles == 1
+                                        ? R.string.vay_profile_count_one
+                                        : R.string.vay_profile_count_many,
+                                savedProfiles
+                        )
         ));
         rows.add(Row.action(
                 ACTION_REPLAY_ONBOARDING,
@@ -318,8 +366,13 @@ public final class VaySettingsActivity extends BaseFragment {
         if (modified > 0) {
             rows.add(Row.action(
                     ACTION_RESET_ALL,
-                    "Reset customized values",
-                    modified + (modified == 1 ? " setting" : " settings")
+                    LocaleController.getString(R.string.vay_reset_customized),
+                    LocaleController.formatString(
+                            modified == 1
+                                    ? R.string.vay_setting_count_one
+                                    : R.string.vay_setting_count_many,
+                            modified
+                    )
             ));
         }
     }
@@ -351,7 +404,7 @@ public final class VaySettingsActivity extends BaseFragment {
             return;
         }
 
-        rows.add(Row.header("Recently changed"));
+        rows.add(Row.header(LocaleController.getString(R.string.vay_recently_changed)));
         for (VaySetting<?> setting : recent) {
             rows.add(Row.setting(setting, true));
         }
@@ -364,7 +417,7 @@ public final class VaySettingsActivity extends BaseFragment {
 
     private String titleForSettingId(String settingId) {
         VaySetting<?> setting = VayTelegram.registry().find(settingId);
-        return setting == null ? settingId : setting.getTitle();
+        return setting == null ? settingId : VaySettingsStrings.title(setting);
     }
 
     private void onRowClicked(int position) {
@@ -1025,14 +1078,14 @@ public final class VaySettingsActivity extends BaseFragment {
     }
 
     private String displayTitle(VaySetting<?> setting, boolean recent) {
-        String title = setting.getTitle();
+        String title = VaySettingsStrings.title(setting);
         if (isModified(setting)) {
             title = "• " + title;
         } else if (isInherited(setting)) {
-            title = title + "  ·  inherited";
+            title = title + "  ·  " + LocaleController.getString(R.string.vay_inherited_short);
         }
         if (recent) {
-            title = title + "  ·  recent";
+            title = title + "  ·  " + LocaleController.getString(R.string.vay_recent_short);
         }
         return title;
     }
