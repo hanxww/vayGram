@@ -120,6 +120,22 @@
     <string name="vay_category_appearance_effects">Внешний вид / Эффекты</string>
 
 
+
+    <string name="vay_desc_bubble_radius">Скругление углов пузырей сообщений</string>
+    <string name="vay_desc_message_spacing">Дополнительный вертикальный отступ между сообщениями</string>
+    <string name="vay_desc_chat_row_height">Высота каждой строки в списке чатов</string>
+    <string name="vay_desc_avatar_size">Размер аватара по умолчанию</string>
+    <string name="vay_desc_avatar_roundness">Скругление углов аватара в процентах</string>
+    <string name="vay_desc_navigation_labels">Показывать подписи под значками нижней навигации</string>
+    <string name="vay_desc_bottom_bar_height">Высота нижней панели навигации</string>
+    <string name="vay_desc_compact_mode">Уплотняет поддерживаемые элементы интерфейса, не перезаписывая ваши значения</string>
+    <string name="vay_desc_animation_scale">Множитель длительности анимаций интерфейса vayGram</string>
+    <string name="vay_desc_amoled">Использовать чистый чёрный цвет на поддерживаемых тёмных поверхностях</string>
+    <string name="vay_desc_material_you">Использовать динамические системные цвета Android как основу палитры vayGram</string>
+    <string name="vay_desc_glass_blur">Включить размытие в стиле стекла там, где оно поддерживается</string>
+    <string name="vay_desc_glass_blur_radius">Радиус размытия стеклянных поверхностей vayGram</string>
+    <string name="vay_desc_glass_opacity">Непрозрачность поддерживаемых стеклянных поверхностей vayGram</string>
+
     <string name="vay_this_chat">Этот чат</string>
     <string name="vay_level_basic">Базовый</string>
     <string name="vay_level_advanced">Продвинутый</string>
