@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -55,7 +56,7 @@ public final class VayGradientActivity extends BaseFragment {
 
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
-        actionBar.setTitle("vayGram Gradients");
+        actionBar.setTitle(LocaleController.getString(R.string.vay_gradients_title));
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -79,16 +80,16 @@ public final class VayGradientActivity extends BaseFragment {
 
     private void rebuildRows() {
         rows.clear();
-        rows.add(Row.header("Live Preview"));
+        rows.add(Row.header(LocaleController.getString(R.string.vay_live_preview)));
         rows.add(Row.preview());
-        rows.add(Row.header("Bottom navigation"));
+        rows.add(Row.header(LocaleController.getString(R.string.vay_bottom_navigation)));
         rows.add(Row.check(ROW_ENABLED));
         rows.add(Row.value(ROW_START_COLOR));
         rows.add(Row.value(ROW_END_COLOR));
         rows.add(Row.value(ROW_ANGLE));
 
         if (VayTelegram.storedNavigationGradient() != null) {
-            rows.add(Row.header("Reset"));
+            rows.add(Row.header(LocaleController.getString(R.string.vay_reset)));
             rows.add(Row.value(ROW_RESET));
         }
 
@@ -148,15 +149,17 @@ public final class VayGradientActivity extends BaseFragment {
         });
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(start ? "Gradient start" : "Gradient end");
-        builder.setMessage("ARGB color · live preview");
+        builder.setTitle(LocaleController.getString(
+                start ? R.string.vay_gradient_start : R.string.vay_gradient_end
+        ));
+        builder.setMessage(LocaleController.getString(R.string.vay_argb_live_preview));
         builder.setView(editor);
-        builder.setNegativeButton("Cancel", (dialog, which) -> {
+        builder.setNegativeButton(LocaleController.getString(R.string.vay_cancel), (dialog, which) -> {
             settled[0] = true;
             VayTelegram.restoreNavigationGradientPreview(originalStored);
             rebuildRows();
         });
-        builder.setPositiveButton("Apply", (dialog, which) -> {
+        builder.setPositiveButton(LocaleController.getString(R.string.vay_apply), (dialog, which) -> {
             settled[0] = true;
             VayGradientSpec applied = start
                     ? original.withStartColor(editor.getColor())
@@ -186,7 +189,7 @@ public final class VayGradientActivity extends BaseFragment {
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Gradient angle");
+        builder.setTitle(LocaleController.getString(R.string.vay_gradient_angle));
         builder.setItems(labels, (dialog, which) -> {
             VayGradientSpec current = VayTelegram.navigationGradient();
             VayTelegram.commitNavigationGradient(
@@ -194,7 +197,7 @@ public final class VayGradientActivity extends BaseFragment {
             );
             rebuildRows();
         });
-        builder.setNegativeButton("Cancel", null);
+        builder.setNegativeButton(LocaleController.getString(R.string.vay_cancel), null);
         showDialog(builder.create());
     }
 
@@ -205,12 +208,12 @@ public final class VayGradientActivity extends BaseFragment {
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Reset navigation gradient?");
-        builder.setMessage("Remove the saved gradient and return to the current vayGram theme colors.");
+        builder.setTitle(LocaleController.getString(R.string.vay_reset_navigation_gradient_title));
+        builder.setMessage(LocaleController.getString(R.string.vay_reset_navigation_gradient_body));
         builder.setNegativeButton("Cancel", null);
-        builder.setPositiveButton("Reset", (dialog, which) -> {
+        builder.setPositiveButton(LocaleController.getString(R.string.vay_reset), (dialog, which) -> {
             VayTelegram.resetNavigationGradient();
-            Toast.makeText(context, "Gradient reset", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, LocaleController.getString(R.string.vay_gradient_reset_done), Toast.LENGTH_SHORT).show();
             rebuildRows();
         });
         showDialog(builder.create());
@@ -222,14 +225,14 @@ public final class VayGradientActivity extends BaseFragment {
 
     private String angleLabel(int angle) {
         switch (angle) {
-            case 0: return "0° · left → right";
-            case 45: return "45° · bottom-left → top-right";
-            case 90: return "90° · bottom → top";
-            case 135: return "135° · bottom-right → top-left";
-            case 180: return "180° · right → left";
-            case 225: return "225° · top-right → bottom-left";
-            case 270: return "270° · top → bottom";
-            case 315: return "315° · top-left → bottom-right";
+            case 0: return LocaleController.getString(R.string.vay_angle_0);
+            case 45: return LocaleController.getString(R.string.vay_angle_45);
+            case 90: return LocaleController.getString(R.string.vay_angle_90);
+            case 135: return LocaleController.getString(R.string.vay_angle_135);
+            case 180: return LocaleController.getString(R.string.vay_angle_180);
+            case 225: return LocaleController.getString(R.string.vay_angle_225);
+            case 270: return LocaleController.getString(R.string.vay_angle_270);
+            case 315: return LocaleController.getString(R.string.vay_angle_315);
             default: return angle + "°";
         }
     }
@@ -312,7 +315,7 @@ public final class VayGradientActivity extends BaseFragment {
             VayGradientSpec spec = VayTelegram.navigationGradient();
             if (type == TYPE_CHECK) {
                 ((TextCheckCell) holder.itemView).setTextAndCheck(
-                        "Enabled",
+                        LocaleController.getString(R.string.vay_enabled),
                         spec.isEnabled(),
                         false
                 );
@@ -321,13 +324,17 @@ public final class VayGradientActivity extends BaseFragment {
 
             TextSettingsCell cell = (TextSettingsCell) holder.itemView;
             if (row.id == ROW_START_COLOR) {
-                cell.setTextAndValue("Start color", colorValue(spec.getStartColor()), false);
+                cell.setTextAndValue(LocaleController.getString(R.string.vay_start_color), colorValue(spec.getStartColor()), false);
             } else if (row.id == ROW_END_COLOR) {
-                cell.setTextAndValue("End color", colorValue(spec.getEndColor()), false);
+                cell.setTextAndValue(LocaleController.getString(R.string.vay_end_color), colorValue(spec.getEndColor()), false);
             } else if (row.id == ROW_ANGLE) {
-                cell.setTextAndValue("Angle", angleLabel(spec.getAngleDegrees()), false);
+                cell.setTextAndValue(LocaleController.getString(R.string.vay_angle), angleLabel(spec.getAngleDegrees()), false);
             } else if (row.id == ROW_RESET) {
-                cell.setTextAndValue("Reset gradient", "Use theme colors", false);
+                cell.setTextAndValue(
+                        LocaleController.getString(R.string.vay_reset_gradient),
+                        LocaleController.getString(R.string.vay_use_theme_colors),
+                        false
+                );
             }
         }
     }
@@ -445,7 +452,12 @@ public final class VayGradientActivity extends BaseFragment {
         private void updateUi() {
             int color = getColor();
             swatch.setBackgroundColor(color);
-            String[] names = {"Alpha", "Red", "Green", "Blue"};
+            String[] names = {
+                    LocaleController.getString(R.string.vay_channel_alpha),
+                    LocaleController.getString(R.string.vay_channel_red),
+                    LocaleController.getString(R.string.vay_channel_green),
+                    LocaleController.getString(R.string.vay_channel_blue)
+            };
             for (int i = 0; i < labels.length; i++) {
                 labels[i].setText(names[i] + "  " + channels[i].getProgress());
             }
