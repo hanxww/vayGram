@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -422,11 +424,20 @@ public final class VayProfileStudioActivity extends BaseFragment {
 
     private <T> void set(VaySetting<T> setting, T value) {
         VayTelegram.settings().set(setting, accountScope, value);
+        notifyTelegramProfile();
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     private void clear(VaySetting setting) {
         VayTelegram.settings().clearStoredValue(setting, accountScope);
+        notifyTelegramProfile();
+    }
+
+    private void notifyTelegramProfile() {
+        NotificationCenter.getInstance(currentAccount).postNotificationName(
+                NotificationCenter.updateInterfaces,
+                MessagesController.UPDATE_MASK_ALL
+        );
     }
 
     private String valueText(Row row) {
