@@ -120,6 +120,22 @@
     <string name="vay_category_appearance_effects">Appearance / Effects</string>
 
 
+
+    <string name="vay_desc_bubble_radius">Corner radius of message bubbles</string>
+    <string name="vay_desc_message_spacing">Additional vertical spacing between messages</string>
+    <string name="vay_desc_chat_row_height">Height of each row in the chat list</string>
+    <string name="vay_desc_avatar_size">Default avatar size</string>
+    <string name="vay_desc_avatar_roundness">Avatar corner radius as a percentage</string>
+    <string name="vay_desc_navigation_labels">Show text labels under bottom navigation icons</string>
+    <string name="vay_desc_bottom_bar_height">Height of the bottom navigation bar</string>
+    <string name="vay_desc_compact_mode">Tighten supported layouts without overwriting custom values</string>
+    <string name="vay_desc_animation_scale">Multiplier for vayGram-controlled UI animation durations</string>
+    <string name="vay_desc_amoled">Use pure black for supported dark surfaces</string>
+    <string name="vay_desc_material_you">Use Android dynamic system colors as the base vayGram palette</string>
+    <string name="vay_desc_glass_blur">Enable vayGram glass-style blur where supported</string>
+    <string name="vay_desc_glass_blur_radius">Blur radius for vayGram glass surfaces</string>
+    <string name="vay_desc_glass_opacity">Opacity of supported vayGram glass surfaces</string>
+
     <string name="vay_this_chat">This chat</string>
     <string name="vay_level_basic">Basic</string>
     <string name="vay_level_advanced">Advanced</string>
