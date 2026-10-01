@@ -32,6 +32,6 @@ Real-device procedure: see `docs/DEVICE_SMOKE.md`.
 - [x] in-app diagnostics/recovery screen available
 - [x] portable backup/restore path available before risky customization testing
 - [ ] crash-reporting strategy decided
-- [ ] changelog generated from merged vayGram stages
-- [ ] known-issues section prepared
-- [ ] one rollback path documented for broken dev builds
+- [x] changelog generated from merged vayGram stages
+- [x] known-issues section prepared
+- [x] one rollback path documented for broken dev builds
