@@ -159,7 +159,17 @@ On the account owner's own profile:
 - change a disposable vayGram setting in the current scope, use Reset current scope, and confirm Telegram account/session data remains intact;
 - create a disposable palette override/gradient, use Reset theme layer, and confirm only vayGram theme-layer customizations are cleared.
 
-## 10. Backup / restore and About
+## 10. Safe Mode recovery
+
+- create several visible vayGram customizations: palette override, gradient, non-default bottom-bar height, chat/list sizing and Profile Studio avatar effect;
+- open **Diagnostics and recovery** and enable **Safe Mode**;
+- confirm Telegram remains logged in and no settings are deleted;
+- confirm theme overrides, gradients/glass, custom layout metrics and Profile Studio avatar effects are bypassed;
+- restart vayGram and confirm Safe Mode remains enabled;
+- disable Safe Mode and confirm the previously saved vayGram customizations become active again;
+- copy diagnostics and confirm it reports the Safe Mode state without exposing Telegram account/chat data.
+
+## 11. Backup / restore and About
 
 - open **Backup & restore** from Vay Settings;
 - copy a portable backup and verify it contains vayGram settings/theme data but no Telegram session, chat, phone-number or account-id data;
@@ -174,7 +184,7 @@ On the account owner's own profile:
 - confirm source-repository and development-channel links open;
 - confirm build information copies successfully.
 
-## 11. Upgrade compatibility
+## 12. Upgrade compatibility
 
 After the clean-install pass, keep the tested build installed.
 
@@ -187,7 +197,7 @@ For the next CI build signed by the persistent vayGram dev key:
 5. confirm onboarding completion state remains intact;
 6. repeat a short chat/send/receive/Vay Settings smoke.
 
-## 12. Crash capture
+## 13. Crash capture
 
 If anything crashes, record:
 
