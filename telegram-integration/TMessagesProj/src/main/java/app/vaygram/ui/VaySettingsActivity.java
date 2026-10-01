@@ -825,7 +825,10 @@ public final class VaySettingsActivity extends BaseFragment {
                 int changed = VayTelegram.settings().applyPreset(preset, scopeKey);
                 Toast.makeText(
                         context,
-                        changed + (changed == 1 ? " setting applied" : " settings applied"),
+                        LocaleController.formatString(
+                                changed == 1 ? R.string.vay_applied_count_one : R.string.vay_applied_count_many,
+                                changed
+                        ),
                         Toast.LENGTH_SHORT
                 ).show();
                 rebuildRows();
@@ -1443,7 +1446,7 @@ public final class VaySettingsActivity extends BaseFragment {
                     paint.setTextAlign(Paint.Align.CENTER);
                     paint.setTextSize(AndroidUtilities.dp(8));
                     canvas.drawText(
-                            i == 0 ? "Chats" : "Tab",
+                            LocaleController.getString(i == 0 ? R.string.vay_preview_chats : R.string.vay_preview_tab),
                             cx,
                             iconY + AndroidUtilities.dp(16),
                             paint
