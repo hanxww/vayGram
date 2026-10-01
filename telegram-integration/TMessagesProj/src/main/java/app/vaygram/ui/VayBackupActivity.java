@@ -1,9 +1,11 @@
 package app.vaygram.ui;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,11 @@ import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.RecyclerListView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import app.vaygram.telegram.VayBackupCodec;
@@ -36,6 +43,12 @@ public final class VayBackupActivity extends BaseFragment {
     private static final int ACTION_COPY = 1;
     private static final int ACTION_SHARE = 2;
     private static final int ACTION_RESTORE = 3;
+    private static final int ACTION_EXPORT_FILE = 4;
+    private static final int ACTION_IMPORT_FILE = 5;
+
+    private static final int REQUEST_EXPORT_FILE = 520;
+    private static final int REQUEST_IMPORT_FILE = 521;
+    private static final int MAX_BACKUP_BYTES = 2 * 1024 * 1024;
 
     private final ArrayList<Row> rows = new ArrayList<>();
     private RecyclerListView listView;
@@ -118,6 +131,16 @@ public final class VayBackupActivity extends BaseFragment {
                 LocaleController.getString(R.string.vay_backup_restore),
                 LocaleController.getString(R.string.vay_backup_restore_hint)
         ));
+        rows.add(Row.action(
+                ACTION_EXPORT_FILE,
+                LocaleController.getString(R.string.vay_backup_export_file),
+                LocaleController.getString(R.string.vay_backup_export_file_hint)
+        ));
+        rows.add(Row.action(
+                ACTION_IMPORT_FILE,
+                LocaleController.getString(R.string.vay_backup_import_file),
+                LocaleController.getString(R.string.vay_backup_import_file_hint)
+        ));
 
         rows.add(Row.header(LocaleController.getString(R.string.vay_backup_privacy)));
         rows.add(Row.value(
@@ -141,6 +164,10 @@ public final class VayBackupActivity extends BaseFragment {
             shareBackup();
         } else if (action == ACTION_RESTORE) {
             showRestoreDialog();
+        } else if (action == ACTION_EXPORT_FILE) {
+            exportBackupFile();
+        } else if (action == ACTION_IMPORT_FILE) {
+            importBackupFile();
         }
     }
 
@@ -186,6 +213,131 @@ public final class VayBackupActivity extends BaseFragment {
                     context,
                     LocaleController.getString(R.string.vay_backup_share_failed),
                     Toast.LENGTH_SHORT
+            ).show();
+        }
+    }
+
+    private void exportBackupFile() {
+        Context context = getParentActivity();
+        if (context == null) {
+            return;
+        }
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("application/json");
+        intent.putExtra(Intent.EXTRA_TITLE, "vayGram-0.1-dev-backup.json");
+        try {
+            startActivityForResult(intent, REQUEST_EXPORT_FILE);
+        } catch (RuntimeException e) {
+            Toast.makeText(
+                    context,
+                    LocaleController.getString(R.string.vay_backup_file_picker_failed),
+                    Toast.LENGTH_SHORT
+            ).show();
+        }
+    }
+
+    private void importBackupFile() {
+        Context context = getParentActivity();
+        if (context == null) {
+            return;
+        }
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("application/json");
+        String[] mimeTypes = {"application/json", "text/json", "text/plain"};
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        try {
+            startActivityForResult(intent, REQUEST_IMPORT_FILE);
+        } catch (RuntimeException e) {
+            Toast.makeText(
+                    context,
+                    LocaleController.getString(R.string.vay_backup_file_picker_failed),
+                    Toast.LENGTH_SHORT
+            ).show();
+        }
+    }
+
+    @Override
+    public void onActivityResultFragment(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK || data == null || data.getData() == null) {
+            return;
+        }
+
+        Uri uri = data.getData();
+        if (requestCode == REQUEST_EXPORT_FILE) {
+            writeBackupToUri(uri);
+        } else if (requestCode == REQUEST_IMPORT_FILE) {
+            readBackupFromUri(uri);
+        }
+    }
+
+    private void writeBackupToUri(Uri uri) {
+        Context context = getParentActivity();
+        if (context == null) {
+            return;
+        }
+        byte[] data = buildBackup().getBytes(StandardCharsets.UTF_8);
+        try (OutputStream output = context.getContentResolver().openOutputStream(uri, "wt")) {
+            if (output == null) {
+                throw new IOException("Unable to open backup destination");
+            }
+            output.write(data);
+            output.flush();
+            Toast.makeText(
+                    context,
+                    LocaleController.getString(R.string.vay_backup_file_exported),
+                    Toast.LENGTH_SHORT
+            ).show();
+        } catch (IOException | RuntimeException e) {
+            Toast.makeText(
+                    context,
+                    LocaleController.getString(R.string.vay_backup_file_write_failed),
+                    Toast.LENGTH_LONG
+            ).show();
+        }
+    }
+
+    private void readBackupFromUri(Uri uri) {
+        Context context = getParentActivity();
+        if (context == null) {
+            return;
+        }
+        try (InputStream input = context.getContentResolver().openInputStream(uri)) {
+            if (input == null) {
+                throw new IOException("Unable to open backup source");
+            }
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            byte[] buffer = new byte[8192];
+            int total = 0;
+            int read;
+            while ((read = input.read(buffer)) != -1) {
+                total += read;
+                if (total > MAX_BACKUP_BYTES) {
+                    Toast.makeText(
+                            context,
+                            LocaleController.getString(R.string.vay_backup_file_too_large),
+                            Toast.LENGTH_LONG
+                    ).show();
+                    return;
+                }
+                output.write(buffer, 0, read);
+            }
+            String json = new String(output.toByteArray(), StandardCharsets.UTF_8).trim();
+            if (json.isEmpty() || !json.contains("vaygram_portable_backup")) {
+                Toast.makeText(
+                        context,
+                        LocaleController.getString(R.string.vay_backup_invalid),
+                        Toast.LENGTH_LONG
+                ).show();
+                return;
+            }
+            confirmRestore(json);
+        } catch (IOException | RuntimeException e) {
+            Toast.makeText(
+                    context,
+                    LocaleController.getString(R.string.vay_backup_file_read_failed),
+                    Toast.LENGTH_LONG
             ).show();
         }
     }

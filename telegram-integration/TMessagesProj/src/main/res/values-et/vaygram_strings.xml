@@ -245,6 +245,17 @@
     <string name="vay_backup_share_hint">Saada JSON teise rakenduse kaudu</string>
     <string name="vay_backup_restore">Taasta varukoopia</string>
     <string name="vay_backup_restore_hint">Kleebi vayGrami teisaldatav varukoopia</string>
+
+    <string name="vay_backup_export_file">Salvesta varukoopia faili</string>
+    <string name="vay_backup_export_file_hint">Loo Androidi failivalijaga teisaldatav .json fail</string>
+    <string name="vay_backup_import_file">Taasta failist</string>
+    <string name="vay_backup_import_file_hint">Vali vayGrami varukoopia .json fail</string>
+    <string name="vay_backup_file_exported">Varukoopia fail salvestatud</string>
+    <string name="vay_backup_file_write_failed">Varukoopia faili ei saanud salvestada</string>
+    <string name="vay_backup_file_read_failed">Varukoopia faili ei saanud lugeda</string>
+    <string name="vay_backup_file_picker_failed">Androidi failivalijat ei saanud avada</string>
+    <string name="vay_backup_file_too_large">Varukoopia fail on liiga suur</string>
+
     <string name="vay_backup_privacy">Privaatsuspiir</string>
     <string name="vay_backup_excludes">Ei lisata kunagi</string>
     <string name="vay_backup_excludes_value">Telegrami seansid, vestlused, sõnumid, telefoninumbrid, konto ID-d ja vestluse eriseaded</string>

@@ -32,6 +32,8 @@ Real-device procedure: see `docs/DEVICE_SMOKE.md`.
 
 - [x] in-app diagnostics/recovery screen available
 - [x] portable backup/restore path available before risky customization testing
+- [x] Android system file picker backup import/export implemented
+- [ ] file picker backup import/export verified on a real device
 - [ ] crash-reporting strategy decided
 - [x] changelog generated from merged vayGram stages
 - [x] known-issues section prepared

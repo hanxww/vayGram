@@ -245,6 +245,17 @@
     <string name="vay_backup_share_hint">Отправить JSON через другое приложение</string>
     <string name="vay_backup_restore">Восстановить резервную копию</string>
     <string name="vay_backup_restore_hint">Вставить переносимую копию vayGram</string>
+
+    <string name="vay_backup_export_file">Сохранить резервную копию в файл</string>
+    <string name="vay_backup_export_file_hint">Создать переносимый .json через системный выбор файлов Android</string>
+    <string name="vay_backup_import_file">Восстановить из файла</string>
+    <string name="vay_backup_import_file_hint">Выбрать файл резервной копии vayGram .json</string>
+    <string name="vay_backup_file_exported">Файл резервной копии сохранён</string>
+    <string name="vay_backup_file_write_failed">Не удалось сохранить файл резервной копии</string>
+    <string name="vay_backup_file_read_failed">Не удалось прочитать файл резервной копии</string>
+    <string name="vay_backup_file_picker_failed">Не удалось открыть системный выбор файлов Android</string>
+    <string name="vay_backup_file_too_large">Файл резервной копии слишком большой</string>
+
     <string name="vay_backup_privacy">Граница приватности</string>
     <string name="vay_backup_excludes">Никогда не входит</string>
     <string name="vay_backup_excludes_value">Сессии Telegram, чаты, сообщения, номера телефонов, ID аккаунтов и настройки отдельных чатов</string>

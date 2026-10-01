@@ -145,7 +145,8 @@
 - [x] About vayGram screen
 - [x] pinned Telegram-base/build metadata in About
 - [x] source repository and development-channel links
-- [ ] add file-based SAF import/export after real-device clipboard/share smoke
+- [x] file-based Android Storage Access Framework import/export
+- [ ] verify SAF file import/export on a real Android device
 
 
 ## M11 — Safe Mode recovery

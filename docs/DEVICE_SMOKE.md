@@ -191,6 +191,10 @@ With bottom navigation visible:
 - confirm saved vayGram profiles are restored;
 - confirm Telegram login/session/chat data remains untouched;
 - share the backup through Android's share sheet and confirm no crash;
+- save the backup as a `.json` file through Android's system file picker;
+- change several vayGram settings, then restore from that file and confirm the confirmation dialog appears before applying;
+- select an invalid/non-vayGram JSON file and confirm it is rejected without changing settings;
+- cancel both file pickers and confirm the screen stays usable;
 - open **About vayGram**;
 - confirm vayGram version, pinned Telegram base/version code and base commit are correct;
 - confirm source-repository and development-channel links open;

@@ -245,6 +245,17 @@
     <string name="vay_backup_share_hint">Send the JSON through another app</string>
     <string name="vay_backup_restore">Restore backup</string>
     <string name="vay_backup_restore_hint">Paste a vayGram portable backup</string>
+
+    <string name="vay_backup_export_file">Save backup file</string>
+    <string name="vay_backup_export_file_hint">Create a portable .json file with Android file picker</string>
+    <string name="vay_backup_import_file">Restore from file</string>
+    <string name="vay_backup_import_file_hint">Choose a vayGram backup .json file</string>
+    <string name="vay_backup_file_exported">Backup file saved</string>
+    <string name="vay_backup_file_write_failed">Could not save backup file</string>
+    <string name="vay_backup_file_read_failed">Could not read backup file</string>
+    <string name="vay_backup_file_picker_failed">Could not open Android file picker</string>
+    <string name="vay_backup_file_too_large">Backup file is too large</string>
+
     <string name="vay_backup_privacy">Privacy boundary</string>
     <string name="vay_backup_excludes">Never included</string>
     <string name="vay_backup_excludes_value">Telegram sessions, chats, messages, phone numbers, account IDs and chat overrides</string>

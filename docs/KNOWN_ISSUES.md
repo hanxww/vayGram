@@ -16,7 +16,7 @@ These are intentionally tracked instead of being hidden from testers.
 ## Backup
 
 - The first portable backup UI uses JSON copy/share/paste.
-- File-based Android Storage Access Framework import/export is planned after the clipboard/share flow is verified on real devices.
+- File-based Android Storage Access Framework import/export is implemented but still needs real-device picker/provider coverage.
 - Per-chat overrides are intentionally excluded because portable backups must not expose chat identifiers.
 
 ## Diagnostics
