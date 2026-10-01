@@ -23,6 +23,10 @@ public final class VayCoachOverlay extends FrameLayout {
     public interface Callback {
         void onNext();
         void onSkip();
+
+        default void onTarget() {
+            onSkip();
+        }
     }
 
     private final View target;
@@ -33,7 +37,9 @@ public final class VayCoachOverlay extends FrameLayout {
     private final LinearLayout card;
     private final int[] targetLocation = new int[2];
     private final int[] overlayLocation = new int[2];
+    private final Callback callback;
     private float lastCardTargetCenterY = Float.NaN;
+    private boolean targetGesture;
 
     private VayCoachOverlay(
             Activity activity,
@@ -47,6 +53,7 @@ public final class VayCoachOverlay extends FrameLayout {
     ) {
         super(activity);
         this.target = target;
+        this.callback = callback;
 
         setWillNotDraw(false);
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);
@@ -214,15 +221,40 @@ public final class VayCoachOverlay extends FrameLayout {
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         updateTargetRect();
-        if (target != null
+
+        boolean insideTarget = target != null
                 && target.isShown()
                 && targetRect.contains(event.getX(), event.getY())
-                && !isInsideCard(event.getX(), event.getY())) {
-            // Let the real highlighted control receive the gesture instead of
-            // simulating a click. This preserves pressed/ripple/accessibility
-            // behavior while the rest of the screen stays blocked by the coach.
-            return false;
+                && !isInsideCard(event.getX(), event.getY());
+
+        if (event.getActionMasked() == MotionEvent.ACTION_DOWN && insideTarget) {
+            targetGesture = true;
+            target.setPressed(true);
+            return true;
         }
+
+        if (targetGesture) {
+            if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
+                target.setPressed(insideTarget);
+                return true;
+            }
+            if (event.getActionMasked() == MotionEvent.ACTION_UP) {
+                targetGesture = false;
+                target.setPressed(false);
+                if (insideTarget) {
+                    detach();
+                    target.performClick();
+                    callback.onTarget();
+                }
+                return true;
+            }
+            if (event.getActionMasked() == MotionEvent.ACTION_CANCEL) {
+                targetGesture = false;
+                target.setPressed(false);
+                return true;
+            }
+        }
+
         return super.dispatchTouchEvent(event);
     }
 
