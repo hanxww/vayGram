@@ -136,6 +136,8 @@
     <string name="vay_desc_glass_blur_radius">Blur radius for vayGram glass surfaces</string>
     <string name="vay_desc_glass_opacity">Opacity of supported vayGram glass surfaces</string>
 
+    <string name="vay_preview_chats">Chats</string>
+    <string name="vay_preview_tab">Tab</string>
     <string name="vay_this_chat">This chat</string>
     <string name="vay_level_basic">Basic</string>
     <string name="vay_level_advanced">Advanced</string>
