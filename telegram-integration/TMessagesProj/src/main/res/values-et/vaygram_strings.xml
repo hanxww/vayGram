@@ -61,6 +61,7 @@
 
 
     <string name="vay_settings_title">vayGrami seaded</string>
+    <string name="vay_settings_entry_hint">Kõik vayGrami seaded ühes kohas</string>
     <string name="vay_live_preview">Eelvaade</string>
     <string name="vay_controls">Juhtimine</string>
     <string name="vay_customization_level">Kohandamise tase</string>
