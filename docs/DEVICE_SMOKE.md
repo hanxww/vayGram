@@ -37,6 +37,12 @@ Pass when the launcher icon, label, package, version, and first activity are cor
 
 On a fresh app-data state:
 
+- confirm the chat list first shows a short contextual coach over the real Telegram UI;
+- confirm everything except the highlighted control is dimmed;
+- confirm the highlighted control stays sharp, bright, and directly tappable;
+- tap the highlighted control and confirm its real Telegram action runs while the coach disappears cleanly;
+- repeat with Next instead of tapping the target and confirm the next highlighted control is positioned correctly;
+- confirm Skip ends the onboarding without showing another tutorial immediately;
 - complete Telegram intro/login entry until the main chat list appears;
 - confirm the vayGram tutorial starts from the main app experience rather than interrupting login;
 - confirm the spotlight dims the rest of the UI while the target stays sharp;

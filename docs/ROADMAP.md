@@ -68,6 +68,8 @@
 ## M6 — First-run experience and device validation
 - [x] Vay Profile Studio foundation and own-profile entry
 - [x] first-run guided onboarding
+- [x] contextual first-launch coach on the real chat-list UI
+- [x] spotlight targets remain sharp and directly clickable
 - [x] spotlight coach overlay with a sharp interactive target cutout
 - [x] replay onboarding from Vay Settings
 - [ ] clean install on a real Android device

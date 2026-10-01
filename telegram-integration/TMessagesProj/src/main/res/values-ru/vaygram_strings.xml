@@ -53,6 +53,10 @@
     <string name="vay_apply">Применить</string>
     <string name="vay_inherit">Наследовать</string>
 
+    <string name="vay_first_launch_menu_title">Главное меню</string>
+    <string name="vay_first_launch_menu_body">Эта кнопка открывает действия Telegram и Настройки. vayGram добавляет свои возможности, не ломая привычную навигацию Telegram.</string>
+    <string name="vay_first_launch_compose_title">Новое сообщение</string>
+    <string name="vay_first_launch_compose_body">Это привычная кнопка создания нового сообщения. Telegram остаётся знакомым, а vayGram добавляет кастомизацию поверх него.</string>
     <string name="vay_onboarding_title">Добро пожаловать в vayGram</string>
     <string name="vay_onboarding_body">Telegram остаётся знакомым. vayGram добавляет слой кастомизации, который можно осваивать постепенно.</string>
     <string name="vay_onboarding_choose_level">Выбери уровень кастомизации</string>

@@ -9,6 +9,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.graphics.drawable.GradientDrawable;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -22,6 +23,10 @@ public final class VayCoachOverlay extends FrameLayout {
     public interface Callback {
         void onNext();
         void onSkip();
+
+        default void onTarget() {
+            onSkip();
+        }
     }
 
     private final View target;
@@ -32,6 +37,9 @@ public final class VayCoachOverlay extends FrameLayout {
     private final LinearLayout card;
     private final int[] targetLocation = new int[2];
     private final int[] overlayLocation = new int[2];
+    private final Callback callback;
+    private float lastCardTargetCenterY = Float.NaN;
+    private boolean targetGesture;
 
     private VayCoachOverlay(
             Activity activity,
@@ -45,6 +53,7 @@ public final class VayCoachOverlay extends FrameLayout {
     ) {
         super(activity);
         this.target = target;
+        this.callback = callback;
 
         setWillNotDraw(false);
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);
@@ -57,6 +66,12 @@ public final class VayCoachOverlay extends FrameLayout {
         borderPaint.setStyle(Paint.Style.STROKE);
         borderPaint.setStrokeWidth(AndroidUtilities.dp(2));
         borderPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText));
+        borderPaint.setShadowLayer(
+                AndroidUtilities.dp(12),
+                0,
+                0,
+                Theme.getColor(Theme.key_windowBackgroundWhiteBlueText)
+        );
 
         card = new LinearLayout(activity);
         card.setOrientation(LinearLayout.VERTICAL);
@@ -204,6 +219,53 @@ public final class VayCoachOverlay extends FrameLayout {
     }
 
     @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        updateTargetRect();
+
+        boolean insideTarget = target != null
+                && target.isShown()
+                && targetRect.contains(event.getX(), event.getY())
+                && !isInsideCard(event.getX(), event.getY());
+
+        if (event.getActionMasked() == MotionEvent.ACTION_DOWN && insideTarget) {
+            targetGesture = true;
+            target.setPressed(true);
+            return true;
+        }
+
+        if (targetGesture) {
+            if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
+                target.setPressed(insideTarget);
+                return true;
+            }
+            if (event.getActionMasked() == MotionEvent.ACTION_UP) {
+                targetGesture = false;
+                target.setPressed(false);
+                if (insideTarget) {
+                    detach();
+                    target.performClick();
+                    callback.onTarget();
+                }
+                return true;
+            }
+            if (event.getActionMasked() == MotionEvent.ACTION_CANCEL) {
+                targetGesture = false;
+                target.setPressed(false);
+                return true;
+            }
+        }
+
+        return super.dispatchTouchEvent(event);
+    }
+
+    private boolean isInsideCard(float x, float y) {
+        return x >= card.getLeft()
+                && x <= card.getRight()
+                && y >= card.getTop()
+                && y <= card.getBottom();
+    }
+
+    @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         updateTargetRect();
@@ -212,6 +274,13 @@ public final class VayCoachOverlay extends FrameLayout {
         float radius = AndroidUtilities.dp(16);
         canvas.drawRoundRect(targetRect, radius, radius, clearPaint);
         canvas.drawRoundRect(targetRect, radius, radius, borderPaint);
+
+        float centerY = targetRect.centerY();
+        if (Float.isNaN(lastCardTargetCenterY)
+                || Math.abs(centerY - lastCardTargetCenterY) > AndroidUtilities.dp(2)) {
+            lastCardTargetCenterY = centerY;
+            post(this::positionCard);
+        }
     }
 
     @Override

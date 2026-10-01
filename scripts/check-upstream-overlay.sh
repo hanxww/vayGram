@@ -46,6 +46,7 @@ must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/theme/VayGradie
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayGradientActivity.java" "gradient editor UI"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayProfileStudioActivity.java" "Vay Profile Studio UI"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayOnboardingActivity.java" "first-run vayGram onboarding UI"
+must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayFirstLaunchCoach.java" "contextual first-launch coach"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayCoachOverlay.java" "guided spotlight overlay"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayOnboardingState.java" "onboarding persistence state"
 
@@ -58,9 +59,15 @@ must_grep 'vay_profile_studio' \
 must_grep 'VayProfileStudioActivity' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java" \
   "Profile Studio navigation"
-must_grep 'VayOnboardingActivity\.maybePresent' \
+must_grep 'VayFirstLaunchCoach\.maybePresent' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/DialogsActivity.java" \
-  "first-run onboarding hook"
+  "first-launch contextual coach hook"
+must_grep 'VayOnboardingActivity\.maybePresent' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayFirstLaunchCoach.java" \
+  "contextual coach handoff to onboarding"
+must_grep 'dispatchTouchEvent' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayCoachOverlay.java" \
+  "spotlight target remains interactive"
 must_grep 'ACTION_REPLAY_ONBOARDING' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
   "replay onboarding action"
