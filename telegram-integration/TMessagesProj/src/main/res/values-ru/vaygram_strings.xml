@@ -136,6 +136,8 @@
     <string name="vay_desc_glass_blur_radius">Радиус размытия стеклянных поверхностей vayGram</string>
     <string name="vay_desc_glass_opacity">Непрозрачность поддерживаемых стеклянных поверхностей vayGram</string>
 
+    <string name="vay_preview_chats">Чаты</string>
+    <string name="vay_preview_tab">Вкладка</string>
     <string name="vay_this_chat">Этот чат</string>
     <string name="vay_level_basic">Базовый</string>
     <string name="vay_level_advanced">Продвинутый</string>
