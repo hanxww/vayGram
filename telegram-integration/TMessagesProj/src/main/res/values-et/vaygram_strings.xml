@@ -11,6 +11,12 @@
     <string name="vay_profile_avatar_roundness">Avatari ümardus</string>
     <string name="vay_profile_avatar_glow">Avatari helendus</string>
     <string name="vay_profile_status_ring">Olekurõngas</string>
+
+    <string name="vay_profile_live_safety">Telegrami ühilduvus</string>
+    <string name="vay_profile_live_safety_value">Turvaline algne paigutus</string>
+    <string name="vay_profile_live_safety_title">Telegrami profiili turvarežiim</string>
+    <string name="vay_profile_live_safety_body">vayGram hoiab Telegrami profiili põhistruktuuri puutumatuna, et vältida tühje või lõigatud paigutusi. Praegu rakenduvad päris profiilile avatari ümardus, helendus ja olekurõngas. Plokkide nähtavus, vaba paigutus, taustaefektid ja kohandatud plokid jäävad Vay Profile eelvaatesse kuni eraldi renderdaja valmimiseni.</string>
+
     <string name="vay_profile_effects">Efektid</string>
     <string name="vay_profile_background_blur">Tausta hägusus</string>
     <string name="vay_profile_parallax">Parallaks</string>
