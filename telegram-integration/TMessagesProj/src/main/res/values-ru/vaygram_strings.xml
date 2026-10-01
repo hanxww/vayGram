@@ -228,6 +228,52 @@
     <string name="vay_use_theme_colors">Использовать цвета темы</string>
 
 
+
+    <string name="vay_backup_entry">Резервная копия</string>
+    <string name="vay_backup_entry_hint">Переносимые настройки vayGram без данных Telegram</string>
+    <string name="vay_backup_title">Резервная копия vayGram</string>
+    <string name="vay_backup_contents">Что входит</string>
+    <string name="vay_backup_global_settings">Глобальные переопределения</string>
+    <string name="vay_backup_account_settings">Настройки текущего аккаунта</string>
+    <string name="vay_backup_saved_profiles">Сохранённые профили</string>
+    <string name="vay_backup_palette">Цвета палитры</string>
+    <string name="vay_backup_gradient">Градиент навигации</string>
+    <string name="vay_backup_actions">Действия</string>
+    <string name="vay_backup_copy">Копировать резервную копию</string>
+    <string name="vay_backup_copy_hint">Скопировать JSON в буфер обмена</string>
+    <string name="vay_backup_share">Поделиться резервной копией</string>
+    <string name="vay_backup_share_hint">Отправить JSON через другое приложение</string>
+    <string name="vay_backup_restore">Восстановить резервную копию</string>
+    <string name="vay_backup_restore_hint">Вставить переносимую копию vayGram</string>
+    <string name="vay_backup_privacy">Граница приватности</string>
+    <string name="vay_backup_excludes">Никогда не входит</string>
+    <string name="vay_backup_excludes_value">Сессии Telegram, чаты, сообщения, номера телефонов, ID аккаунтов и настройки отдельных чатов</string>
+    <string name="vay_backup_copied">Резервная копия vayGram скопирована</string>
+    <string name="vay_backup_share_failed">Не найдено приложение для отправки копии</string>
+    <string name="vay_backup_paste_hint">Вставьте JSON резервной копии vayGram</string>
+    <string name="vay_backup_restore_title">Восстановление vayGram</string>
+    <string name="vay_backup_restore_body">Копия адаптируется к этому устройству: глобальные настройки восстановятся глобально, а настройки аккаунта — для текущего аккаунта.</string>
+    <string name="vay_backup_confirm_title">Заменить настройки vayGram?</string>
+    <string name="vay_backup_confirm_body">Текущие глобальные настройки и настройки текущего аккаунта vayGram, сохранённые профили, палитра и градиент навигации будут заменены. Сессии и данные аккаунта Telegram не затрагиваются.</string>
+    <string name="vay_backup_invalid">Некорректная или неподдерживаемая резервная копия vayGram</string>
+    <string name="vay_backup_restored">Восстановлено настроек: %1$d, профилей: %2$d, цветов: %3$d</string>
+
+    <string name="vay_about_entry">О vayGram</string>
+    <string name="vay_about_entry_hint">Версия, база Telegram, исходники и ссылки проекта</string>
+    <string name="vay_about_title">О vayGram</string>
+    <string name="vay_about_client">Клиент</string>
+    <string name="vay_about_base">База Telegram</string>
+    <string name="vay_about_base_commit">Коммит базы</string>
+    <string name="vay_about_project">Проект</string>
+    <string name="vay_about_source">Исходный код</string>
+    <string name="vay_about_channel">Канал разработки</string>
+    <string name="vay_about_copy_build">Копировать данные сборки</string>
+    <string name="vay_about_copy_build_hint">Полезно при сообщении об ошибке</string>
+    <string name="vay_about_principle">Принцип продукта</string>
+    <string name="vay_about_slogan">Настраивай всё. Не усложняй ничего.</string>
+    <string name="vay_about_open_failed">Не удалось открыть ссылку</string>
+    <string name="vay_about_build_copied">Данные сборки скопированы</string>
+
     <string name="vay_diagnostics_entry">Диагностика и восстановление</string>
     <string name="vay_diagnostics_entry_hint">Сборка, безопасный отчёт и инструменты восстановления</string>
     <string name="vay_diagnostics_title">Диагностика и восстановление</string>

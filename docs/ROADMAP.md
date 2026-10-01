@@ -129,3 +129,20 @@
 - [x] EN / RU / ET diagnostics UI
 - [ ] add crash-session diagnostics after a real crash sample is available
 - [ ] add per-surface visual regression coverage for bottom-navigation overlap
+
+
+## M10 — Portable backup and publication metadata
+
+- [x] privacy-safe portable vayGram backup schema
+- [x] global settings backup and restore
+- [x] current-account settings backup and restore without exporting Telegram account IDs
+- [x] saved profile backup and restore
+- [x] theme palette backup and restore
+- [x] navigation-gradient backup and restore
+- [x] explicit exclusion of Telegram sessions, chats, messages, phone numbers and per-chat IDs
+- [x] copy/share/restore backup UI
+- [x] EN / RU / ET backup UI
+- [x] About vayGram screen
+- [x] pinned Telegram-base/build metadata in About
+- [x] source repository and development-channel links
+- [ ] add file-based SAF import/export after real-device clipboard/share smoke

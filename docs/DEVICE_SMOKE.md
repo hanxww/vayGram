@@ -159,7 +159,22 @@ On the account owner's own profile:
 - change a disposable vayGram setting in the current scope, use Reset current scope, and confirm Telegram account/session data remains intact;
 - create a disposable palette override/gradient, use Reset theme layer, and confirm only vayGram theme-layer customizations are cleared.
 
-## 10. Upgrade compatibility
+## 10. Backup / restore and About
+
+- open **Backup & restore** from Vay Settings;
+- copy a portable backup and verify it contains vayGram settings/theme data but no Telegram session, chat, phone-number or account-id data;
+- change several global/account settings, palette colors and the navigation gradient, then restore the copied backup;
+- confirm global settings return to their backed-up values;
+- confirm account settings are mapped to the currently selected Telegram account;
+- confirm saved vayGram profiles are restored;
+- confirm Telegram login/session/chat data remains untouched;
+- share the backup through Android's share sheet and confirm no crash;
+- open **About vayGram**;
+- confirm vayGram version, pinned Telegram base/version code and base commit are correct;
+- confirm source-repository and development-channel links open;
+- confirm build information copies successfully.
+
+## 11. Upgrade compatibility
 
 After the clean-install pass, keep the tested build installed.
 
@@ -172,7 +187,7 @@ For the next CI build signed by the persistent vayGram dev key:
 5. confirm onboarding completion state remains intact;
 6. repeat a short chat/send/receive/Vay Settings smoke.
 
-## 11. Crash capture
+## 12. Crash capture
 
 If anything crashes, record:
 

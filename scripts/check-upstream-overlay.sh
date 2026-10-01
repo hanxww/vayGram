@@ -45,6 +45,9 @@ must_not_grep() {
 
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" "Vay Settings UI"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayDiagnosticsActivity.java" "vayGram diagnostics and recovery UI"
+must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayBackupActivity.java" "portable backup and restore UI"
+must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayAboutActivity.java" "vayGram About UI"
+must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/telegram/VayBackupCodec.java" "privacy-safe backup codec"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/core/settings/VaySettingsEngine.java" "VayCore settings engine"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/VayAndroid.java" "Android settings bridge"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/settings/VayPresetRepository.java" "persistent preset repository"
@@ -108,6 +111,27 @@ must_grep 'No account ids, phone numbers, chats, messages, tokens, or credential
 must_grep 'resetThemePalette' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayDiagnosticsActivity.java" \
   "theme recovery action"
+must_grep 'telegram_data_included.*false' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/telegram/VayBackupCodec.java" \
+  "backup Telegram-data privacy boundary"
+must_grep 'chat_overrides_included.*false' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/telegram/VayBackupCodec.java" \
+  "backup chat-id privacy boundary"
+must_grep 'capturePreset' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/telegram/VayBackupCodec.java" \
+  "portable settings backup capture"
+must_grep 'replaceAll' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/settings/VayPresetRepository.java" \
+  "saved profile restore support"
+must_grep 'ACTION_BACKUP' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
+  "backup settings entry"
+must_grep 'ACTION_ABOUT' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \
+  "About settings entry"
+must_grep 'SOURCE_REPOSITORY' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/telegram/VayBuild.java" \
+  "source repository About metadata"
 must_grep 'TELEGRAM_BASE_VERSION = "12\.10\.5"' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/telegram/VayBuild.java" \
   "pinned Telegram diagnostic version"

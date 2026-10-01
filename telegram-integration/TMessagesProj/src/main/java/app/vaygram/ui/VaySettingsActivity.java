@@ -79,6 +79,8 @@ public final class VaySettingsActivity extends BaseFragment {
     private static final int ACTION_GRADIENT_EDITOR = 12;
     private static final int ACTION_REPLAY_ONBOARDING = 13;
     private static final int ACTION_DIAGNOSTICS = 14;
+    private static final int ACTION_BACKUP = 15;
+    private static final int ACTION_ABOUT = 16;
 
     private static final int RECENT_LIMIT = 5;
     private static final int COACH_STEPS = 5;
@@ -372,6 +374,11 @@ public final class VaySettingsActivity extends BaseFragment {
                         )
         ));
         rows.add(Row.action(
+                ACTION_BACKUP,
+                LocaleController.getString(R.string.vay_backup_entry),
+                LocaleController.getString(R.string.vay_backup_entry_hint)
+        ));
+        rows.add(Row.action(
                 ACTION_DIAGNOSTICS,
                 LocaleController.getString(R.string.vay_diagnostics_entry),
                 LocaleController.getString(R.string.vay_diagnostics_entry_hint)
@@ -380,6 +387,11 @@ public final class VaySettingsActivity extends BaseFragment {
                 ACTION_REPLAY_ONBOARDING,
                 LocaleController.getString(R.string.vay_onboarding_replay),
                 LocaleController.getString(R.string.vay_onboarding_replay_hint)
+        ));
+        rows.add(Row.action(
+                ACTION_ABOUT,
+                LocaleController.getString(R.string.vay_about_entry),
+                LocaleController.getString(R.string.vay_about_entry_hint)
         ));
 
         if (modified > 0) {
@@ -510,12 +522,16 @@ public final class VaySettingsActivity extends BaseFragment {
             presentFragment(new VayPaletteActivity());
         } else if (action == ACTION_GRADIENT_EDITOR) {
             presentFragment(new VayGradientActivity());
+        } else if (action == ACTION_BACKUP) {
+            presentFragment(new VayBackupActivity());
         } else if (action == ACTION_DIAGNOSTICS) {
             presentFragment(new VayDiagnosticsActivity(
                     scopeKey,
                     localizedScopeTitle(),
                     localizedVisibilityLevel(visibilityLevel)
             ));
+        } else if (action == ACTION_ABOUT) {
+            presentFragment(new VayAboutActivity());
         } else if (action == ACTION_REPLAY_ONBOARDING) {
             onboardingCoachRequested = true;
             VayOnboardingState.resetForReplay();
