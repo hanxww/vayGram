@@ -263,6 +263,12 @@ must_grep 'VayTelegram\.presets\(\)\.save' \
 must_grep 'VayAppearance\.dialogRowHeightDp\(currentAccount, currentDialogId\)' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java" \
   "dialog row height hook"
+must_grep 'VayAppearance\.dialogNameTextSizeDp\(currentAccount\)' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java" \
+  "dialog title text size hook"
+must_grep 'VayAppearance\.dialogMessageTextSizeDp\(currentAccount\)' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java" \
+  "dialog preview text size hook"
 must_grep 'VayAppearance\.dialogAvatarSizeDp' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java" \
   "dialog avatar size hook"

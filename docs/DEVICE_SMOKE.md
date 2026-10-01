@@ -108,6 +108,8 @@ Change each item and verify the real Telegram surface updates:
 - chat bubble radius
 - message spacing
 - chat list row height
+- chat title text size
+- chat preview text size
 - avatar size
 - avatar roundness
 - bottom navigation height

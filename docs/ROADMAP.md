@@ -171,3 +171,15 @@
 - [x] refresh Contacts list/floating-button offsets after navigation-height changes
 - [x] refresh Calls list/floating-button offsets after navigation-height changes
 - [ ] real-device regression pass across profile gifts/media/settings/contacts/calls
+
+
+## M12 — Chat List Studio typography
+
+- [x] chat title text size control
+- [x] message-preview text size control
+- [x] Global / Account scope persistence
+- [x] Safe Mode fallback to Telegram-compatible defaults
+- [x] live DialogCell renderer hooks
+- [x] EN / RU / ET UI strings
+- [ ] verify typography extremes on a real Android device
+

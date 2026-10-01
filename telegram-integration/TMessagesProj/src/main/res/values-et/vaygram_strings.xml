@@ -103,6 +103,12 @@
     <string name="vay_setting_bubble_radius">Sõnumimulli ümardus</string>
     <string name="vay_setting_message_spacing">Sõnumite vahe</string>
     <string name="vay_setting_chat_row_height">Vestlusrea kõrgus</string>
+
+    <string name="vay_setting_chat_title_text_size">Vestluse pealkirja teksti suurus</string>
+    <string name="vay_setting_chat_preview_text_size">Vestluse eelvaate teksti suurus</string>
+    <string name="vay_desc_chat_title_text_size">Vestluste nimede teksti suurus vestlusloendis</string>
+    <string name="vay_desc_chat_preview_text_size">Sõnumite eelvaate teksti suurus vestlusloendis</string>
+
     <string name="vay_setting_avatar_size">Avatari suurus</string>
     <string name="vay_setting_avatar_roundness">Avatari ümardus</string>
     <string name="vay_setting_navigation_labels">Navigeerimise sildid</string>

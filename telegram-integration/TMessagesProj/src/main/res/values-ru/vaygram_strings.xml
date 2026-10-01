@@ -103,6 +103,12 @@
     <string name="vay_setting_bubble_radius">Скругление пузырей</string>
     <string name="vay_setting_message_spacing">Отступ между сообщениями</string>
     <string name="vay_setting_chat_row_height">Высота строки чата</string>
+
+    <string name="vay_setting_chat_title_text_size">Размер названия чата</string>
+    <string name="vay_setting_chat_preview_text_size">Размер текста предпросмотра</string>
+    <string name="vay_desc_chat_title_text_size">Размер текста названий чатов в списке</string>
+    <string name="vay_desc_chat_preview_text_size">Размер текста предпросмотра сообщений в списке чатов</string>
+
     <string name="vay_setting_avatar_size">Размер аватара</string>
     <string name="vay_setting_avatar_roundness">Скругление аватара</string>
     <string name="vay_setting_navigation_labels">Подписи навигации</string>
