@@ -137,6 +137,12 @@ Verify:
 
 On the account owner's own profile:
 
+- before changing anything, confirm the native Telegram avatar/name/status header has no blank reserved area, clipping, or shifted text;
+- confirm native Telegram rows such as phone, bio, username, birthday, personal channel, music and media are not hidden merely because a Vay block defaults to off;
+- change avatar roundness and confirm the real Telegram profile avatar updates without breaking expand/collapse;
+- enable avatar glow/status ring and confirm they render without covering or suppressing the avatar;
+- disable Vay preview blocks and confirm the current build keeps Telegram's structural profile layout intact;
+- open the Telegram compatibility row and confirm the safe-rendering explanation matches current behavior;
 - confirm the Vay Profile Studio entry is visible and opens;
 - confirm profile-specific controls are kept inside Profile Studio rather than duplicated in ordinary Vay Settings;
 - change available foundation controls;
