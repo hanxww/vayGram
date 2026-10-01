@@ -15,6 +15,11 @@
     <string name="vay_profile_background_blur">Размытие фона</string>
     <string name="vay_profile_parallax">Параллакс</string>
     <string name="vay_profile_blocks">Блоки профиля</string>
+    <string name="vay_profile_core_blocks">Основные блоки</string>
+    <string name="vay_profile_personal_blocks">Личные блоки</string>
+    <string name="vay_profile_social_blocks">Социальные блоки</string>
+    <string name="vay_profile_content_blocks">Контент</string>
+    <string name="vay_profile_custom_blocks">Свои блоки</string>
     <string name="vay_profile_show_username">Показывать username</string>
     <string name="vay_profile_show_bio">Показывать bio</string>
     <string name="vay_profile_show_avatar">Показывать аватар</string>
