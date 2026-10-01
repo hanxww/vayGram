@@ -751,7 +751,5 @@ public final class VayProfileStudioActivity extends BaseFragment {
             }
             return value.substring(0, Math.max(1, end)) + ellipsis;
         }
-
-        }
     }
 }
