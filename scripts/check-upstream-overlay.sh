@@ -135,6 +135,15 @@ must_grep 'chat_overrides_included.*false' \
 must_grep 'capturePreset' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/telegram/VayBackupCodec.java" \
   "portable settings backup capture"
+must_grep 'Intent\.ACTION_CREATE_DOCUMENT' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayBackupActivity.java" \
+  "SAF backup file export"
+must_grep 'Intent\.ACTION_OPEN_DOCUMENT' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayBackupActivity.java" \
+  "SAF backup file import"
+must_grep 'MAX_BACKUP_BYTES' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayBackupActivity.java" \
+  "bounded backup file import"
 must_grep 'replaceAll' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/settings/VayPresetRepository.java" \
   "saved profile restore support"
