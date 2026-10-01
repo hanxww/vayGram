@@ -13,6 +13,7 @@ public final class VayBuild {
             "vnd.android.cursor.item/vnd.app.vaygram.messenger.android.call.video";
 
     public static final String DEVELOPMENT_CHANNEL = "https://t.me/vayGram_app";
+    public static final String SOURCE_REPOSITORY = "https://github.com/hanxww/vayGram";
     public static final String CLIENT_VERSION = "0.1-dev";
     public static final String TELEGRAM_BASE_VERSION = "12.10.5";
     public static final int TELEGRAM_BASE_VERSION_CODE = 7105;
