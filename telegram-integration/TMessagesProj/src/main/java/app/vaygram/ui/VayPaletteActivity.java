@@ -57,7 +57,7 @@ public final class VayPaletteActivity extends BaseFragment {
 
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
-        actionBar.setTitle("vayGram Palette");
+        actionBar.setTitle(LocaleController.getString(R.string.vay_palette_title));
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -95,28 +95,28 @@ public final class VayPaletteActivity extends BaseFragment {
         rows.clear();
 
         if (TextUtils.isEmpty(query)) {
-            rows.add(Row.header("Sources"));
+            rows.add(Row.header(LocaleController.getString(R.string.vay_sources)));
             String materialValue;
             if (!VayTelegram.isMaterialYouSupported()) {
-                materialValue = "Requires Android 12+";
+                materialValue = LocaleController.getString(R.string.vay_requires_android_12);
             } else if (VayTelegram.isMaterialYouEnabled()) {
-                materialValue = "Enabled · tap to refresh";
+                materialValue = LocaleController.getString(R.string.vay_enabled_tap_refresh);
             } else {
-                materialValue = "Disabled in vayGram Settings";
+                materialValue = LocaleController.getString(R.string.vay_disabled_in_settings);
             }
             rows.add(Row.action(
                     ACTION_REFRESH_MATERIAL_YOU,
-                    "Material You base",
+                    LocaleController.getString(R.string.vay_material_you_base),
                     materialValue
             ));
         }
 
         if (TextUtils.isEmpty(query) && VayTelegram.themePalette().countOverrides() > 0) {
-            rows.add(Row.header("Palette"));
+            rows.add(Row.header(LocaleController.getString(R.string.vay_palette)));
             rows.add(Row.action(
                     ACTION_RESET_ALL,
-                    "Reset palette",
-                    VayTelegram.themePalette().countOverrides() + " overrides"
+                    LocaleController.getString(R.string.vay_reset_palette),
+                    LocaleController.formatString(R.string.vay_override_count_suffix, VayTelegram.themePalette().countOverrides())
             ));
         }
 
@@ -158,20 +158,20 @@ public final class VayPaletteActivity extends BaseFragment {
             if (!VayTelegram.isMaterialYouSupported()) {
                 Toast.makeText(
                         getParentActivity(),
-                        "Material You requires Android 12 or newer",
+                        LocaleController.getString(R.string.vay_material_requires_android),
                         Toast.LENGTH_SHORT
                 ).show();
             } else if (!VayTelegram.isMaterialYouEnabled()) {
                 Toast.makeText(
                         getParentActivity(),
-                        "Enable Material You palette in vayGram Settings",
+                        LocaleController.getString(R.string.vay_material_enable_hint),
                         Toast.LENGTH_SHORT
                 ).show();
             } else {
                 VayTelegram.refreshMaterialYou();
                 Toast.makeText(
                         getParentActivity(),
-                        "Material You colors refreshed",
+                        LocaleController.getString(R.string.vay_material_refreshed),
                         Toast.LENGTH_SHORT
                 ).show();
                 rebuildRows();
@@ -188,12 +188,12 @@ public final class VayPaletteActivity extends BaseFragment {
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Reset vayGram palette?");
-        builder.setMessage("Remove every custom theme-token color and return to Telegram theme colors.");
-        builder.setNegativeButton("Cancel", null);
-        builder.setPositiveButton("Reset", (dialog, which) -> {
+        builder.setTitle(LocaleController.getString(R.string.vay_reset_palette_title));
+        builder.setMessage(LocaleController.getString(R.string.vay_reset_palette_body));
+        builder.setNegativeButton(LocaleController.getString(R.string.vay_cancel), null);
+        builder.setPositiveButton(LocaleController.getString(R.string.vay_reset), (dialog, which) -> {
             VayTelegram.resetThemePalette();
-            Toast.makeText(context, "Palette reset", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, LocaleController.getString(R.string.vay_palette_reset_done), Toast.LENGTH_SHORT).show();
             rebuildRows();
         });
         showDialog(builder.create());
@@ -218,17 +218,17 @@ public final class VayPaletteActivity extends BaseFragment {
         builder.setTitle(token.getTitle());
         builder.setMessage(token.getId());
         builder.setView(editor);
-        builder.setNegativeButton("Cancel", (dialog, which) -> {
+        builder.setNegativeButton(LocaleController.getString(R.string.vay_cancel), (dialog, which) -> {
             settled[0] = true;
             VayTelegram.restoreThemeColorPreview(token, originalOverride);
             rebuildRows();
         });
-        builder.setNeutralButton("Reset", (dialog, which) -> {
+        builder.setNeutralButton(LocaleController.getString(R.string.vay_reset), (dialog, which) -> {
             settled[0] = true;
             VayTelegram.resetThemeColor(token);
             rebuildRows();
         });
-        builder.setPositiveButton("Apply", (dialog, which) -> {
+        builder.setPositiveButton(LocaleController.getString(R.string.vay_apply), (dialog, which) -> {
             settled[0] = true;
             VayTelegram.commitThemeColor(token, editor.getColor());
             rebuildRows();
@@ -246,9 +246,9 @@ public final class VayPaletteActivity extends BaseFragment {
         int color = VayThemeBridge.color(token);
         String value = String.format(Locale.US, "#%08X", color);
         if (VayTelegram.themePalette().hasColorOverride(token)) {
-            value += "  ·  override";
+            value += "  ·  " + LocaleController.getString(R.string.vay_override_short);
         } else if (VayTelegram.isMaterialYouEnabled()) {
-            value += "  ·  Material You";
+            value += "  ·  " + LocaleController.getString(R.string.vay_material_you_suffix);
         }
         return value;
     }
@@ -408,7 +408,12 @@ public final class VayPaletteActivity extends BaseFragment {
         private void updateUi() {
             int color = getColor();
             swatch.setBackgroundColor(color);
-            String[] names = {"Alpha", "Red", "Green", "Blue"};
+            String[] names = {
+                    LocaleController.getString(R.string.vay_channel_alpha),
+                    LocaleController.getString(R.string.vay_channel_red),
+                    LocaleController.getString(R.string.vay_channel_green),
+                    LocaleController.getString(R.string.vay_channel_blue)
+            };
             for (int i = 0; i < labels.length; i++) {
                 labels[i].setText(names[i] + "  " + channels[i].getProgress());
             }
