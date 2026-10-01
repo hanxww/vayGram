@@ -78,3 +78,29 @@
 - [ ] Firebase notification smoke
 - [ ] Vay Settings / Theme Engine / scopes smoke
 - [ ] Profile Studio smoke
+
+
+## M7 — Profile Studio block pack
+- [x] avatar visibility block
+- [x] display name block
+- [x] status / last-seen block
+- [x] phone block with Telegram privacy boundary
+- [x] birthday block
+- [x] emoji-status block
+- [x] personal-channel block
+- [x] groups block
+- [x] links block
+- [x] music block
+- [x] quote block
+- [x] badges block
+- [x] gifts block
+- [x] media block
+- [x] mutual-chats block
+- [x] custom-text block
+- [x] custom-image block
+- [x] separator block
+- [x] spacer block
+- [x] buttons block
+- [x] account/global persistence and inheritance for all blocks
+- [x] live Profile Studio preview for the block pack
+- [x] EN / RU / ET UI strings

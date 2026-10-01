@@ -70,6 +70,21 @@ must_grep 'VayCoachOverlay\.show' \
 must_grep 'PROFILE_LAYOUT_MODE' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/core/settings/VayDefaults.java" \
   "Profile Studio setting registry"
+must_grep 'PROFILE_SHOW_AVATAR' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/core/settings/VayDefaults.java" \
+  "Profile Studio avatar block"
+must_grep 'PROFILE_SHOW_BUTTONS' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/core/settings/VayDefaults.java" \
+  "Profile Studio buttons block"
+must_grep 'profile\.block\.phone' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/core/settings/VayDefaults.java" \
+  "Profile Studio privacy-aware phone block"
+must_grep 'drawPreviewBlocks' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayProfileStudioActivity.java" \
+  "Profile Studio multi-block live preview"
+must_grep 'vay_profile_show_mutual_chats' \
+  "$TMP/telegram/TMessagesProj/src/main/res/values-ru/vaygram_strings.xml" \
+  "Profile Studio block localization"
 
 must_grep 'ACTION_SAVE_PROFILE' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" \

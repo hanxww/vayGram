@@ -69,6 +69,17 @@ public final class Demo {
         if (registry.find("profile.layout.mode") != VayDefaults.PROFILE_LAYOUT_MODE) {
             throw new IllegalStateException("Profile Studio settings are missing from the registry");
         }
+        if (registry.find("profile.block.avatar") != VayDefaults.PROFILE_SHOW_AVATAR
+                || registry.find("profile.block.buttons") != VayDefaults.PROFILE_SHOW_BUTTONS
+                || registry.find("profile.block.custom_image") != VayDefaults.PROFILE_SHOW_CUSTOM_IMAGE) {
+            throw new IllegalStateException("Profile block pack is missing from the registry");
+        }
+        if (!engine.get(VayDefaults.PROFILE_SHOW_AVATAR)
+                || !engine.get(VayDefaults.PROFILE_SHOW_NAME)
+                || engine.get(VayDefaults.PROFILE_SHOW_PHONE)
+                || engine.get(VayDefaults.PROFILE_SHOW_CUSTOM_IMAGE)) {
+            throw new IllegalStateException("Profile block privacy/default smoke test failed");
+        }
         if (engine.get(VayDefaults.GLASS_OPACITY) != 1f) {
             throw new IllegalStateException("Glass opacity must default to fully opaque");
         }
@@ -86,8 +97,12 @@ public final class Demo {
 
         engine.set(VayDefaults.PROFILE_LAYOUT_MODE, account, "free");
         engine.set(VayDefaults.PROFILE_AVATAR_SIZE, account, 999);
+        engine.set(VayDefaults.PROFILE_SHOW_PHONE, account, true);
+        engine.set(VayDefaults.PROFILE_SHOW_BUTTONS, account, true);
         if (!"free".equals(engine.getResolved(VayDefaults.PROFILE_LAYOUT_MODE, account, VayScopeKey.GLOBAL))
-                || engine.getResolved(VayDefaults.PROFILE_AVATAR_SIZE, account, VayScopeKey.GLOBAL) != 196) {
+                || engine.getResolved(VayDefaults.PROFILE_AVATAR_SIZE, account, VayScopeKey.GLOBAL) != 196
+                || !engine.getResolved(VayDefaults.PROFILE_SHOW_PHONE, account, VayScopeKey.GLOBAL)
+                || !engine.getResolved(VayDefaults.PROFILE_SHOW_BUTTONS, account, VayScopeKey.GLOBAL)) {
             throw new IllegalStateException("Profile Studio account settings failed");
         }
 

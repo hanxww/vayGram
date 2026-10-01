@@ -137,11 +137,59 @@ public final class VayProfileStudioActivity extends BaseFragment {
         rows.add(Row.setting(VayDefaults.PROFILE_PARALLAX,
                 LocaleController.getString(R.string.vay_profile_parallax)));
 
-        rows.add(Row.header(LocaleController.getString(R.string.vay_profile_blocks)));
+        rows.add(Row.header(LocaleController.getString(R.string.vay_profile_core_blocks)));
+        rows.add(Row.setting(VayDefaults.PROFILE_SHOW_AVATAR,
+                LocaleController.getString(R.string.vay_profile_show_avatar)));
+        rows.add(Row.setting(VayDefaults.PROFILE_SHOW_NAME,
+                LocaleController.getString(R.string.vay_profile_show_name)));
         rows.add(Row.setting(VayDefaults.PROFILE_SHOW_USERNAME,
                 LocaleController.getString(R.string.vay_profile_show_username)));
         rows.add(Row.setting(VayDefaults.PROFILE_SHOW_BIO,
                 LocaleController.getString(R.string.vay_profile_show_bio)));
+        rows.add(Row.setting(VayDefaults.PROFILE_SHOW_STATUS,
+                LocaleController.getString(R.string.vay_profile_show_status)));
+        rows.add(Row.setting(VayDefaults.PROFILE_SHOW_EMOJI_STATUS,
+                LocaleController.getString(R.string.vay_profile_show_emoji_status)));
+
+        rows.add(Row.header(LocaleController.getString(R.string.vay_profile_personal_blocks)));
+        rows.add(Row.setting(VayDefaults.PROFILE_SHOW_PHONE,
+                LocaleController.getString(R.string.vay_profile_show_phone)));
+        rows.add(Row.setting(VayDefaults.PROFILE_SHOW_BIRTHDAY,
+                LocaleController.getString(R.string.vay_profile_show_birthday)));
+
+        rows.add(Row.header(LocaleController.getString(R.string.vay_profile_social_blocks)));
+        rows.add(Row.setting(VayDefaults.PROFILE_SHOW_PERSONAL_CHANNEL,
+                LocaleController.getString(R.string.vay_profile_show_personal_channel)));
+        rows.add(Row.setting(VayDefaults.PROFILE_SHOW_GROUPS,
+                LocaleController.getString(R.string.vay_profile_show_groups)));
+        rows.add(Row.setting(VayDefaults.PROFILE_SHOW_MUTUAL_CHATS,
+                LocaleController.getString(R.string.vay_profile_show_mutual_chats)));
+
+        rows.add(Row.header(LocaleController.getString(R.string.vay_profile_content_blocks)));
+        rows.add(Row.setting(VayDefaults.PROFILE_SHOW_LINKS,
+                LocaleController.getString(R.string.vay_profile_show_links)));
+        rows.add(Row.setting(VayDefaults.PROFILE_SHOW_MUSIC,
+                LocaleController.getString(R.string.vay_profile_show_music)));
+        rows.add(Row.setting(VayDefaults.PROFILE_SHOW_QUOTE,
+                LocaleController.getString(R.string.vay_profile_show_quote)));
+        rows.add(Row.setting(VayDefaults.PROFILE_SHOW_BADGES,
+                LocaleController.getString(R.string.vay_profile_show_badges)));
+        rows.add(Row.setting(VayDefaults.PROFILE_SHOW_GIFTS,
+                LocaleController.getString(R.string.vay_profile_show_gifts)));
+        rows.add(Row.setting(VayDefaults.PROFILE_SHOW_MEDIA,
+                LocaleController.getString(R.string.vay_profile_show_media)));
+
+        rows.add(Row.header(LocaleController.getString(R.string.vay_profile_custom_blocks)));
+        rows.add(Row.setting(VayDefaults.PROFILE_SHOW_CUSTOM_TEXT,
+                LocaleController.getString(R.string.vay_profile_show_custom_text)));
+        rows.add(Row.setting(VayDefaults.PROFILE_SHOW_CUSTOM_IMAGE,
+                LocaleController.getString(R.string.vay_profile_show_custom_image)));
+        rows.add(Row.setting(VayDefaults.PROFILE_SHOW_SEPARATORS,
+                LocaleController.getString(R.string.vay_profile_show_separators)));
+        rows.add(Row.setting(VayDefaults.PROFILE_SHOW_SPACER,
+                LocaleController.getString(R.string.vay_profile_show_spacer)));
+        rows.add(Row.setting(VayDefaults.PROFILE_SHOW_BUTTONS,
+                LocaleController.getString(R.string.vay_profile_show_buttons)));
         rows.add(Row.setting(VayDefaults.PROFILE_AUTHOR_STYLE,
                 LocaleController.getString(R.string.vay_profile_author_style)));
 
@@ -179,6 +227,26 @@ public final class VayProfileStudioActivity extends BaseFragment {
         settings.add(VayDefaults.PROFILE_PARALLAX);
         settings.add(VayDefaults.PROFILE_SHOW_USERNAME);
         settings.add(VayDefaults.PROFILE_SHOW_BIO);
+        settings.add(VayDefaults.PROFILE_SHOW_AVATAR);
+        settings.add(VayDefaults.PROFILE_SHOW_NAME);
+        settings.add(VayDefaults.PROFILE_SHOW_STATUS);
+        settings.add(VayDefaults.PROFILE_SHOW_PHONE);
+        settings.add(VayDefaults.PROFILE_SHOW_BIRTHDAY);
+        settings.add(VayDefaults.PROFILE_SHOW_EMOJI_STATUS);
+        settings.add(VayDefaults.PROFILE_SHOW_PERSONAL_CHANNEL);
+        settings.add(VayDefaults.PROFILE_SHOW_GROUPS);
+        settings.add(VayDefaults.PROFILE_SHOW_LINKS);
+        settings.add(VayDefaults.PROFILE_SHOW_MUSIC);
+        settings.add(VayDefaults.PROFILE_SHOW_QUOTE);
+        settings.add(VayDefaults.PROFILE_SHOW_BADGES);
+        settings.add(VayDefaults.PROFILE_SHOW_GIFTS);
+        settings.add(VayDefaults.PROFILE_SHOW_MEDIA);
+        settings.add(VayDefaults.PROFILE_SHOW_MUTUAL_CHATS);
+        settings.add(VayDefaults.PROFILE_SHOW_CUSTOM_TEXT);
+        settings.add(VayDefaults.PROFILE_SHOW_CUSTOM_IMAGE);
+        settings.add(VayDefaults.PROFILE_SHOW_SEPARATORS);
+        settings.add(VayDefaults.PROFILE_SHOW_SPACER);
+        settings.add(VayDefaults.PROFILE_SHOW_BUTTONS);
         settings.add(VayDefaults.PROFILE_AUTHOR_STYLE);
         return settings;
     }
@@ -205,12 +273,7 @@ public final class VayProfileStudioActivity extends BaseFragment {
             return;
         }
 
-        if (row.setting == VayDefaults.PROFILE_AVATAR_GLOW
-                || row.setting == VayDefaults.PROFILE_STATUS_RING
-                || row.setting == VayDefaults.PROFILE_PARALLAX
-                || row.setting == VayDefaults.PROFILE_SHOW_USERNAME
-                || row.setting == VayDefaults.PROFILE_SHOW_BIO
-                || row.setting == VayDefaults.PROFILE_AUTHOR_STYLE) {
+        if (row.setting.getDefaultValue() instanceof Boolean) {
             toggleBoolean(row.setting);
         } else if (row.setting.hasNumericRange()) {
             showNumberEditor(row);
@@ -426,7 +489,7 @@ public final class VayProfileStudioActivity extends BaseFragment {
                 previewView = new ProfilePreviewView(context);
                 previewView.setLayoutParams(new RecyclerView.LayoutParams(
                         RecyclerView.LayoutParams.MATCH_PARENT,
-                        AndroidUtilities.dp(330)
+                        AndroidUtilities.dp(540)
                 ));
                 return new RecyclerListView.Holder(previewView);
             } else if (viewType == TYPE_HEADER) {
@@ -542,7 +605,17 @@ public final class VayProfileStudioActivity extends BaseFragment {
             canvas.drawRoundRect(rect, AndroidUtilities.dp(26), AndroidUtilities.dp(26), paint);
             paint.clearShadowLayer();
 
-            float avatarSize = AndroidUtilities.dp(Math.min(148, get(VayDefaults.PROFILE_AVATAR_SIZE)));
+            if (Boolean.TRUE.equals(get(VayDefaults.PROFILE_PARALLAX))) {
+                paint.setColor(0x224F2CFF);
+                canvas.drawCircle(getWidth() - AndroidUtilities.dp(52), AndroidUtilities.dp(62), AndroidUtilities.dp(34), paint);
+                paint.setColor(0x22FF35CC);
+                canvas.drawCircle(AndroidUtilities.dp(48), getHeight() - AndroidUtilities.dp(48), AndroidUtilities.dp(26), paint);
+            }
+
+            boolean showAvatar = Boolean.TRUE.equals(get(VayDefaults.PROFILE_SHOW_AVATAR));
+            float avatarSize = showAvatar
+                    ? AndroidUtilities.dp(Math.min(148, get(VayDefaults.PROFILE_AVATAR_SIZE)))
+                    : 0f;
             float cx = "free".equals(get(VayDefaults.PROFILE_LAYOUT_MODE))
                     ? getWidth() * 0.36f
                     : getWidth() * 0.5f;
@@ -550,53 +623,133 @@ public final class VayProfileStudioActivity extends BaseFragment {
             float radiusPct = get(VayDefaults.PROFILE_AVATAR_RADIUS);
             float avatarRadius = avatarSize * Math.max(0f, Math.min(50f, radiusPct)) / 100f;
 
-            if (Boolean.TRUE.equals(get(VayDefaults.PROFILE_AVATAR_GLOW))) {
-                paint.setColor(accent);
-                paint.setShadowLayer(AndroidUtilities.dp(22), 0, 0, accent);
+            if (showAvatar) {
                 rect.set(cx - avatarSize / 2, cy - avatarSize / 2, cx + avatarSize / 2, cy + avatarSize / 2);
-                canvas.drawRoundRect(rect, avatarRadius, avatarRadius, paint);
-                paint.clearShadowLayer();
-            }
+                if (Boolean.TRUE.equals(get(VayDefaults.PROFILE_AVATAR_GLOW))) {
+                    paint.setColor(accent);
+                    paint.setShadowLayer(AndroidUtilities.dp(22), 0, 0, accent);
+                    canvas.drawRoundRect(rect, avatarRadius, avatarRadius, paint);
+                    paint.clearShadowLayer();
+                }
 
-            paint.setColor(accent);
-            rect.set(cx - avatarSize / 2, cy - avatarSize / 2, cx + avatarSize / 2, cy + avatarSize / 2);
-            canvas.drawRoundRect(rect, avatarRadius, avatarRadius, paint);
-
-            if (Boolean.TRUE.equals(get(VayDefaults.PROFILE_STATUS_RING))) {
-                paint.setStyle(Paint.Style.STROKE);
-                paint.setStrokeWidth(AndroidUtilities.dp(3));
-                paint.setColor(Color.WHITE);
+                paint.setColor(accent);
                 canvas.drawRoundRect(rect, avatarRadius, avatarRadius, paint);
-                paint.setStyle(Paint.Style.FILL);
+
+                if (Boolean.TRUE.equals(get(VayDefaults.PROFILE_STATUS_RING))) {
+                    paint.setStyle(Paint.Style.STROKE);
+                    paint.setStrokeWidth(AndroidUtilities.dp(3));
+                    paint.setColor(Color.WHITE);
+                    canvas.drawRoundRect(rect, avatarRadius, avatarRadius, paint);
+                    paint.setStyle(Paint.Style.FILL);
+                }
             }
 
             paint.setTextAlign(Paint.Align.CENTER);
-            paint.setColor(text);
-            paint.setTextSize(AndroidUtilities.dp(20));
-            paint.setFakeBoldText(true);
-            canvas.drawText("vayGram", cx, cy + avatarSize / 2 + AndroidUtilities.dp(32), paint);
-            paint.setFakeBoldText(false);
+            float cursorY = showAvatar
+                    ? cy + avatarSize / 2 + AndroidUtilities.dp(32)
+                    : AndroidUtilities.dp(72);
 
-            float cursorY = cy + avatarSize / 2 + AndroidUtilities.dp(56);
+            if (Boolean.TRUE.equals(get(VayDefaults.PROFILE_SHOW_NAME))) {
+                paint.setColor(text);
+                paint.setTextSize(AndroidUtilities.dp(20));
+                paint.setFakeBoldText(true);
+                canvas.drawText("vayGram", cx, cursorY, paint);
+                paint.setFakeBoldText(false);
+                cursorY += AndroidUtilities.dp(24);
+            }
+
             if (Boolean.TRUE.equals(get(VayDefaults.PROFILE_SHOW_USERNAME))) {
                 paint.setColor(accent);
                 paint.setTextSize(AndroidUtilities.dp(13));
                 canvas.drawText("@vaygram", cx, cursorY, paint);
-                cursorY += AndroidUtilities.dp(24);
+                cursorY += AndroidUtilities.dp(22);
             }
+
             if (Boolean.TRUE.equals(get(VayDefaults.PROFILE_SHOW_BIO))) {
                 paint.setColor(textSecondary);
                 paint.setTextSize(AndroidUtilities.dp(12));
                 canvas.drawText("Customize everything. Complicate nothing.", cx, cursorY, paint);
+                cursorY += AndroidUtilities.dp(24);
             }
 
-            if (Boolean.TRUE.equals(get(VayDefaults.PROFILE_PARALLAX))) {
-                paint.setColor(0x224F2CFF);
-                canvas.drawCircle(getWidth() - AndroidUtilities.dp(52), AndroidUtilities.dp(62), AndroidUtilities.dp(34), paint);
-                paint.setColor(0x22FF35CC);
-                canvas.drawCircle(AndroidUtilities.dp(48), getHeight() - AndroidUtilities.dp(48), AndroidUtilities.dp(26), paint);
-            }
+            ArrayList<String> blocks = new ArrayList<>();
+            addPreviewBlock(blocks, VayDefaults.PROFILE_SHOW_STATUS, R.string.vay_profile_show_status);
+            addPreviewBlock(blocks, VayDefaults.PROFILE_SHOW_PHONE, R.string.vay_profile_show_phone);
+            addPreviewBlock(blocks, VayDefaults.PROFILE_SHOW_BIRTHDAY, R.string.vay_profile_show_birthday);
+            addPreviewBlock(blocks, VayDefaults.PROFILE_SHOW_EMOJI_STATUS, R.string.vay_profile_show_emoji_status);
+            addPreviewBlock(blocks, VayDefaults.PROFILE_SHOW_PERSONAL_CHANNEL, R.string.vay_profile_show_personal_channel);
+            addPreviewBlock(blocks, VayDefaults.PROFILE_SHOW_GROUPS, R.string.vay_profile_show_groups);
+            addPreviewBlock(blocks, VayDefaults.PROFILE_SHOW_MUTUAL_CHATS, R.string.vay_profile_show_mutual_chats);
+            addPreviewBlock(blocks, VayDefaults.PROFILE_SHOW_LINKS, R.string.vay_profile_show_links);
+            addPreviewBlock(blocks, VayDefaults.PROFILE_SHOW_MUSIC, R.string.vay_profile_show_music);
+            addPreviewBlock(blocks, VayDefaults.PROFILE_SHOW_QUOTE, R.string.vay_profile_show_quote);
+            addPreviewBlock(blocks, VayDefaults.PROFILE_SHOW_BADGES, R.string.vay_profile_show_badges);
+            addPreviewBlock(blocks, VayDefaults.PROFILE_SHOW_GIFTS, R.string.vay_profile_show_gifts);
+            addPreviewBlock(blocks, VayDefaults.PROFILE_SHOW_MEDIA, R.string.vay_profile_show_media);
+            addPreviewBlock(blocks, VayDefaults.PROFILE_SHOW_CUSTOM_TEXT, R.string.vay_profile_show_custom_text);
+            addPreviewBlock(blocks, VayDefaults.PROFILE_SHOW_CUSTOM_IMAGE, R.string.vay_profile_show_custom_image);
+            addPreviewBlock(blocks, VayDefaults.PROFILE_SHOW_SEPARATORS, R.string.vay_profile_show_separators);
+            addPreviewBlock(blocks, VayDefaults.PROFILE_SHOW_SPACER, R.string.vay_profile_show_spacer);
+            addPreviewBlock(blocks, VayDefaults.PROFILE_SHOW_BUTTONS, R.string.vay_profile_show_buttons);
+            drawPreviewBlocks(canvas, blocks, cursorY + AndroidUtilities.dp(8), accent, text);
             paint.setTextAlign(Paint.Align.LEFT);
+        }
+
+        private void addPreviewBlock(ArrayList<String> blocks, VaySetting<Boolean> setting, int stringRes) {
+            if (Boolean.TRUE.equals(get(setting))) {
+                blocks.add(LocaleController.getString(stringRes));
+            }
+        }
+
+        private void drawPreviewBlocks(Canvas canvas, ArrayList<String> blocks, float startY, int accent, int textColor) {
+            if (blocks.isEmpty()) {
+                return;
+            }
+            float left = AndroidUtilities.dp(34);
+            float right = getWidth() - AndroidUtilities.dp(34);
+            float gap = AndroidUtilities.dp(7);
+            float chipHeight = AndroidUtilities.dp(25);
+            float rowGap = AndroidUtilities.dp(6);
+            float columnWidth = (right - left - gap) / 2f;
+
+            paint.setTextSize(AndroidUtilities.dp(10));
+            paint.setFakeBoldText(false);
+            paint.setTextAlign(Paint.Align.LEFT);
+
+            for (int i = 0; i < blocks.size(); i++) {
+                int row = i / 2;
+                int column = i % 2;
+                float x = left + column * (columnWidth + gap);
+                float y = startY + row * (chipHeight + rowGap);
+                if (y + chipHeight > getHeight() - AndroidUtilities.dp(28)) {
+                    break;
+                }
+
+                rect.set(x, y, x + columnWidth, y + chipHeight);
+                paint.setColor(Color.argb(28, Color.red(accent), Color.green(accent), Color.blue(accent)));
+                canvas.drawRoundRect(rect, AndroidUtilities.dp(10), AndroidUtilities.dp(10), paint);
+
+                paint.setColor(textColor);
+                String label = fitLabel(blocks.get(i), columnWidth - AndroidUtilities.dp(18));
+                canvas.drawText(
+                        label,
+                        x + AndroidUtilities.dp(9),
+                        y + chipHeight / 2f - (paint.ascent() + paint.descent()) / 2f,
+                        paint
+                );
+            }
+        }
+
+        private String fitLabel(String value, float maxWidth) {
+            if (paint.measureText(value) <= maxWidth) {
+                return value;
+            }
+            String ellipsis = "…";
+            int end = value.length();
+            while (end > 1 && paint.measureText(value.substring(0, end) + ellipsis) > maxWidth) {
+                end--;
+            }
+            return value.substring(0, Math.max(1, end)) + ellipsis;
         }
     }
 }
