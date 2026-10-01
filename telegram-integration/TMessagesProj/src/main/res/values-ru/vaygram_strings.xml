@@ -61,6 +61,7 @@
 
 
     <string name="vay_settings_title">Настройки vayGram</string>
+    <string name="vay_settings_entry_hint">Все настройки vayGram в одном месте</string>
     <string name="vay_live_preview">Предпросмотр</string>
     <string name="vay_controls">Управление</string>
     <string name="vay_customization_level">Уровень кастомизации</string>
