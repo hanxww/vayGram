@@ -11,7 +11,11 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/DialogsActivity.java b/
 +        if (!onlySelect && folderId == 0 && communityId == 0) {
 +            AndroidUtilities.runOnUIThread(() -> {
 +                if (getParentActivity() != null && getVisibleDialog() == null) {
-+                    app.vaygram.ui.VayFirstLaunchCoach.maybePresent(\n                            DialogsActivity.this,\n                            optionsItem,\n                            floatingButton3\n                    );
++                    app.vaygram.ui.VayFirstLaunchCoach.maybePresent(
++                            DialogsActivity.this,
++                            optionsItem,
++                            floatingButton3
++                    );
 +                }
 +            }, 900);
 +        }
