@@ -1,0 +1,115 @@
+diff --git a/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java b/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java
+--- a/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java
++++ b/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java
+@@ -6753,7 +6753,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter
+         animatedStatusView.setPivotX(dp(30));
+         animatedStatusView.setPivotY(dp(30));
+ 
+-        avatarContainer = new FrameLayout(context) {
++        avatarContainer = new app.vaygram.ui.VayProfileAvatarFrame(context, currentAccount, myProfile) {
+             @Override
+             public void setScaleX(float scaleX) {
+                 super.setScaleX(scaleX);
+@@ -7930,6 +7930,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter
+     private int getSmallAvatarRoundRadius() {
+         if (isTopic) {
+             return 0;
++        }
++        if (myProfile && userId == getUserConfig().getClientUserId()) {
++            return app.vaygram.telegram.VayProfileAppearance.avatarRadiusForSize(currentAccount, dp(100));
+         }
+         if (chatId != 0) {
+             TLRPC.Chat chatLocal = getMessagesController().getChat(chatId);
+@@ -12852,7 +12855,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter
+         if (userId != 0) {
+             TLRPC.User user = getMessagesController().getUser(userId);
+-            if (userInfo != null && userInfo.saved_music != null && (imageUpdater == null || myProfile)) {
++            if (userInfo != null && userInfo.saved_music != null && (imageUpdater == null || myProfile)
++                    && (!myProfile || app.vaygram.telegram.VayProfileAppearance.showMusic(currentAccount))) {
+                 hasMusic = true;
+             }
+ 
+@@ -12935,7 +12939,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter
+                     unofficialSecurityRiskDividerRow = rowCount++;
+                 }
+ 
+-                if (userInfo != null && (userInfo.flags2 & 64) != 0 && (profileChannelMessageFetcher == null || !profileChannelMessageFetcher.loaded || !profileChannelMessageFetcher.messageObjects.isEmpty())) {
++                if ((!myProfile || app.vaygram.telegram.VayProfileAppearance.showPersonalChannel(currentAccount))
++                        && userInfo != null && (userInfo.flags2 & 64) != 0 && (profileChannelMessageFetcher == null || !profileChannelMessageFetcher.loaded || !profileChannelMessageFetcher.messageObjects.isEmpty())) {
+                     final TLRPC.Chat channel = getMessagesController().getChat(userInfo.personal_channel_id);
+                     if (channel != null && (ChatObject.isPublic(channel) || !ChatObject.isNotInChat(channel))) {
+                         channelRow = rowCount++;
+@@ -12944,17 +12949,20 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter
+                     }
+                 }
+                 infoStartRow = rowCount;
+-                if (!isBot && (hasPhone || !hasInfo)) {
++                if (!isBot && (hasPhone || !hasInfo)
++                        && (!myProfile || app.vaygram.telegram.VayProfileAppearance.showPhone(currentAccount))) {
+                     phoneRow = rowCount++;
+                 }
+-                if (userInfo != null && !TextUtils.isEmpty(userInfo.about)) {
++                if (userInfo != null && !TextUtils.isEmpty(userInfo.about)
++                        && (!myProfile || app.vaygram.telegram.VayProfileAppearance.showBio(currentAccount))) {
+                     userInfoRow = rowCount++;
+                 }
+-                if (user != null && username != null) {
++                if (user != null && username != null
++                        && (!myProfile || app.vaygram.telegram.VayProfileAppearance.showUsername(currentAccount))) {
+                     usernameRow = rowCount++;
+                 }
+                 if (userInfo != null) {
+-                    if (userInfo.birthday != null) {
++                    if (userInfo.birthday != null
++                            && (!myProfile || app.vaygram.telegram.VayProfileAppearance.showBirthday(currentAccount))) {
+                         birthdayRow = rowCount++;
+                     }
+                     if (userInfo.business_work_hours != null) {
+@@ -13040,7 +13048,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter
+                     reportDividerRow = rowCount++;
+                 }
+ 
+-                if (hasMedia || (user != null && user.bot && user.bot_can_edit && user.bot_has_main_app) || userInfo != null && userInfo.common_chats_count != 0 || myProfile) {
++                if ((hasMedia && (!myProfile || app.vaygram.telegram.VayProfileAppearance.showMedia(currentAccount)))
++                        || (user != null && user.bot && user.bot_can_edit && user.bot_has_main_app)
++                        || userInfo != null && userInfo.common_chats_count != 0
++                        || myProfile && app.vaygram.telegram.VayProfileAppearance.showMedia(currentAccount)) {
+                     sharedMediaRow = rowCount++;
+                 } else if (lastSectionRow == -1 && needSendMessage) {
+                     sendMessageRow = rowCount++;
+@@ -11161,6 +11171,22 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter
+             avatarImage.getImageReceiver().setVisible(!PhotoViewer.isShowingImage(photoBig) && (getLastStoryViewer() == null || getLastStoryViewer().transitionViewHolder.view != avatarImage), storyView != null);
+         }
+ 
++        if (myProfile && userId == getUserConfig().getClientUserId()) {
++            boolean showName = app.vaygram.telegram.VayProfileAppearance.showName(currentAccount);
++            boolean showStatus = app.vaygram.telegram.VayProfileAppearance.showStatus(currentAccount);
++            avatarImage.drawAvatar = app.vaygram.telegram.VayProfileAppearance.showAvatar(currentAccount);
++            for (int a = 0; a < nameTextView.length; a++) {
++                if (nameTextView[a] != null) {
++                    nameTextView[a].setVisibility(showName ? View.VISIBLE : View.INVISIBLE);
++                }
++            }
++            for (int a = 0; a < onlineTextView.length; a++) {
++                if (onlineTextView[a] != null) {
++                    onlineTextView[a].setVisibility(showStatus ? View.VISIBLE : View.INVISIBLE);
++                }
++            }
++            avatarContainer.invalidate();
++        }
++
+         needLayout(true);
+     }
+@@ -9086,6 +9112,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter
+                 if (infoChanged) {
+                     updateProfileData(true);
+                 }
++                if (myProfile) {
++                    updateRowsIds();
++                    if (listAdapter != null) {
++                        listAdapter.notifyDataSetChanged();
++                    }
++                }
+                 if ((mask & MessagesController.UPDATE_MASK_PHONE) != 0) {
+                     if (listView != null) {
+                         RecyclerListView.Holder holder = (RecyclerListView.Holder) listView.findViewHolderForPosition(phoneRow);
