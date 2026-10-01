@@ -35,6 +35,7 @@ public final class VayDiagnosticsActivity extends BaseFragment {
     private static final int ACTION_COPY = 1;
     private static final int ACTION_RESET_SCOPE = 2;
     private static final int ACTION_RESET_THEME = 3;
+    private static final int ACTION_SAFE_MODE = 4;
 
     private final VayScopeKey scopeKey;
     private final String scopeTitle;
@@ -139,8 +140,21 @@ public final class VayDiagnosticsActivity extends BaseFragment {
                         ? LocaleController.getString(R.string.vay_enabled)
                         : LocaleController.getString(R.string.vay_diagnostics_disabled)
         ));
+        rows.add(Row.value(
+                LocaleController.getString(R.string.vay_safe_mode),
+                VayTelegram.isSafeMode()
+                        ? LocaleController.getString(R.string.vay_safe_mode_enabled)
+                        : LocaleController.getString(R.string.vay_safe_mode_disabled)
+        ));
 
         rows.add(Row.header(LocaleController.getString(R.string.vay_diagnostics_recovery)));
+        rows.add(Row.action(
+                ACTION_SAFE_MODE,
+                LocaleController.getString(R.string.vay_safe_mode),
+                VayTelegram.isSafeMode()
+                        ? LocaleController.getString(R.string.vay_safe_mode_disable)
+                        : LocaleController.getString(R.string.vay_safe_mode_enable)
+        ));
         rows.add(Row.action(
                 ACTION_COPY,
                 LocaleController.getString(R.string.vay_diagnostics_copy),
@@ -182,6 +196,8 @@ public final class VayDiagnosticsActivity extends BaseFragment {
             confirmResetScope();
         } else if (row.action == ACTION_RESET_THEME) {
             confirmResetTheme();
+        } else if (row.action == ACTION_SAFE_MODE) {
+            confirmSafeMode();
         }
     }
 
@@ -220,7 +236,42 @@ public final class VayDiagnosticsActivity extends BaseFragment {
                 + "material_you=" + materialYouStatus() + "\n"
                 + "navigation_gradient="
                 + (VayTelegram.storedNavigationGradient() != null ? "enabled" : "disabled") + "\n"
+                + "safe_mode=" + (VayTelegram.isSafeMode() ? "enabled" : "disabled") + "\n"
                 + "privacy=No account ids, phone numbers, chats, messages, tokens, or credentials are included.";
+    }
+
+    private void confirmSafeMode() {
+        Context context = getParentActivity();
+        if (context == null) {
+            return;
+        }
+        boolean enabling = !VayTelegram.isSafeMode();
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(LocaleController.getString(
+                enabling
+                        ? R.string.vay_safe_mode_enable_title
+                        : R.string.vay_safe_mode_disable_title
+        ));
+        builder.setMessage(LocaleController.getString(
+                enabling
+                        ? R.string.vay_safe_mode_enable_body
+                        : R.string.vay_safe_mode_disable_body
+        ));
+        builder.setNegativeButton(LocaleController.getString(R.string.vay_cancel), null);
+        builder.setPositiveButton(LocaleController.getString(
+                enabling
+                        ? R.string.vay_safe_mode_enable
+                        : R.string.vay_safe_mode_disable
+        ), (dialog, which) -> {
+            VayTelegram.setSafeMode(enabling);
+            Toast.makeText(
+                    context,
+                    LocaleController.getString(R.string.vay_safe_mode_changed),
+                    Toast.LENGTH_SHORT
+            ).show();
+            rebuildRows();
+        });
+        showDialog(builder.create());
     }
 
     private void confirmResetScope() {
