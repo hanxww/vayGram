@@ -49,6 +49,8 @@ On a fresh app-data state:
 - confirm the target remains clickable;
 - confirm Next / Skip / Done work;
 - confirm the tour survives required scrolling and different screen positions;
+- on the Basic / Advanced / Insane page, confirm Continue remains visible and tappable on a compact-height device;
+- select each mode and confirm Continue advances to the scopes page without needing to rotate or resize the app;
 - confirm the selected Basic / Advanced / Insane level persists;
 - complete the tutorial, restart the app, and confirm it does not auto-run again;
 - replay it manually from Vay Settings.
@@ -89,6 +91,7 @@ With vayGram in the background:
 
 Verify:
 
+- vayGram Settings is the first standalone settings block before Telegram's ordinary settings rows;
 - Vay Settings entry opens;
 - search works;
 - Basic / Advanced / Insane filtering works;

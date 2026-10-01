@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -72,7 +73,7 @@ public final class VayOnboardingActivity extends BaseFragment {
         content.setOrientation(LinearLayout.VERTICAL);
         content.setGravity(Gravity.CENTER_HORIZONTAL);
         int horizontal = AndroidUtilities.dp(24);
-        content.setPadding(horizontal, AndroidUtilities.dp(18), horizontal, AndroidUtilities.dp(24));
+        content.setPadding(horizontal, AndroidUtilities.dp(18), horizontal, AndroidUtilities.dp(28));
 
         artView = new OnboardingArtView(context);
         content.addView(artView, new LinearLayout.LayoutParams(
@@ -122,13 +123,6 @@ public final class VayOnboardingActivity extends BaseFragment {
         modeParams.topMargin = AndroidUtilities.dp(20);
         content.addView(modeContainer, modeParams);
 
-        View spacer = new View(context);
-        content.addView(spacer, new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                0,
-                1f
-        ));
-
         LinearLayout buttons = new LinearLayout(context);
         buttons.setOrientation(LinearLayout.HORIZONTAL);
         buttons.setGravity(Gravity.CENTER_VERTICAL);
@@ -169,17 +163,30 @@ public final class VayOnboardingActivity extends BaseFragment {
                 1.25f
         ));
 
-        LinearLayout.LayoutParams buttonsParams = new LinearLayout.LayoutParams(
+        buttons.setPadding(horizontal, 0, horizontal, AndroidUtilities.dp(10));
+        buttons.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+
+        ScrollView scrollView = new ScrollView(context);
+        scrollView.setFillViewport(true);
+        scrollView.setClipToPadding(false);
+        scrollView.addView(content, new ScrollView.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
-        );
-        buttonsParams.topMargin = AndroidUtilities.dp(18);
-        content.addView(buttons, buttonsParams);
+        ));
 
-        root.addView(content, new FrameLayout.LayoutParams(
+        FrameLayout.LayoutParams scrollParams = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
-        ));
+        );
+        scrollParams.bottomMargin = AndroidUtilities.dp(64);
+        root.addView(scrollView, scrollParams);
+
+        FrameLayout.LayoutParams buttonsParams = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                AndroidUtilities.dp(64),
+                Gravity.BOTTOM
+        );
+        root.addView(buttons, buttonsParams);
 
         fragmentView = root;
         updatePage();
@@ -203,6 +210,11 @@ public final class VayOnboardingActivity extends BaseFragment {
 
         modeContainer.removeAllViews();
         modeContainer.setVisibility(page == 1 ? View.VISIBLE : View.GONE);
+        ViewGroup.LayoutParams artParams = artView.getLayoutParams();
+        if (artParams != null) {
+            artParams.height = AndroidUtilities.dp(page == 1 ? 150 : 230);
+            artView.setLayoutParams(artParams);
+        }
 
         if (page == 0) {
             titleView.setText(LocaleController.getString(R.string.vay_onboarding_title));
@@ -227,6 +239,8 @@ public final class VayOnboardingActivity extends BaseFragment {
                         ? R.string.vay_onboarding_start_tour
                         : R.string.vay_onboarding_continue
         ));
+        nextButton.setEnabled(true);
+        nextButton.setClickable(true);
         artView.setPage(page);
     }
 
@@ -243,6 +257,7 @@ public final class VayOnboardingActivity extends BaseFragment {
         view.setBackground(modeBackground(level == selectedLevel));
         view.setOnClickListener(v -> {
             selectedLevel = level;
+            VayOnboardingState.setPreferredLevel(selectedLevel);
             updatePage();
         });
 

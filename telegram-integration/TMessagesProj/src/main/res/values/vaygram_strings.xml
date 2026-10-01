@@ -61,6 +61,7 @@
 
 
     <string name="vay_settings_title">vayGram Settings</string>
+    <string name="vay_settings_entry_hint">Customize everything. Complicate nothing.</string>
     <string name="vay_live_preview">Live Preview</string>
     <string name="vay_controls">Controls</string>
     <string name="vay_customization_level">Customization level</string>

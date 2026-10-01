@@ -18,9 +18,9 @@ Real-device procedure: see `docs/DEVICE_SMOKE.md`.
 - [ ] Message send / receive works
 - [ ] Media download/upload works
 - [ ] Notifications tested with Firebase enabled
-- [ ] Vay Settings opens from Telegram Settings
+- [ ] Vay Settings opens from the first standalone block in Telegram Settings
 - [ ] Live preview, palette, gradients and scope overrides smoke-tested
-- [ ] First-run onboarding spotlight smoke-tested on a real device
+- [ ] First-run onboarding spotlight and mode-selection navigation smoke-tested on a real device
 - [ ] Vay Profile Studio entry and foundation smoke-tested
 - [x] SHA-256 and build metadata produced next to the APK
 - [x] About vayGram exposes version, pinned Telegram base and source repository

@@ -87,6 +87,9 @@ must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayOnboardin
 must_grep 'presentSettingFragment\(new app\.vaygram\.ui\.VaySettingsActivity\(\)\)' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/SettingsActivity.java" \
   "Settings entry hook"
+must_grep 'R\.string\.vay_settings_entry_hint' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/SettingsActivity.java" \
+  "top-level standalone vayGram settings block"
 must_grep 'vay_profile_studio' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java" \
   "Profile Studio profile hook"
@@ -111,6 +114,15 @@ must_grep 'VayFirstLaunchCoach\.maybePresent' \
 must_grep 'VayOnboardingActivity\.maybePresent' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayFirstLaunchCoach.java" \
   "contextual coach handoff to onboarding"
+must_grep 'new ScrollView\(context\)' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayOnboardingActivity.java" \
+  "scroll-safe onboarding content"
+must_grep 'Gravity\.BOTTOM' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayOnboardingActivity.java" \
+  "always-reachable onboarding navigation"
+must_grep 'setPreferredLevel\(selectedLevel\)' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayOnboardingActivity.java" \
+  "onboarding mode selection persistence"
 must_grep 'dispatchTouchEvent' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayCoachOverlay.java" \
   "spotlight target remains interactive"

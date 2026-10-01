@@ -72,6 +72,9 @@
 - [x] spotlight targets remain sharp and directly clickable
 - [x] spotlight coach overlay with a sharp interactive target cutout
 - [x] replay onboarding from Vay Settings
+- [x] keep onboarding Continue/Back/Skip controls reachable on compact-height devices
+- [x] persist Basic / Advanced / Insane immediately when selected
+- [x] place vayGram Settings as the first standalone settings block
 - [ ] clean install on a real Android device
 - [ ] upgrade over the previous vayGram dev build
 - [ ] Telegram login/logout smoke
