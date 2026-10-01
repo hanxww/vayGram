@@ -34,6 +34,7 @@ This is the rolling changelog for the first public development build. It describ
 - Sanitized diagnostics and recovery screen.
 - Persistent Safe Mode that bypasses vayGram rendering customizations without deleting them.
 - Portable vayGram backup/restore for global/current-account settings, saved profiles, palette overrides and navigation gradient.
+- Android system file picker export/import for portable vayGram backup JSON.
 - Backup deliberately excludes Telegram sessions, chats, messages, phone numbers, account IDs and per-chat overrides.
 - About vayGram screen with client/base version, source repository and development channel.
 
