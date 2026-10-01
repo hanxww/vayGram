@@ -1167,7 +1167,7 @@ public final class VaySettingsActivity extends BaseFragment {
 
             if (row.mode) {
                 TextSettingsCell cell = (TextSettingsCell) holder.itemView;
-                cell.setTextAndValue("Customization level", visibilityLevel.name(), false);
+                cell.setTextAndValue(LocaleController.getString(R.string.vay_customization_level), visibilityLevel.name(), false);
                 return;
             }
 
