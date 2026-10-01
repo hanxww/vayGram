@@ -61,6 +61,25 @@ public final class VayPresetRepository {
         return list().size();
     }
 
+    public void replaceAll(List<VaySettingsPreset> presets) {
+        SharedPreferences.Editor editor = preferences.edit();
+        for (String key : preferences.getAll().keySet()) {
+            if (key.startsWith(KEY_PREFIX)) {
+                editor.remove(key);
+            }
+        }
+        editor.apply();
+
+        if (presets == null) {
+            return;
+        }
+        for (VaySettingsPreset preset : presets) {
+            if (preset != null) {
+                save(preset);
+            }
+        }
+    }
+
     public boolean delete(String name) {
         String key = KEY_PREFIX + name;
         if (!preferences.contains(key)) {
