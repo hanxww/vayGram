@@ -1,0 +1,164 @@
+# vayGram real-device smoke test
+
+Use this checklist for a real Android phone or tablet. Do not paste API credentials, signing passwords, Firebase files, tokens, or other secrets into issues, logs, or chat.
+
+## Build under test
+
+Record before testing:
+
+- vayGram commit SHA
+- GitHub Actions run ID
+- artifact name
+- package id
+- app version
+- APK SHA-256
+- Android device model
+- Android version
+
+Expected dev identity:
+
+```text
+package: app.vaygram.messenger.beta
+version: 0.1-dev
+```
+
+## 1. Clean install
+
+1. Download the APK artifact from the successful `dev-apk` run.
+2. Verify the published SHA-256 before installation.
+3. Remove an older vayGram dev install only for the clean-install pass.
+4. Install the APK.
+5. Launch it from the launcher.
+6. Confirm there is no immediate crash, blank activity, or restart loop.
+
+Pass when the launcher icon, label, package, version, and first activity are correct.
+
+## 2. First-run onboarding
+
+On a fresh app-data state:
+
+- complete Telegram intro/login entry until the main chat list appears;
+- confirm the vayGram tutorial starts from the main app experience rather than interrupting login;
+- confirm the spotlight dims the rest of the UI while the target stays sharp;
+- confirm the target remains clickable;
+- confirm Next / Skip / Done work;
+- confirm the tour survives required scrolling and different screen positions;
+- confirm the selected Basic / Advanced / Insane level persists;
+- complete the tutorial, restart the app, and confirm it does not auto-run again;
+- replay it manually from Vay Settings.
+
+## 3. Telegram core smoke
+
+Use a test account where possible.
+
+- login
+- logout and login again
+- chat list opens
+- open a private chat
+- open a group/channel
+- send a text message
+- receive a text message
+- reply
+- forward a normal message
+- send an image
+- send a short video
+- download received media
+- upload media
+- play voice/audio where available
+- verify links and attachments open normally
+
+Do not test or implement bypasses for self-destruct or protected-content restrictions.
+
+## 4. Firebase / notifications
+
+With vayGram in the background:
+
+- receive a Telegram message;
+- confirm a push notification arrives;
+- tap it and confirm the correct chat opens;
+- repeat after force-stopping/reopening the app if appropriate for the Android version;
+- confirm no notification uses Telegram's upstream package identity.
+
+## 5. Vay Settings
+
+Verify:
+
+- Vay Settings entry opens;
+- search works;
+- Basic / Advanced / Insane filtering works;
+- Global / Account / Chat scopes open;
+- inherited values are visually distinct from explicit overrides;
+- per-setting reset works;
+- reset-all works;
+- Undo / Redo works;
+- Recently Changed updates;
+- import/export works with non-secret settings data;
+- saved profiles can be created/applied/deleted.
+
+## 6. Visible customization
+
+Change each item and verify the real Telegram surface updates:
+
+- chat bubble radius
+- message spacing
+- chat list row height
+- avatar size
+- avatar roundness
+- bottom navigation height
+- bottom navigation labels
+- animation scale
+- AMOLED mode
+- compact mode
+
+Restart the app and verify committed values persist.
+
+## 7. Theme Engine
+
+Verify:
+
+- semantic palette override
+- per-token reset
+- Material You enable/disable on Android 12+
+- AMOLED surface enforcement in a dark theme
+- bottom-navigation gradient
+- gradient direction
+- glass opacity
+- blur on supported Android versions
+- live preview cancel restores the previous value
+- live preview apply persists the new value
+
+## 8. Vay Profile Studio
+
+On the account owner's own profile:
+
+- confirm the Vay Profile Studio entry is visible and opens;
+- confirm profile-specific controls are kept inside Profile Studio rather than duplicated in ordinary Vay Settings;
+- change available foundation controls;
+- leave and reopen the profile;
+- restart the app and verify persisted state;
+- confirm ordinary Telegram profile actions still work.
+
+## 9. Upgrade compatibility
+
+After the clean-install pass, keep the tested build installed.
+
+For the next CI build signed by the persistent vayGram dev key:
+
+1. install it over the existing build without uninstalling;
+2. confirm Android accepts the upgrade;
+3. confirm Telegram account/session data remains intact;
+4. confirm vayGram settings/profiles remain intact;
+5. confirm onboarding completion state remains intact;
+6. repeat a short chat/send/receive/Vay Settings smoke.
+
+## 10. Crash capture
+
+If anything crashes, record:
+
+- exact action immediately before the crash;
+- device and Android version;
+- vayGram commit and Actions run ID;
+- whether it reproduces after relaunch;
+- a minimal relevant logcat excerpt with personal message content, phone numbers, tokens, and account identifiers removed.
+
+A real-device smoke pass does not make the build release-ready by itself. All remaining items in `docs/RELEASE_CHECKLIST.md` still apply.

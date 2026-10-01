@@ -57,10 +57,24 @@
 - [x] distinct application id and account type
 - [x] vayGram application labels
 - [x] dev version suffix
-- [ ] own Firebase configuration
+- [x] own Firebase configuration
 - [x] own Telegram API credential injection (secrets not committed)
 - [x] isolated development signing configuration
 - [x] Android overlay compile CI
 - [x] reproducible dev APK pipeline + checksum/build metadata
-- [x] optional persistent CI signing/Firebase secret wiring
-- [ ] first installable 0.1-dev APK
+- [x] persistent CI signing/Firebase secret wiring
+- [x] first full 0.1-dev APK built by CI
+
+## M6 — First-run experience and device validation
+- [x] Vay Profile Studio foundation and own-profile entry
+- [x] first-run guided onboarding
+- [x] spotlight coach overlay with a sharp interactive target cutout
+- [x] replay onboarding from Vay Settings
+- [ ] clean install on a real Android device
+- [ ] upgrade over the previous vayGram dev build
+- [ ] Telegram login/logout smoke
+- [ ] chats and message send/receive smoke
+- [ ] media upload/download smoke
+- [ ] Firebase notification smoke
+- [ ] Vay Settings / Theme Engine / scopes smoke
+- [ ] Profile Studio smoke
