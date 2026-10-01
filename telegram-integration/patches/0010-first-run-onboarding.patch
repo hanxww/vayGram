@@ -1,0 +1,18 @@
+diff --git a/TMessagesProj/src/main/java/org/telegram/ui/DialogsActivity.java b/TMessagesProj/src/main/java/org/telegram/ui/DialogsActivity.java
+--- a/TMessagesProj/src/main/java/org/telegram/ui/DialogsActivity.java
++++ b/TMessagesProj/src/main/java/org/telegram/ui/DialogsActivity.java
+@@ -7207,7 +7207,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter
+                 MessagesController.DialogFilter dialogFilter = getMessagesController().selectedDialogFilter[dialogsType == DIALOGS_TYPE_FOLDER1 ? 0 : 1];
+                 if (dialogFilter != null) {
+                     filterTabsView.selectTabWithStableId(dialogFilter.localId);
+                 }
+             }
+         }
++        if (!onlySelect && folderId == 0 && communityId == 0) {
++            AndroidUtilities.runOnUIThread(() -> {
++                if (getParentActivity() != null && getVisibleDialog() == null) {
++                    app.vaygram.ui.VayOnboardingActivity.maybePresent(DialogsActivity.this);
++                }
++            }, 900);
++        }
+     }

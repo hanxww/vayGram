@@ -27,4 +27,37 @@
     <string name="vay_cancel">Отмена</string>
     <string name="vay_apply">Применить</string>
     <string name="vay_inherit">Наследовать</string>
+
+    <string name="vay_onboarding_title">Добро пожаловать в vayGram</string>
+    <string name="vay_onboarding_body">Telegram остаётся знакомым. vayGram добавляет слой кастомизации, который можно осваивать постепенно.</string>
+    <string name="vay_onboarding_choose_level">Выбери уровень кастомизации</string>
+    <string name="vay_onboarding_choose_level_body">Его можно изменить в любой момент. Basic оставляет только главное, Advanced открывает больше настроек, Insane — самые глубокие возможности.</string>
+    <string name="vay_onboarding_scopes_title">Меняй только то, что действительно нужно</string>
+    <string name="vay_onboarding_scopes_body">Global задаёт основу. Account может её переопределить. Chat может переопределить оба уровня. Наследуемые значения всегда видны.</string>
+    <string name="vay_onboarding_preview_title">Смотри результат до применения</string>
+    <string name="vay_onboarding_preview_body">Live preview, Undo/Redo и пресеты находятся в одном месте — не нужно искать их по настройкам Telegram.</string>
+    <string name="vay_onboarding_basic">Basic</string>
+    <string name="vay_onboarding_advanced">Advanced</string>
+    <string name="vay_onboarding_insane">Insane</string>
+    <string name="vay_onboarding_continue">Далее</string>
+    <string name="vay_onboarding_back">Назад</string>
+    <string name="vay_onboarding_skip">Пропустить</string>
+    <string name="vay_onboarding_start_tour">Начать обучение</string>
+    <string name="vay_onboarding_step">%1$d из %2$d</string>
+    <string name="vay_onboarding_replay">Повторить обучение vayGram</string>
+    <string name="vay_onboarding_replay_hint">Снова показать подсказки в Vay Settings</string>
+    <string name="vay_coach_preview_title">Live preview</string>
+    <string name="vay_coach_preview_body">Изменения сразу отображаются здесь — можно настроить интерфейс до выхода из настроек.</string>
+    <string name="vay_coach_level_title">Basic, Advanced, Insane</string>
+    <string name="vay_coach_level_body">Нажми сюда, чтобы показать больше или меньше параметров. Начинай с простого и открывай глубокие настройки по необходимости.</string>
+    <string name="vay_coach_scope_title">Scopes и наследование</string>
+    <string name="vay_coach_scope_body">Global — база. Account и Chat могут переопределять её, не уничтожая наследуемое значение.</string>
+    <string name="vay_coach_theme_title">Theme Engine</string>
+    <string name="vay_coach_theme_body">Здесь находятся редакторы палитры и градиентов. Ручные настройки имеют приоритет над автоматически сгенерированными цветами.</string>
+    <string name="vay_coach_profiles_title">Профили и пресеты</string>
+    <string name="vay_coach_profiles_body">Сохраняй набор настроек, экспортируй его, импортируй чужой или переключайся между профилями.</string>
+    <string name="vay_coach_next">Далее</string>
+    <string name="vay_coach_done">Готово</string>
+    <string name="vay_coach_finished">Готово. Теперь можно спокойно изучать vayGram в своём темпе.</string>
+
 </resources>

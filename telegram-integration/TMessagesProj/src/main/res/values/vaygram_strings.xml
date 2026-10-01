@@ -27,4 +27,37 @@
     <string name="vay_cancel">Cancel</string>
     <string name="vay_apply">Apply</string>
     <string name="vay_inherit">Inherit</string>
+
+    <string name="vay_onboarding_title">Welcome to vayGram</string>
+    <string name="vay_onboarding_body">Telegram stays familiar. vayGram adds a customization layer you can grow into at your own pace.</string>
+    <string name="vay_onboarding_choose_level">Choose your customization level</string>
+    <string name="vay_onboarding_choose_level_body">You can change this anytime. Basic keeps things simple; Advanced exposes more controls; Insane unlocks the deepest customization.</string>
+    <string name="vay_onboarding_scopes_title">Change only what you mean to change</string>
+    <string name="vay_onboarding_scopes_body">Global sets the default. Account can override it. Chat can override both. Inherited values stay visible, so you always know where a value comes from.</string>
+    <string name="vay_onboarding_preview_title">See changes before you commit</string>
+    <string name="vay_onboarding_preview_body">Use live preview, undo/redo and presets without hunting through Telegram settings.</string>
+    <string name="vay_onboarding_basic">Basic</string>
+    <string name="vay_onboarding_advanced">Advanced</string>
+    <string name="vay_onboarding_insane">Insane</string>
+    <string name="vay_onboarding_continue">Continue</string>
+    <string name="vay_onboarding_back">Back</string>
+    <string name="vay_onboarding_skip">Skip</string>
+    <string name="vay_onboarding_start_tour">Start guided tour</string>
+    <string name="vay_onboarding_step">%1$d of %2$d</string>
+    <string name="vay_onboarding_replay">Replay vayGram tutorial</string>
+    <string name="vay_onboarding_replay_hint">Show the guided Vay Settings tour again</string>
+    <string name="vay_coach_preview_title">Live preview</string>
+    <string name="vay_coach_preview_body">Changes appear here immediately, so you can tune the interface before leaving settings.</string>
+    <string name="vay_coach_level_title">Basic, Advanced, Insane</string>
+    <string name="vay_coach_level_body">Tap this row to reveal more or fewer controls. Start simple and only open the deeper levels when you need them.</string>
+    <string name="vay_coach_scope_title">Scopes and inheritance</string>
+    <string name="vay_coach_scope_body">Global is the base. Account and Chat can override it without destroying the inherited value.</string>
+    <string name="vay_coach_theme_title">Theme Engine</string>
+    <string name="vay_coach_theme_body">Palette and gradient editors live here. Manual overrides take priority over generated colors.</string>
+    <string name="vay_coach_profiles_title">Profiles and presets</string>
+    <string name="vay_coach_profiles_body">Save a setup, export it, import one from someone else, or switch between profiles later.</string>
+    <string name="vay_coach_next">Next</string>
+    <string name="vay_coach_done">Done</string>
+    <string name="vay_coach_finished">You\'re ready. Explore vayGram at your own pace.</string>
+
 </resources>

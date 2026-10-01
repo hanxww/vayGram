@@ -77,8 +77,10 @@ public final class VaySettingsActivity extends BaseFragment {
     private static final int ACTION_SCOPE_INFO = 10;
     private static final int ACTION_PALETTE_EDITOR = 11;
     private static final int ACTION_GRADIENT_EDITOR = 12;
+    private static final int ACTION_REPLAY_ONBOARDING = 13;
 
     private static final int RECENT_LIMIT = 5;
+    private static final int COACH_STEPS = 5;
 
     private final VayScopeKey scopeKey;
     private final VayScopeKey parentScopeKey;
@@ -96,7 +98,9 @@ public final class VaySettingsActivity extends BaseFragment {
             });
 
     private String query = "";
-    private VayVisibilityLevel visibilityLevel = VayVisibilityLevel.ADVANCED;
+    private VayVisibilityLevel visibilityLevel = VayVisibilityLevel.BASIC;
+    private boolean onboardingCoachRequested;
+    private VayCoachOverlay coachOverlay;
 
     public VaySettingsActivity() {
         this(VayScopeKey.GLOBAL, null, "Global");
@@ -114,6 +118,12 @@ public final class VaySettingsActivity extends BaseFragment {
         this.scopeKey = scopeKey == null ? VayScopeKey.GLOBAL : scopeKey;
         this.parentScopeKey = parentScopeKey;
         this.scopeTitle = TextUtils.isEmpty(scopeTitle) ? this.scopeKey.getScope().name() : scopeTitle;
+    }
+
+    public static VaySettingsActivity forOnboarding() {
+        VaySettingsActivity activity = new VaySettingsActivity();
+        activity.onboardingCoachRequested = true;
+        return activity;
     }
 
     public static VaySettingsActivity forAccount(int account) {
@@ -135,6 +145,7 @@ public final class VaySettingsActivity extends BaseFragment {
     @Override
     public View createView(Context context) {
         VayTelegram.ensureInitialized();
+        visibilityLevel = VayOnboardingState.preferredLevel();
         VayTelegram.settings().removeListener(previewListener);
         VayTelegram.settings().addListener(previewListener);
 
@@ -174,12 +185,22 @@ public final class VaySettingsActivity extends BaseFragment {
         fragmentView = listView;
         actionBar.setAdaptiveBackground(listView);
         rebuildRows();
+        if (onboardingCoachRequested) {
+            listView.postDelayed(() -> showCoachStep(0), 500);
+        }
         return fragmentView;
     }
 
     @Override
     public void onFragmentDestroy() {
         VayTelegram.settings().removeListener(previewListener);
+        if (coachOverlay != null) {
+            coachOverlay.detach();
+            coachOverlay = null;
+        }
+        if (onboardingCoachRequested && !VayOnboardingState.isCompleted()) {
+            VayOnboardingState.endPresentation();
+        }
         previewView = null;
         super.onFragmentDestroy();
     }
@@ -288,6 +309,11 @@ public final class VaySettingsActivity extends BaseFragment {
                 "Saved profiles",
                 savedProfiles == 0 ? "None yet" : savedProfiles + (savedProfiles == 1 ? " profile" : " profiles")
         ));
+        rows.add(Row.action(
+                ACTION_REPLAY_ONBOARDING,
+                LocaleController.getString(R.string.vay_onboarding_replay),
+                LocaleController.getString(R.string.vay_onboarding_replay_hint)
+        ));
 
         if (modified > 0) {
             rows.add(Row.action(
@@ -349,6 +375,7 @@ public final class VaySettingsActivity extends BaseFragment {
 
         if (row.mode) {
             visibilityLevel = nextLevel(visibilityLevel);
+            VayOnboardingState.setPreferredLevel(visibilityLevel);
             rebuildRows();
             return;
         }
@@ -411,6 +438,142 @@ public final class VaySettingsActivity extends BaseFragment {
             presentFragment(new VayPaletteActivity());
         } else if (action == ACTION_GRADIENT_EDITOR) {
             presentFragment(new VayGradientActivity());
+        } else if (action == ACTION_REPLAY_ONBOARDING) {
+            onboardingCoachRequested = true;
+            VayOnboardingState.resetForReplay();
+            listView.postDelayed(() -> showCoachStep(0), 250);
+        }
+    }
+
+    private void showCoachStep(int step) {
+        if (!onboardingCoachRequested || getParentActivity() == null || listView == null) {
+            return;
+        }
+        if (step >= COACH_STEPS) {
+            finishCoach();
+            return;
+        }
+
+        int position;
+        int titleRes;
+        int bodyRes;
+        switch (step) {
+            case 0:
+                position = findPreviewRow();
+                titleRes = R.string.vay_coach_preview_title;
+                bodyRes = R.string.vay_coach_preview_body;
+                break;
+            case 1:
+                position = findModeRow();
+                titleRes = R.string.vay_coach_level_title;
+                bodyRes = R.string.vay_coach_level_body;
+                break;
+            case 2:
+                position = findActionRow(ACTION_SCOPE_INFO);
+                titleRes = R.string.vay_coach_scope_title;
+                bodyRes = R.string.vay_coach_scope_body;
+                break;
+            case 3:
+                position = findActionRow(ACTION_PALETTE_EDITOR);
+                titleRes = R.string.vay_coach_theme_title;
+                bodyRes = R.string.vay_coach_theme_body;
+                break;
+            case 4:
+            default:
+                position = findActionRow(ACTION_SAVED_PROFILES);
+                titleRes = R.string.vay_coach_profiles_title;
+                bodyRes = R.string.vay_coach_profiles_body;
+                break;
+        }
+
+        if (position < 0) {
+            showCoachStep(step + 1);
+            return;
+        }
+
+        if (coachOverlay != null) {
+            coachOverlay.detach();
+            coachOverlay = null;
+        }
+
+        final int targetPosition = position;
+        listView.scrollToPosition(targetPosition);
+        listView.postDelayed(() -> {
+            if (!onboardingCoachRequested || getParentActivity() == null) {
+                return;
+            }
+            RecyclerView.ViewHolder holder = listView.findViewHolderForAdapterPosition(targetPosition);
+            View target = holder == null ? listView : holder.itemView;
+            coachOverlay = VayCoachOverlay.show(
+                    getParentActivity(),
+                    target,
+                    LocaleController.formatString(R.string.vay_onboarding_step, step + 1, COACH_STEPS),
+                    LocaleController.getString(titleRes),
+                    LocaleController.getString(bodyRes),
+                    LocaleController.getString(
+                            step == COACH_STEPS - 1
+                                    ? R.string.vay_coach_done
+                                    : R.string.vay_coach_next
+                    ),
+                    LocaleController.getString(R.string.vay_onboarding_skip),
+                    new VayCoachOverlay.Callback() {
+                        @Override
+                        public void onNext() {
+                            coachOverlay = null;
+                            showCoachStep(step + 1);
+                        }
+
+                        @Override
+                        public void onSkip() {
+                            coachOverlay = null;
+                            finishCoach();
+                        }
+                    }
+            );
+        }, 220);
+    }
+
+    private int findPreviewRow() {
+        for (int i = 0; i < rows.size(); i++) {
+            if (rows.get(i).preview) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private int findModeRow() {
+        for (int i = 0; i < rows.size(); i++) {
+            if (rows.get(i).mode) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private int findActionRow(int action) {
+        for (int i = 0; i < rows.size(); i++) {
+            if (rows.get(i).action == action) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private void finishCoach() {
+        if (coachOverlay != null) {
+            coachOverlay.detach();
+            coachOverlay = null;
+        }
+        onboardingCoachRequested = false;
+        VayOnboardingState.markCompleted();
+        Context context = getParentActivity();
+        if (context != null) {
+            Toast.makeText(
+                    context,
+                    LocaleController.getString(R.string.vay_coach_finished),
+                    Toast.LENGTH_SHORT
+            ).show();
         }
     }
 
