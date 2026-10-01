@@ -46,7 +46,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java b
              return;
          }
          if (isDialogCell) {
-@@ -1246,22 +1252,26 @@
+@@ -1246,22 +1252,28 @@
 -        if (useForceThreeLines || SharedConfig.useThreeLinesLayout || true) {
 -            Theme.dialogs_namePaint[0].setTextSize(dp(17));
 -            Theme.dialogs_nameEncryptedPaint[0].setTextSize(dp(17));
@@ -89,7 +89,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java b
  
              Theme.dialogs_messagePaint[0].setColor(Theme.dialogs_messagePaint[0].linkColor = Theme.getColor(Theme.key_chats_message, resourcesProvider));
              paintIndex = 0;
-@@ -2418,57 +2424,66 @@
+@@ -2418,57 +2430,66 @@
          animatedEmojiStackName = AnimatedEmojiSpan.update(AnimatedEmojiDrawable.CACHE_TYPE_MESSAGES, this, animatedEmojiStackName, nameLayout);
  
  
@@ -207,7 +207,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java b
          if (LocaleController.isRTL) {
              tagsRight = getMeasuredWidth() - dp(messagePaddingStart);
              tagsLeft = dp(64);
-@@ -3218,10 +3233,10 @@
+@@ -3218,10 +3239,10 @@
              for (int i = 0; i < thumbImage.length; ++i) {
                  thumbImage[i].setImageBitmap((BitmapDrawable) null);
              }
@@ -222,7 +222,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Cells/DialogCell.java b
          } else {
              int oldUnreadCount = unreadCount;
              boolean oldHasReactionsMentions = reactionMentionCount != 0;
-@@ -3671,11 +3686,11 @@
+@@ -3671,11 +3692,11 @@
                  avatarRadius = dp(12);
              } else if (chat != null && chat.forum && currentDialogFolderId == 0 && !useFromUserAsAvatar || !isSavedDialog && user != null && user.self && MessagesController.getInstance(currentAccount).savedViewAsChats) {
                  avatarRadius = dp(16);
