@@ -43,6 +43,9 @@ if [[ -d "$RESOURCE_OVERLAY" ]]; then
   cp -R "$RESOURCE_OVERLAY/." "$WORKDIR/TMessagesProj/src/main/res/"
 fi
 
+echo "[vayGram] merging vayGram strings into Telegram localization inputs..."
+bash "$ROOT/scripts/merge-vaygram-localization.sh" "$WORKDIR"
+
 for patch in "$ROOT"/telegram-integration/patches/*.patch; do
   echo "[vayGram] applying $(basename "$patch")"
   git -C "$WORKDIR" apply --check "$patch"
