@@ -50,6 +50,21 @@ must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayAboutActi
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/telegram/VayBackupCodec.java" "privacy-safe backup codec"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/core/settings/VaySettingsEngine.java" "VayCore settings engine"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/VayAndroid.java" "Android settings bridge"
+must_grep 'RUNTIME_PREFS_NAME' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/VayAndroid.java" \
+  "separate Safe Mode persistence"
+must_grep 'setSafeMode(boolean enabled)' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/telegram/VayTelegram.java" \
+  "Safe Mode Telegram bridge"
+must_grep 'safeModeEnabled' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/theme/VayThemeBridge.java" \
+  "Safe Mode theme bypass"
+must_grep 'setSafeModeEnabled' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/telegram/VayAppearance.java" \
+  "Safe Mode appearance bypass"
+must_grep 'ACTION_SAFE_MODE' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayDiagnosticsActivity.java" \
+  "Safe Mode recovery action"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/settings/VayPresetRepository.java" "persistent preset repository"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/theme/VayThemeBridge.java" "Telegram theme token bridge"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayPaletteActivity.java" "palette editor UI"
