@@ -53,7 +53,7 @@ must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/VayAndr
 must_grep 'RUNTIME_PREFS_NAME' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/VayAndroid.java" \
   "separate Safe Mode persistence"
-must_grep 'setSafeMode(boolean enabled)' \
+must_grep 'setSafeMode\(boolean enabled\)' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/telegram/VayTelegram.java" \
   "Safe Mode Telegram bridge"
 must_grep 'safeModeEnabled' \
