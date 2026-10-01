@@ -65,6 +65,14 @@ public final class VayAppearance {
         return !safeModeEnabled && compactModeEnabled ? Math.min(value, 60) : value;
     }
 
+    public static int dialogNameTextSizeDp(int account) {
+        return resolvedForAccount(VayDefaults.DIALOG_NAME_TEXT_SIZE, account);
+    }
+
+    public static int dialogMessageTextSizeDp(int account) {
+        return resolvedForAccount(VayDefaults.DIALOG_MESSAGE_TEXT_SIZE, account);
+    }
+
     public static float avatarSizeDp() {
         float value = safeModeEnabled
                 ? VayDefaults.AVATAR_SIZE.getDefaultValue()
