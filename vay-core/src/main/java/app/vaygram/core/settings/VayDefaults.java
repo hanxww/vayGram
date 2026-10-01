@@ -217,7 +217,7 @@ public final class VayDefaults {
             .build();
 
     public static final VaySetting<Boolean> PROFILE_STATUS_RING = VaySetting
-            .builder("profile.avatar.status_ring", VaySettingType.BOOLEAN, true)
+            .builder("profile.avatar.status_ring", VaySettingType.BOOLEAN, false)
             .title("Status ring")
             .description("Show a Vay status ring around the profile avatar")
             .category("Profile Studio / Avatar")

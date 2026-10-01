@@ -11,6 +11,12 @@
     <string name="vay_profile_avatar_roundness">Avatar roundness</string>
     <string name="vay_profile_avatar_glow">Avatar glow</string>
     <string name="vay_profile_status_ring">Status ring</string>
+
+    <string name="vay_profile_live_safety">Telegram compatibility</string>
+    <string name="vay_profile_live_safety_value">Safe native layout</string>
+    <string name="vay_profile_live_safety_title">Safe Telegram profile mode</string>
+    <string name="vay_profile_live_safety_body">vayGram keeps the structural Telegram profile header intact to avoid blank or clipped layouts. Avatar roundness, glow and status ring can update the real profile now. Block visibility, free layout, background effects and custom blocks stay in Vay Profile preview until the dedicated renderer is ready.</string>
+
     <string name="vay_profile_effects">Effects</string>
     <string name="vay_profile_background_blur">Background blur</string>
     <string name="vay_profile_parallax">Parallax</string>

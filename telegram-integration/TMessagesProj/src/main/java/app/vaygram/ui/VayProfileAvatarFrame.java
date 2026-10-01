@@ -33,10 +33,6 @@ public class VayProfileAvatarFrame extends FrameLayout {
             return;
         }
 
-        if (!VayProfileAppearance.showAvatar(account)) {
-            return;
-        }
-
         int accent = VayThemeBridge.color(VayThemeTokens.ACCENT_PRIMARY);
         float inset = AndroidUtilities.dp(2);
         rect.set(inset, inset, getWidth() - inset, getHeight() - inset);
@@ -54,6 +50,11 @@ public class VayProfileAvatarFrame extends FrameLayout {
             paint.clearShadowLayer();
         }
 
+        // Never suppress Telegram's avatar container here. Hiding only the
+        // children keeps Telegram's original header geometry reserved and
+        // creates a large blank header on real devices.
+        super.dispatchDraw(canvas);
+
         if (VayProfileAppearance.statusRing(account)) {
             paint.setStyle(Paint.Style.STROKE);
             paint.setStrokeWidth(AndroidUtilities.dp(2));
@@ -62,6 +63,5 @@ public class VayProfileAvatarFrame extends FrameLayout {
         }
 
         paint.setStyle(Paint.Style.FILL);
-        super.dispatchDraw(canvas);
     }
 }

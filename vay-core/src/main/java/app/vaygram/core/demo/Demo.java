@@ -77,8 +77,9 @@ public final class Demo {
         if (!engine.get(VayDefaults.PROFILE_SHOW_AVATAR)
                 || !engine.get(VayDefaults.PROFILE_SHOW_NAME)
                 || engine.get(VayDefaults.PROFILE_SHOW_PHONE)
-                || engine.get(VayDefaults.PROFILE_SHOW_CUSTOM_IMAGE)) {
-            throw new IllegalStateException("Profile block privacy/default smoke test failed");
+                || engine.get(VayDefaults.PROFILE_SHOW_CUSTOM_IMAGE)
+                || engine.get(VayDefaults.PROFILE_STATUS_RING)) {
+            throw new IllegalStateException("Profile block privacy/safe-default smoke test failed");
         }
         if (engine.get(VayDefaults.GLASS_OPACITY) != 1f) {
             throw new IllegalStateException("Glass opacity must default to fully opaque");

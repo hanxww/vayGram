@@ -30,6 +30,19 @@ must_grep() {
   echo "[vayGram] ok: $label"
 }
 
+must_not_grep() {
+  local pattern="$1"
+  local path="$2"
+  local label="$3"
+  if grep -qE "$pattern" "$path"; then
+    echo "[vayGram] forbidden pattern: $label" >&2
+    echo "[vayGram] pattern: $pattern" >&2
+    echo "[vayGram] file: $path" >&2
+    exit 1
+  fi
+  echo "[vayGram] ok: $label"
+}
+
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VaySettingsActivity.java" "Vay Settings UI"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/core/settings/VaySettingsEngine.java" "VayCore settings engine"
 must_file "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/android/VayAndroid.java" "Android settings bridge"
@@ -61,12 +74,18 @@ must_grep 'vay_profile_studio' \
 must_grep 'VayProfileStudioActivity' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java" \
   "Profile Studio navigation"
-must_grep 'VayProfileAppearance\.showPhone' \
-  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java" \
-  "Profile Studio live row visibility hook"
 must_grep 'VayProfileAvatarFrame' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java" \
   "Profile Studio live avatar hook"
+must_grep 'updateAvatarRoundRadius\(\)' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java" \
+  "Profile Studio live avatar refresh hook"
+must_not_grep 'avatarImage\.drawAvatar = app\.vaygram' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java" \
+  "Profile Studio must not blank Telegram avatar geometry"
+must_not_grep 'VayProfileAppearance\.showTelegramPhone' \
+  "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java" \
+  "Profile Studio block defaults must not suppress native Telegram rows"
 must_grep 'VayFirstLaunchCoach\.maybePresent' \
   "$TMP/telegram/TMessagesProj/src/main/java/org/telegram/ui/DialogsActivity.java" \
   "first-launch contextual coach hook"
@@ -97,6 +116,12 @@ must_grep 'profile\.block\.phone' \
 must_grep 'drawPreviewBlocks' \
   "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayProfileStudioActivity.java" \
   "Profile Studio multi-block live preview"
+must_grep 'ACTION_COMPATIBILITY' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/ui/VayProfileStudioActivity.java" \
+  "Profile Studio safe live-rendering explanation"
+must_grep 'telegramVisibleUnlessExplicitlyHidden' \
+  "$TMP/telegram/TMessagesProj/src/main/java/app/vaygram/telegram/VayProfileAppearance.java" \
+  "Profile Studio future native-row compatibility guard"
 must_grep 'vay_profile_show_mutual_chats' \
   "$TMP/telegram/TMessagesProj/src/main/res/values-ru/strings.xml" \
   "Profile Studio block localization merged into Telegram strings"

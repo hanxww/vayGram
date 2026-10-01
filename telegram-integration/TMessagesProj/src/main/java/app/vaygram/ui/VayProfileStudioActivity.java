@@ -49,6 +49,7 @@ public final class VayProfileStudioActivity extends BaseFragment {
 
     private static final int ACTION_LAYOUT_MODE = 1;
     private static final int ACTION_RESET = 2;
+    private static final int ACTION_COMPATIBILITY = 3;
 
     private final ArrayList<Row> rows = new ArrayList<>();
     private RecyclerListView listView;
@@ -121,6 +122,12 @@ public final class VayProfileStudioActivity extends BaseFragment {
                 ACTION_LAYOUT_MODE,
                 LocaleController.getString(R.string.vay_profile_layout_mode),
                 layoutModeLabel()
+        ));
+
+        rows.add(Row.action(
+                ACTION_COMPATIBILITY,
+                LocaleController.getString(R.string.vay_profile_live_safety),
+                LocaleController.getString(R.string.vay_profile_live_safety_value)
         ));
 
         rows.add(Row.header(LocaleController.getString(R.string.vay_profile_avatar)));
@@ -271,6 +278,11 @@ public final class VayProfileStudioActivity extends BaseFragment {
             return;
         }
 
+        if (row.action == ACTION_COMPATIBILITY) {
+            showCompatibilityDialog();
+            return;
+        }
+
         if (row.setting == null) {
             return;
         }
@@ -306,6 +318,19 @@ public final class VayProfileStudioActivity extends BaseFragment {
         return "free".equals(get(VayDefaults.PROFILE_LAYOUT_MODE))
                 ? LocaleController.getString(R.string.vay_profile_free_layout)
                 : LocaleController.getString(R.string.vay_profile_grid_layout);
+    }
+
+    private void showCompatibilityDialog() {
+        Context context = getParentActivity();
+        if (context == null) {
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(LocaleController.getString(R.string.vay_profile_live_safety_title));
+        builder.setMessage(LocaleController.getString(R.string.vay_profile_live_safety_body));
+        builder.setPositiveButton(LocaleController.getString(R.string.vay_close), null);
+        showDialog(builder.create());
     }
 
     private void showResetDialog() {
