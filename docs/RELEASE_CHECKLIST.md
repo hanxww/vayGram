@@ -25,6 +25,7 @@ Real-device procedure: see `docs/DEVICE_SMOKE.md`.
 - [x] SHA-256 and build metadata produced next to the APK
 - [x] About vayGram exposes version, pinned Telegram base and source repository
 - [x] portable vayGram-only backup/restore available without Telegram session/chat data
+- [x] persistent Safe Mode can bypass vayGram rendering customizations without deleting settings
 - [ ] GPL source link included with the APK post
 
 ## Nice to have before #001 APK
