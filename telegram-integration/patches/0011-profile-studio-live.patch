@@ -30,7 +30,7 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java b/
              TLRPC.Chat chatLocal = getMessagesController().getChat(chatId);
              if (ChatObject.isForum(chatLocal)) {
                  return dp(needInsetForStories() ? 24 : 38);
-@@ -9047,11 +9050,17 @@
+@@ -9047,11 +9050,18 @@
          } else if (id == NotificationCenter.updateInterfaces) {
              int mask = (Integer) args[0];
              boolean infoChanged = (mask & MessagesController.UPDATE_MASK_AVATAR) != 0 || (mask & MessagesController.UPDATE_MASK_NAME) != 0 || (mask & MessagesController.UPDATE_MASK_STATUS) != 0 || (mask & MessagesController.UPDATE_MASK_EMOJI_STATUS) != 0;
@@ -43,82 +43,14 @@ diff --git a/TMessagesProj/src/main/java/org/telegram/ui/ProfileActivity.java b/
 +                if (infoChanged) {
 +                    updateProfileData(true);
 +                }
-+                if (myProfile) {
-+                    updateRowsIds();
-+                    if (listAdapter != null) {
-+                        listAdapter.notifyDataSetChanged();
++                if (myProfile && avatarImage != null) {
++                    updateAvatarRoundRadius();
++                    if (avatarContainer != null) {
++                        avatarContainer.invalidate();
 +                    }
++                    avatarImage.invalidate();
 +                }
 +                if ((mask & MessagesController.UPDATE_MASK_PHONE) != 0) {
                      if (listView != null) {
                          RecyclerListView.Holder holder = (RecyclerListView.Holder) listView.findViewHolderForPosition(phoneRow);
                          if (holder != null) {
-@@ -10601,7 +10610,8 @@
- 
-         if (userId != 0) {
-             TLRPC.User user = getMessagesController().getUser(userId);
--            if (userInfo != null && userInfo.saved_music != null && (imageUpdater == null || myProfile)) {
-+            if (userInfo != null && userInfo.saved_music != null && (imageUpdater == null || myProfile)
-+                    && (!myProfile || app.vaygram.telegram.VayProfileAppearance.showTelegramMusic(currentAccount))) {
-                 hasMusic = true;
-             }
- 
-@@ -10696,7 +10706,8 @@
-                     unofficialSecurityRiskDividerRow = rowCount++;
-                 }
- 
--                if (userInfo != null && (userInfo.flags2 & 64) != 0 && (profileChannelMessageFetcher == null || !profileChannelMessageFetcher.loaded || !profileChannelMessageFetcher.messageObjects.isEmpty())) {
-+                if ((!myProfile || app.vaygram.telegram.VayProfileAppearance.showTelegramPersonalChannel(currentAccount))
-+                        && userInfo != null && (userInfo.flags2 & 64) != 0 && (profileChannelMessageFetcher == null || !profileChannelMessageFetcher.loaded || !profileChannelMessageFetcher.messageObjects.isEmpty())) {
-                     final TLRPC.Chat channel = getMessagesController().getChat(userInfo.personal_channel_id);
-                     if (channel != null && (ChatObject.isPublic(channel) || !ChatObject.isNotInChat(channel))) {
-                         channelRow = rowCount++;
-@@ -10704,19 +10715,23 @@
-                     }
-                 }
-                 infoStartRow = rowCount;
--                if (!isBot && (hasPhone || !hasInfo)) {
--                    phoneRow = rowCount++;
--                }
--                if (userInfo != null && !TextUtils.isEmpty(userInfo.about)) {
--                    userInfoRow = rowCount++;
--                }
--                if (user != null && username != null) {
--                    usernameRow = rowCount++;
--                }
--                if (userInfo != null) {
--                    if (userInfo.birthday != null) {
--                        birthdayRow = rowCount++;
--                    }
-+                if (!isBot && (hasPhone || !hasInfo)
-+                        && (!myProfile || app.vaygram.telegram.VayProfileAppearance.showTelegramPhone(currentAccount))) {
-+                    phoneRow = rowCount++;
-+                }
-+                if (userInfo != null && !TextUtils.isEmpty(userInfo.about)
-+                        && (!myProfile || app.vaygram.telegram.VayProfileAppearance.showTelegramBio(currentAccount))) {
-+                    userInfoRow = rowCount++;
-+                }
-+                if (user != null && username != null
-+                        && (!myProfile || app.vaygram.telegram.VayProfileAppearance.showTelegramUsername(currentAccount))) {
-+                    usernameRow = rowCount++;
-+                }
-+                if (userInfo != null) {
-+                    if (userInfo.birthday != null
-+                            && (!myProfile || app.vaygram.telegram.VayProfileAppearance.showTelegramBirthday(currentAccount))) {
-+                        birthdayRow = rowCount++;
-+                    }
-                     if (userInfo.business_work_hours != null) {
-                         bizHoursRow = rowCount++;
-                     }
-@@ -10820,7 +10835,10 @@
-                     reportDividerRow = rowCount++;
-                 }
- 
--                if (hasMedia || (user != null && user.bot && user.bot_can_edit && user.bot_has_main_app) || userInfo != null && userInfo.common_chats_count != 0 || myProfile) {
-+                if ((hasMedia && (!myProfile || app.vaygram.telegram.VayProfileAppearance.showTelegramMedia(currentAccount)))
-+                        || (user != null && user.bot && user.bot_can_edit && user.bot_has_main_app)
-+                        || userInfo != null && userInfo.common_chats_count != 0
-+                        || myProfile && app.vaygram.telegram.VayProfileAppearance.showTelegramMedia(currentAccount)) {
-                     sharedMediaRow = rowCount++;
-                 } else if (lastSectionRow == -1 && needSendMessage) {
-                     sendMessageRow = rowCount++;
