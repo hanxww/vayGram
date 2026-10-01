@@ -47,8 +47,12 @@ public final class VayTelegram {
     private static void installTelegramBridges() {
         VaySettingsEngine engine = VayAndroid.settings();
         VayThemeBridge.refreshPalette(VayAndroid.themePalette());
-        syncMaterialYou(engine);
         navigationGradient = VayAndroid.gradients().find(VayThemeGradients.NAVIGATION_BOTTOM);
+
+        boolean safeMode = VayAndroid.isSafeMode();
+        VayAppearance.setSafeModeEnabled(safeMode);
+        VayThemeBridge.setSafeModeEnabled(safeMode);
+        syncMaterialYou(engine);
 
         // Preserve an existing Telegram appearance choice on the first vayGram run.
         engine.seedIfAbsent(
@@ -57,7 +61,9 @@ public final class VayTelegram {
                 (float) SharedConfig.bubbleRadius
         );
 
-        syncBubbleRadius(engine.get(VayDefaults.CHAT_BUBBLE_RADIUS));
+        syncBubbleRadius(VayAndroid.isSafeMode()
+                ? VayDefaults.CHAT_BUBBLE_RADIUS.getDefaultValue()
+                : engine.get(VayDefaults.CHAT_BUBBLE_RADIUS));
         VayAppearance.setCompactModeEnabled(engine.get(VayDefaults.COMPACT_MODE));
 
         VayScopeKey selectedAccountScope = accountScope(UserConfig.selectedAccount);
@@ -82,7 +88,11 @@ public final class VayTelegram {
                     && VayScopeKey.GLOBAL.equals(change.getScope())) {
                 Object value = change.getNewValue();
                 if (value instanceof Number) {
-                    syncBubbleRadius(((Number) value).floatValue());
+                    syncBubbleRadius(
+                            VayAndroid.isSafeMode()
+                                    ? VayDefaults.CHAT_BUBBLE_RADIUS.getDefaultValue()
+                                    : ((Number) value).floatValue()
+                    );
                 }
             }
 
@@ -223,6 +233,12 @@ public final class VayTelegram {
 
     public static VayGradientSpec navigationGradient() {
         ensureInitialized();
+        if (VayAndroid.isSafeMode()) {
+            return VayThemeGradients.navigationDefaults(
+                    Theme.getColor(Theme.key_glass_targetMainTabs),
+                    Theme.getColor(Theme.key_featuredStickers_addButton)
+            );
+        }
         VayGradientSpec current = navigationGradient;
         if (current != null) {
             return current;
@@ -262,6 +278,44 @@ public final class VayTelegram {
         VayAndroid.gradients().delete(VayThemeGradients.NAVIGATION_BOTTOM);
         navigationGradient = null;
         notifyMainTabsAppearanceChanged();
+    }
+
+    public static boolean isSafeMode() {
+        ensureInitialized();
+        return VayAndroid.isSafeMode();
+    }
+
+    public static void setSafeMode(boolean enabled) {
+        ensureInitialized();
+        VayAndroid.setSafeMode(enabled);
+        VayAppearance.setSafeModeEnabled(enabled);
+        VayThemeBridge.setSafeModeEnabled(enabled);
+
+        VaySettingsEngine engine = VayAndroid.settings();
+        VayScopeKey accountScope = accountScope(UserConfig.selectedAccount);
+
+        syncBubbleRadius(
+                enabled
+                        ? VayDefaults.CHAT_BUBBLE_RADIUS.getDefaultValue()
+                        : engine.get(VayDefaults.CHAT_BUBBLE_RADIUS)
+        );
+        VayAppearance.setCompactModeEnabled(engine.get(VayDefaults.COMPACT_MODE));
+        syncMainTabsHeight(VayAppearance.effectiveBottomNavigationHeightDp(
+                engine.getResolved(VayDefaults.NAV_HEIGHT, accountScope, VayScopeKey.GLOBAL)
+        ));
+        VayAppearance.setAmoledSurfacesEnabled(engine.getResolved(
+                VayDefaults.THEME_AMOLED,
+                accountScope,
+                VayScopeKey.GLOBAL
+        ));
+
+        syncMaterialYou(engine);
+        Theme.refreshThemeColors(false, true);
+        notifyMainTabsAppearanceChanged();
+        NotificationCenter.getGlobalInstance().postNotificationName(
+                NotificationCenter.dialogsNeedReload,
+                true
+        );
     }
 
     public static boolean isMaterialYouSupported() {
