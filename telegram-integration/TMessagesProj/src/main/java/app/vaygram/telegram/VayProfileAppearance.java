@@ -64,10 +64,10 @@ public final class VayProfileAppearance {
         return Boolean.TRUE.equals(get(account, VayDefaults.PROFILE_STATUS_RING));
     }
 
-    public static int avatarRadiusDp(int account, int avatarSizeDp) {
+    public static int avatarRadiusForSize(int account, int avatarSize) {
         Number percent = get(account, VayDefaults.PROFILE_AVATAR_RADIUS);
         float value = percent == null ? 50f : percent.floatValue();
         value = Math.max(0f, Math.min(50f, value));
-        return Math.round(avatarSizeDp * value / 100f);
+        return Math.round(avatarSize * value / 100f);
     }
 }
