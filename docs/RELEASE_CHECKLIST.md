@@ -23,10 +23,14 @@ Real-device procedure: see `docs/DEVICE_SMOKE.md`.
 - [ ] First-run onboarding spotlight smoke-tested on a real device
 - [ ] Vay Profile Studio entry and foundation smoke-tested
 - [x] SHA-256 and build metadata produced next to the APK
+- [x] About vayGram exposes version, pinned Telegram base and source repository
+- [x] portable vayGram-only backup/restore available without Telegram session/chat data
 - [ ] GPL source link included with the APK post
 
 ## Nice to have before #001 APK
 
+- [x] in-app diagnostics/recovery screen available
+- [x] portable backup/restore path available before risky customization testing
 - [ ] crash-reporting strategy decided
 - [ ] changelog generated from merged vayGram stages
 - [ ] known-issues section prepared
