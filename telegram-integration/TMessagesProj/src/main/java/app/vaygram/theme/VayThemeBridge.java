@@ -32,8 +32,17 @@ public final class VayThemeBridge {
     private static volatile SparseIntArray materialLightColors = new SparseIntArray();
     private static volatile SparseIntArray materialDarkColors = new SparseIntArray();
     private static volatile boolean materialYouEnabled;
+    private static volatile boolean safeModeEnabled;
 
     private VayThemeBridge() {}
+
+    public static void setSafeModeEnabled(boolean enabled) {
+        safeModeEnabled = enabled;
+    }
+
+    public static boolean isSafeModeEnabled() {
+        return safeModeEnabled;
+    }
 
     public static int color(VayThemeToken token) {
         int key = telegramColorKey(token);
@@ -70,10 +79,13 @@ public final class VayThemeBridge {
     }
 
     public static boolean isMaterialYouEnabled() {
-        return materialYouEnabled;
+        return !safeModeEnabled && materialYouEnabled;
     }
 
     public static int applyColorOverride(int telegramColorKey, int fallbackColor) {
+        if (safeModeEnabled) {
+            return fallbackColor;
+        }
         SparseIntArray manual = colorOverrides;
         int manualIndex = manual.indexOfKey(telegramColorKey);
         if (manualIndex >= 0) {
